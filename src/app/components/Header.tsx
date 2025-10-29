@@ -38,7 +38,7 @@ export default function Header() {
                         id="hamburger-icon"
                         aria-expanded={isMenuOpen}
                         aria-controls="primary-navigation"
-                        onclick={() => setIsMenuOpen(!isMenuOpen)}
+                        // onclick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         <span className="line line-1"></span>
                         <span className="line line-2"></span>
