@@ -1,0 +1,7 @@
+{
+  "/auth/login/page": "app/auth/login/page.js",
+  "/about-us/page": "app/about-us/page.js",
+  "/contact-us/page": "app/contact-us/page.js",
+  "/faq/page": "app/faq/page.js",
+  "/privacy-policy/page": "app/privacy-policy/page.js"
+}

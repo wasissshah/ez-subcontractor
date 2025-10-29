@@ -15,55 +15,80 @@ export default function Footer() {
             style={{
                 backgroundImage: `url('/assets/img/footer-bg.webp')`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                backgroundPosition: 'center'
             }}
         >
             <div className="container">
-                <Link href="/" className="footer-logo d-flex justify-content-center mx-auto mb-4">
+                <Link
+                    href="/"
+                    className="footer-logo d-flex justify-content-center mx-auto mb-4"
+                    style={{width: 'fit-content'}}
+                    aria-label="Home"
+                >
                     <Image
-                        src="/assets/img/login-logo.webp"
+                        src="/assets/img/icons/logo.webp"
                         width={283}
                         height={81}
-                        alt="Logo"
+                        alt="EZ Subcontractor Logo"
                         className="img-fluid w-100"
-                        style={{ maxWidth: '283px' }}
+                        loading="lazy"
                     />
                 </Link>
 
                 <div className="footer-main">
                     <div className="row g-3">
-                        {/* Reach Us */}
+                        {/* Contact Info */}
                         <div className="col-lg-4 col-sm-6">
                             <div className="footer-title">Reach us</div>
                             <div className="d-flex align-items-center gap-2 mb-3">
                                 <div className="icon">
-                                    <Image src="/assets/img/Message.svg" width={15} height={15} alt="Email" />
+                                    <Image
+                                        src="/assets/img/icons/message-green.svg"
+                                        width={15}
+                                        height={15}
+                                        alt="Email"
+                                        loading="lazy"
+                                    />
                                 </div>
                                 <Link
                                     href="mailto:EZcontractorz1@gmail.com"
                                     className="text-decoration-none"
-                                    style={{ color: '#E6EE9D' }}
+                                    style={{color: '#E6EE9D'}}
                                 >
                                     EZcontractorz1@gmail.com
                                 </Link>
                             </div>
                             <div className="d-flex align-items-center gap-2 mb-3">
                                 <div className="icon">
-                                    <Image src="/assets/img/Call.svg" width={15} height={15} alt="Phone" />
+                                    <Image
+                                        src="/assets/img/icons/call-green.svg"
+                                        width={15}
+                                        height={15}
+                                        alt="Phone"
+                                        loading="lazy"
+                                    />
                                 </div>
                                 <Link
                                     href="tel:+10001234392"
                                     className="text-decoration-none"
-                                    style={{ color: '#E6EE9D' }}
+                                    style={{color: '#E6EE9D'}}
                                 >
                                     +1 (000) 123-4392
                                 </Link>
                             </div>
                             <div className="d-flex align-items-center gap-2">
                                 <div className="icon">
-                                    <Image src="/assets/img/Location1.svg" width={15} height={15} alt="Location" />
+                                    <Image
+                                        src="/assets/img/icons/location-green.svg"
+                                        width={15}
+                                        height={15}
+                                        alt="Location"
+                                        loading="lazy"
+                                    />
                                 </div>
-                                <span style={{ color: '#E6EE9D' }}>132 Dartmouth St Boston, MA 02116</span>
+                                <span style={{color: '#E6EE9D'}}>
+                  132 Dartmouth St Boston, MA 02116
+                </span>
                             </div>
                         </div>
 
@@ -72,20 +97,20 @@ export default function Footer() {
                             <div className="footer-title">Quick Links</div>
                             <ul className="footer-links m-0 p-0">
                                 <li><Link href="/">Home</Link></li>
-                                <li><Link href="/projects">Projects</Link></li>
-                                <li><Link href="/about">About</Link></li>
-                                <li><Link href="/contact">Contact</Link></li>
+                                <li><Link href="/messages">Messages</Link></li>
+                                <li><Link href="/contact-us">Contact Us</Link></li>
+                                <li><Link href="/about-us">About Us</Link></li>
                             </ul>
                         </div>
 
-                        {/* Other */}
+                        {/* Other Links */}
                         <div className="col-lg-2 col-sm-6">
                             <div className="footer-title">Other</div>
                             <ul className="footer-links m-0 p-0">
-                                <li><Link href="/privacy">Privacy Policy</Link></li>
-                                <li><Link href="/terms">Terms of Service</Link></li>
-                                <li><Link href="/faq">FAQ</Link></li>
-                                <li><Link href="/support">Support</Link></li>
+                                <li><Link href="/terms-and-conditions">Terms & Conditions</Link></li>
+                                <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+                                <li><Link href="/faq">FAQs</Link></li>
+                                <li><Link href="/blogs">Blogs</Link></li>
                             </ul>
                         </div>
 
@@ -96,15 +121,19 @@ export default function Footer() {
                                 <form className="form-wrapper mb-3">
                                     <input
                                         type="email"
-                                        placeholder="Your email address"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
+                                        onchange={(e) => setEmail(e.target.value)}
+                                        placeholder="Your email address"
                                         className="form-control"
+                                        required
                                     />
-                                    <input type="submit" className="submit-btn" value="Subscribe" />
+                                    <input
+                                        type="submit"
+                                        className="submit-btn"
+                                        value="Subscribe"
+                                    />
                                 </form>
-                                <p style={{ fontSize: '14px' }} className="mb-0 custom-text-gray">
+                                <p className="mb-0 text-white opacity-50" style={{fontSize: '14px'}}>
                                     Will send you weekly updates for your better tool management.
                                 </p>
                             </div>
@@ -112,10 +141,15 @@ export default function Footer() {
                     </div>
                 </div>
 
+                {/* Footer Bottom */}
                 <div className="footer-bottom pt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                    <div className="left text-white">© 2025 EZ Subcontractor. All Rights Reserved</div>
-                    <div className="right text-white">
-                        Developed By: <span className="custom-text">Design Spartans</span>
+                    <div className="left text-white fw-medium">
+                        © {new Date().getFullYear()} EZ Subcontractor. All Rights Reserved
+                    </div>
+                    <div className="right text-white fw-medium">
+                        Developed By: <Link href="https://designspartans.com"
+                                            className="text-primary fw-semibold text-decoration-underline">Design
+                        Spartans</Link>
                     </div>
                 </div>
             </div>

@@ -22,73 +22,64 @@ export default function Header() {
         <header className="header">
             <div className="container">
                 <div className="header-wrapper">
-                    <Link href="/" className="logo">
+                    <Link href="/" className="logo" aria-label="Home">
                         <Image
-                            src="/assets/img/login-logo.webp"
+                            src="/assets/img/icons/logo.webp"
                             width={234}
                             height={67}
                             alt="Logo"
+                            priority
                         />
                     </Link>
 
+                    {/* Hamburger button */}
                     <button
                         className="hamburger"
                         id="hamburger-icon"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle navigation"
+                        aria-expanded={isMenuOpen}
+                        aria-controls="primary-navigation"
+                        onclick={() => setIsMenuOpen(!isMenuOpen)}
                     >
                         <span className="line line-1"></span>
                         <span className="line line-2"></span>
                         <span className="line line-3"></span>
                     </button>
 
-                    {/* Desktop Navigation */}
-                    <nav className={isMenuOpen ? 'mobile-open' : ''}>
+                    {/* Navigation */}
+                    <nav
+                        id="primary-navigation"
+                        className={`${
+                            isMenuOpen ? 'nav-open' : 'nav-closed'
+                        }`}
+                    >
                         <ul className="menu-links mb-0">
                             <li>
-                                <Link
-                                    href="/"
-                                    className={isActive('/') ? 'active' : ''}
-                                >
+                                <Link href="/" className="active">
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/projects"
-                                    className={isActive('/projects') ? 'active' : ''}
-                                >
-                                    Projects
-                                </Link>
+                                <Link href="/projects">Projects</Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/subscription"
-                                    className={isActive('/subscription') ? 'active' : ''}
-                                >
-                                    30 Days Free Trial
-                                </Link>
+                                <Link href="/subscription">30 Days Free Trial</Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/blogs"
-                                    className={isActive('/blogs') ? 'active' : ''}
-                                >
-                                    Blogs
-                                </Link>
+                                <Link href="/blogs">Blog</Link>
                             </li>
                         </ul>
+                        <div className="buttons d-flex align-items-center flex-wrap gap-3">
+                            <Link
+                                href="/auth/login"
+                                className="btn btn-outline-dark rounded-3"
+                            >
+                                Log In
+                            </Link>
+                            <Link href="/auth/signup" className="btn btn-primary rounded-3">
+                                Sign Up
+                            </Link>
+                        </div>
                     </nav>
-
-                    {/* Auth Buttons */}
-                    <div className="buttons d-flex align-items-center flex-wrap">
-                        <Link href="/auth/login" className="custom-btn-s1 custom-outline-s1">
-                            Log In
-                        </Link>
-                        <Link href="/auth/register" className="custom-btn-s1 custom-primary-s1">
-                            Sign Up
-                        </Link>
-                    </div>
                 </div>
             </div>
         </header>

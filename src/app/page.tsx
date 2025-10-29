@@ -1,51 +1,45 @@
+// app/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Header from './components/Header';
-import Footer from './components/Footer';
-
-// ✅ Import Slider from react-slick
 import Slider from 'react-slick';
+import { useState } from 'react';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
-// ✅ CSS is already imported globally in layout.tsx (recommended)
-// But if you prefer here, it's okay too:
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
-import '../styles/main-page.css';
+import '../styles/home.css';
+import '../styles/cards.css';
 
-export default function Home() {
-    const [searchService, setSearchService] = useState('');
-    const [searchZip, setSearchZip] = useState('');
 
-    // Sample services (not used in render below, but kept for reference)
-    const services = [
-        { name: 'Landscaping', icon: '/assets/img/service/main-service-icon (3).webp' },
-        { name: 'Plumbing', icon: '/assets/img/service/main-service-icon (4).webp' },
-        { name: 'Remodeling', icon: '/assets/img/service/main-service-icon (1).webp' },
-        { name: 'Painting', icon: '/assets/img/service/main-service-icon (5).webp' },
-        { name: 'Roofing', icon: '/assets/img/service/main-service-icon (2).webp' },
-        { name: 'Concrete', icon: '/assets/img/service/main-service-icon (6).webp' },
-        { name: 'Windows', icon: '/assets/img/service/main-service-icon (7).webp' },
-        { name: 'Welding', icon: '/assets/img/service/main-service-icon (8).webp' },
-        { name: 'Masonary', icon: '/assets/img/service/main-service-icon (9).webp' },
-    ];
-
-    const projects = Array(4).fill({
+export default function HomePage() {
+    // Mock project data (replace with real API later)
+    const projects = Array(6).fill({
         category: 'Framing',
         location: 'Whittier, CA',
-        description:
-            'Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish.',
+        description: `Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish.`,
+        timeAgo: '23 mins ago'
     });
 
-    // ✅ Slick settings
+    const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
+
+    const toggleExpand = (id: number) => {
+        const newExpanded = new Set(expandedCards);
+        if (newExpanded.has(id)) {
+            newExpanded.delete(id);
+        } else {
+            newExpanded.add(id);
+        }
+        setExpandedCards(newExpanded);
+    };
+
+    // Slick slider settings (exactly as you provided)
     const sliderSettings = {
         slidesToShow: 3,
         slidesToScroll: 1,
         arrows: false,
-        dots: false,
+        dots: true,
         infinite: true,
         speed: 600,
         responsive: [
@@ -70,86 +64,54 @@ export default function Home() {
             <div className="sections overflow-hidden">
                 {/* Banner Section */}
                 <section
-                    className="banner-sec"
+                    className="home-banner-sec"
                     style={{
-                        backgroundImage: `url('/assets/img/banner-img.webp')`,
+                        backgroundImage: `url('/assets/img/home-banner-img.webp')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
                     }}
                 >
                     <div className="container">
-                        <div className="content-wrapper">
-                            <h1 className="main-title text-white text-center mb-4">
-                                Find subcontractors you can trust for free
-                            </h1>
-                            <div className="main-wrapper mx-auto" style={{ maxWidth: '876px' }}>
-                                <form
-                                    className="form-wrapper"
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        console.log('Search:', { searchService, searchZip });
-                                    }}
-                                >
-                                    <div className="input-wrapper">
-                                        <Image
-                                            src="/assets/img/search-icon.svg"
-                                            width={20}
-                                            height={20}
-                                            alt="Search Icon"
-                                        />
-                                        <input
-                                            type="search"
-                                            className="input-control"
-                                            placeholder="eg: Electrical"
-                                            value={searchService}
-                                            onChange={(e) => setSearchService(e.target.value)}
-                                        />
+                        <div className="banner-wrapper">
+                            <div className="content-wrapper">
+                                <h1 className="main-title text-white text-center mb-4">
+                                    Real Subs. Real Work. Real Results.
+                                </h1>
+                                <div className="main-wrapper mx-auto" style={{maxWidth: '876px'}}>
+                                    <div className="buttons d-flex flex-wrap justify-content-center gap-3 mb-4">
+                                        <Link href="/post-project" className="btn btn-primary rounded-3">
+                                            <span>Post a Project</span>
+                                            <Image
+                                                src="/assets/img/icons/arrow-white.svg"
+                                                width={12}
+                                                height={14}
+                                                alt="Arrow"
+                                                style={{filter: 'invert(1)'}}
+                                            />
+                                        </Link>
+                                        <Link href="/join-subcontractor" className="btn bg-dark rounded-3">
+                                            <span className="text-white">Join as Subcontractor</span>
+                                            <Image
+                                                src="/assets/img/icons/arrow-white.svg"
+                                                width={12}
+                                                height={14}
+                                                alt="Arrow"
+                                            />
+                                        </Link>
+                                        <Link href="/affiliate" className="btn bg-white rounded-3">
+                                            <span>Be an Affiliate</span>
+                                            <Image
+                                                src="/assets/img/icons/arrow-white.svg"
+                                                width={12}
+                                                height={14}
+                                                alt="Arrow"
+                                                style={{filter: 'invert(1)'}}
+                                            />
+                                        </Link>
                                     </div>
-                                    <div className="input-wrapper">
-                                        <Image
-                                            src="/assets/img/Location.svg"
-                                            width={20}
-                                            height={20}
-                                            alt="Location Icon"
-                                        />
-                                        <input
-                                            type="text"
-                                            className="input-control"
-                                            placeholder="42291"
-                                            value={searchZip}
-                                            onChange={(e) => setSearchZip(e.target.value)}
-                                        />
-                                    </div>
-                                    <input type="submit" className="submit-btn" value="Search" />
-                                </form>
-
-                                <div className="buttons">
-                                    <Link href="/post-project" className="custom-form-btn btn-s1">
-                                        <span>Post a Project</span>
-                                        <Image
-                                            src="/assets/img/form-arrow.svg"
-                                            width={16}
-                                            height={18}
-                                            alt="Arrow"
-                                        />
-                                    </Link>
-                                    <Link href="/join-subcontractor" className="custom-form-btn btn-s2">
-                                        <span>Join as Subcontractor</span>
-                                        <Image
-                                            src="/assets/img/form-arrow.svg"
-                                            width={16}
-                                            height={18}
-                                            alt="Arrow"
-                                        />
-                                    </Link>
-                                    <Link href="/affiliate" className="custom-form-btn btn-s3">
-                                        <span>Be an Affiliate</span>
-                                        <Image
-                                            src="/assets/img/form-arrow.svg"
-                                            width={16}
-                                            height={18}
-                                            alt="Arrow"
-                                        />
+                                    <Link href="/trial" className="notice-button d-flex justify-content-center">
+                                        No credit card required enjoy a free 30-day trial.
                                     </Link>
                                 </div>
                             </div>
@@ -157,50 +119,64 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* Projects Section with Slick */}
-                <section className="project-sec">
+                {/* Projects Section */}
+                <section className="project-sec py-5">
                     <div className="container">
                         <div className="content-wrappper mb-5 text-center">
-                            <Link href="/projects" className="custom-btn custom-outline-btn mx-auto mb-4">
+                            <Link href="/projects" className="btn btn-outline-dark mx-auto mb-4">
                                 PROJECTS
                             </Link>
                             <h2 className="main-title">Explore real projects posted by top general contractors</h2>
                         </div>
 
-                        {/* ✅ Wrap Slider around slides */}
-                        <Slider {...sliderSettings} className="main-card-slide">
-                            {projects.map((project, idx) => (
-                                <div key={idx} className="p-2"> {/* ✅ Slick requires direct child wrapper */}
-                                    <div className="custom-card">
-                                        <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                            <Link
-                                                href={`/projects?category=${project.category.toLowerCase()}`}
-                                                className="custom-btn custom-primary-btn"
+                        {/* ✅ Slick Slider */}
+                        <div className="main-card-slide">
+                            <Slider {...sliderSettings}>
+                                {projects.map((project, index) => (
+                                    <div key={index} className="px-2">
+                                        <div className="custom-card">
+                                            <div
+                                                className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
+                                                <Link href={`/projects?category=${project.category.toLowerCase()}`}
+                                                      className="btn btn-primary">
+                                                    {project.category}
+                                                </Link>
+                                                <div className="date text-primary-gray-light">{project.timeAgo}</div>
+                                            </div>
+                                            <div className="title text-black fs-5 fw-semibold mb-3">
+                                                {project.location}
+                                            </div>
+                                            <div className="description">
+                                                {expandedCards.has(index)
+                                                    ? project.description.repeat(5)
+                                                    : `${project.description.substring(0, 150)}...`}
+                                            </div>
+                                            <button
+                                                className="see-more-btn btn btn-link p-0"
+                                                onclick={() => toggleExpand(index)}
                                             >
-                                                {project.category}
-                                            </Link>
-                                            <div className="date custom-text-gray-light">23 mins ago</div>
+                                                {expandedCards.has(index) ? 'See less' : 'See more'}
+                                            </button>
                                         </div>
-                                        <div className="title text-black fs-5 fw-semibold mb-3">{project.location}</div>
-                                        <div className="description">{project.description}</div>
-                                        <button className="see-more-btn">See more</button>
                                     </div>
-                                </div>
-                            ))}
-                        </Slider>
+                                ))}
+                            </Slider>
+                        </div>
 
-                        <div className="buttons d-flex align-items-center justify-content-between gap-2 flex-wrap mt-4">
+                        {/* Pagination & See All */}
+                        <div className="buttons d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5">
+                            {/* Optional: Add custom dots if needed */}
                             <div className="custom-pagination d-flex align-items-center justify-content-center gap-2">
-                                {/* Optional: leave empty or enable `dots: true` in settings */}
+                                {/* You can add manual dots here if using custom pagination */}
                             </div>
-                            <Link href="/projects" className="custom-btn custom-bg-dark text-white rounded-3">
-                                <span>See All</span>
+                            <Link href="/all-projects" className="btn bg-dark rounded-3">
+                                <span className="text-white">See All</span>
                                 <Image
-                                    src="/assets/img/btn-arrow.svg"
+                                    src="/assets/img/icons/arrow-white.svg"
                                     width={12}
-                                    height={10}
+                                    height={14}
                                     alt="Arrow"
-                                    className="d-block mt-1"
+                                    className="d-block"
                                 />
                             </Link>
                         </div>

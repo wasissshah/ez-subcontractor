@@ -1,0 +1,60 @@
+{
+  "pages": {
+    "/subscription/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/subscription/page.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_font-montserrat_css.css",
+      "static/css/css-node_modules_bootstrap_dist_css_bootstrap_min_css.css",
+      "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/blogs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/blogs/page.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/page.js"
+    ],
+    "/auth/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/login/page.js"
+    ],
+    "/about-us/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/about-us/page.js"
+    ],
+    "/contact-us/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/contact-us/page.js"
+    ],
+    "/faq/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/faq/page.js"
+    ],
+    "/privacy-policy/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-f89a77.css",
+      "static/chunks/app/privacy-policy/page.js"
+    ]
+  }
+}

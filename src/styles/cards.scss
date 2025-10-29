@@ -1,0 +1,89 @@
+$primary: #C9DA2B;
+$gray: #F9F9F9;
+$gray-light: #9A9A9A;
+$dark: #272727;
+
+.project-sec {
+  padding: 50px 0;
+
+  .main-card-slide {
+    margin-bottom: 30px;
+  }
+
+  .description {
+    font-weight: 600;
+    color: #6d6d6d;
+  }
+
+  .slick-dots,
+  .custom-pagination {
+    display: flex !important;
+    justify-content: start;
+    align-items: center;
+    bottom: -80px;
+    left: 20px;
+
+    li,
+    .page-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: $dark;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.active,
+      &:hover {
+        background: $primary;
+        border: 2px solid $dark;
+        width: 29px;
+        height: 12px;
+        border-radius: 30px;
+      }
+      button {
+        padding: 0;
+        width: 12px;
+        height: 12px;
+        &:before {
+          display: none;
+        }
+      }
+    }
+    li.slick-active {
+      background: $primary;
+      border: 2px solid $dark;
+      width: 29px;
+      height: 12px;
+      border-radius: 30px;
+    }
+  }
+}
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+
+  &.expanded {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
+}
+.see-more-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: $primary;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 5px;
+  padding: 0;
+}
+.custom-card.has-more {
+  .see-more-btn {
+    display: inline-block;
+  }
+}
+

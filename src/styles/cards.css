@@ -1,0 +1,94 @@
+.project-sec {
+  padding: 50px 0;
+}
+.project-sec .main-card-slide {
+  margin-bottom: 30px;
+}
+.project-sec .description {
+  font-weight: 600;
+  color: #6d6d6d;
+}
+.project-sec .slick-dots,
+.project-sec .custom-pagination {
+  display: flex !important;
+  justify-content: start;
+  align-items: center;
+  bottom: -80px;
+  left: 20px;
+}
+.project-sec .slick-dots li,
+.project-sec .slick-dots .page-dot,
+.project-sec .custom-pagination li,
+.project-sec .custom-pagination .page-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #272727;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.project-sec .slick-dots li.active, .project-sec .slick-dots li:hover,
+.project-sec .slick-dots .page-dot.active,
+.project-sec .slick-dots .page-dot:hover,
+.project-sec .custom-pagination li.active,
+.project-sec .custom-pagination li:hover,
+.project-sec .custom-pagination .page-dot.active,
+.project-sec .custom-pagination .page-dot:hover {
+  background: #C9DA2B;
+  border: 2px solid #272727;
+  width: 29px;
+  height: 12px;
+  border-radius: 30px;
+}
+.project-sec .slick-dots li button,
+.project-sec .slick-dots .page-dot button,
+.project-sec .custom-pagination li button,
+.project-sec .custom-pagination .page-dot button {
+  padding: 0;
+  width: 12px;
+  height: 12px;
+}
+.project-sec .slick-dots li button:before,
+.project-sec .slick-dots .page-dot button:before,
+.project-sec .custom-pagination li button:before,
+.project-sec .custom-pagination .page-dot button:before {
+  display: none;
+}
+.project-sec .slick-dots li.slick-active,
+.project-sec .custom-pagination li.slick-active {
+  background: #C9DA2B;
+  border: 2px solid #272727;
+  width: 29px;
+  height: 12px;
+  border-radius: 30px;
+}
+
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+}
+.description.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.see-more-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #C9DA2B;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 5px;
+  padding: 0;
+}
+
+.custom-card.has-more .see-more-btn {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=cards.css.map */
