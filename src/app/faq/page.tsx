@@ -51,7 +51,7 @@ export default function AboutUsPage() {
                                             <button
                                                 className={`accordion-button ${!isOpen ? 'collapsed' : ''} bg-white`}
                                                 type="button"
-                                                onclick={() => toggleAccordion(item.id)}
+                                                // onclick={() => toggleAccordion(item.id)}
                                                 aria-expanded={isOpen}
                                                 aria-controls={`faqCollapse${item.id}`}
                                             >
