@@ -153,7 +153,7 @@ export default function HomePage() {
                                             </div>
                                             <button
                                                 className="see-more-btn btn btn-link p-0"
-                                                onclick={() => toggleExpand(index)}
+                                                // onclick={() => toggleExpand(index)}
                                             >
                                                 {expandedCards.has(index) ? 'See less' : 'See more'}
                                             </button>
