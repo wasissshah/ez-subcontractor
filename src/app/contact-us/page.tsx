@@ -123,7 +123,7 @@ export default function AboutUsPage() {
                                 {/* Contact Form */}
                                 <div className="col-lg-8">
                                     <div className="form-wrapper">
-                                        <form onsubmit={handleSubmit} className="form">
+                                        <form className="form">
                                             <div className="input-wrapper d-flex flex-column">
                                                 <label htmlFor="firstName" className="mb-1 fw-semibold">
                                                     First Name *
