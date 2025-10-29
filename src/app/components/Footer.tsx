@@ -122,7 +122,7 @@ export default function Footer() {
                                     <input
                                         type="email"
                                         value={email}
-                                        onchange={(e) => setEmail(e.target.value)}
+                                        // onchange={(e) => setEmail(e.target.value)}
                                         placeholder="Your email address"
                                         className="form-control"
                                         required
