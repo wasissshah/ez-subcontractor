@@ -192,7 +192,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "88e93973d87639a5"; }
+/******/ 		__webpack_require__.h = function() { return "91663ff64c16e387"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -830,11 +830,10 @@
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
 /******/ 			"webpack": 0,
-/******/ 			"css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a": 0,
+/******/ 			"css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-79dcab": 0,
 /******/ 			"css-src_styles_font-montserrat_css": 0,
 /******/ 			"css-node_modules_bootstrap_dist_css_bootstrap_min_css": 0,
-/******/ 			"css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341": 0,
-/******/ 			"css-src_styles_login_css": 0
+/******/ 			"css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341": 0
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.j = function(chunkId, promises) {
@@ -846,7 +845,7 @@
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if(/^(app(\/(a(bout\-us|d\-post|uth\/login)\/page|(((blog|contact\-u|how\-it\-work|my\-ad|project|terms\-and\-condition)s|faq|subscription)\/|)page|layout)|\-pages\-internals)|main(|\-app)|pages\/_(app|error)|\/_error|react\-refresh)$/.test(chunkId)) {
+/******/ 						if(/^(app(\/((|_not\-found\/)page|layout)|\-pages\-internals)|main\-app)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise(function(resolve, reject) { installedChunkData = installedChunks[chunkId] = [resolve, reject]; });
 /******/ 							promises.push(installedChunkData[2] = promise);

@@ -139,8 +139,7 @@ export default function HomePage() {
                                                     : `${project.description.substring(0, 150)}...`}
                                             </div>
                                             <button
-                                                className="see-more-btn btn btn-link p-0"
-                                                onclick={() => toggleExpand(index)}
+                                                className="see-more-btn btn btn-link p-0 text-primary"
                                             >
                                                 {expandedCards.has(index) ? 'See less' : 'See more'}
                                             </button>

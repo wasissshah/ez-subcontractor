@@ -1,9 +1,4 @@
 {
-  "/page": "app/page.js",
-  "/how-it-works/page": "app/how-it-works/page.js",
-  "/subscription/page": "app/subscription/page.js",
-  "/blogs/page": "app/blogs/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/terms-and-conditions/page": "app/terms-and-conditions/page.js",
-  "/faq/page": "app/faq/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js"
 }

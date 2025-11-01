@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-79dcab.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,71 +14,10 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/auth/login/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/login/page.js"
-    ],
-    "/about-us/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/about-us/page.js"
-    ],
-    "/contact-us/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/contact-us/page.js"
-    ],
-    "/projects/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/projects/page.js"
-    ],
-    "/subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/subscription/page.js"
-    ],
-    "/blogs/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/blogs/page.js"
-    ],
-    "/ad-post/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/ad-post/page.js"
-    ],
-    "/my-ads/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/my-ads/page.js"
-    ],
-    "/how-it-works/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/how-it-works/page.js"
-    ],
-    "/terms-and-conditions/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/terms-and-conditions/page.js"
-    ],
-    "/faq/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_contact-us_cs-cad22a.css",
-      "static/chunks/app/faq/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
