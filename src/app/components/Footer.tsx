@@ -1,3 +1,4 @@
+// components/Footer.tsx
 'use client';
 
 import Link from 'next/link';
@@ -9,20 +10,27 @@ import "../../styles/footer.css";
 export default function Footer() {
     const [email, setEmail] = useState('');
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // You can add newsletter subscription logic here later
+        console.log('Subscribed with email:', email);
+        setEmail('');
+    };
+
     return (
         <footer
             className="footer"
             style={{
                 backgroundImage: `url('/assets/img/footer-bg.webp')`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
             }}
         >
             <div className="container">
                 <Link
                     href="/"
                     className="footer-logo d-flex justify-content-center mx-auto mb-4"
-                    style={{width: 'fit-content'}}
+                    style={{ width: 'fit-content' }}
                     aria-label="Home"
                 >
                     <Image
@@ -53,7 +61,7 @@ export default function Footer() {
                                 <Link
                                     href="mailto:EZcontractorz1@gmail.com"
                                     className="text-decoration-none"
-                                    style={{color: '#E6EE9D'}}
+                                    style={{ color: '#E6EE9D' }}
                                 >
                                     EZcontractorz1@gmail.com
                                 </Link>
@@ -71,7 +79,7 @@ export default function Footer() {
                                 <Link
                                     href="tel:+10001234392"
                                     className="text-decoration-none"
-                                    style={{color: '#E6EE9D'}}
+                                    style={{ color: '#E6EE9D' }}
                                 >
                                     +1 (000) 123-4392
                                 </Link>
@@ -86,20 +94,20 @@ export default function Footer() {
                                         loading="lazy"
                                     />
                                 </div>
-                                <span style={{color: '#E6EE9D'}}>
-                  132 Dartmouth St Boston, MA 02116
-                </span>
+                                <span style={{ color: '#E6EE9D' }}>
+                                    132 Dartmouth St Boston, MA 02116
+                                </span>
                             </div>
                         </div>
 
-                        {/* Quick Links */}
+                        {/* Quick Links – Updated to match new structure */}
                         <div className="col-lg-2 col-sm-6">
                             <div className="footer-title">Quick Links</div>
                             <ul className="footer-links m-0 p-0">
                                 <li><Link href="/">Home</Link></li>
-                                <li><Link href="/messages">Messages</Link></li>
-                                <li><Link href="/contact-us">Contact Us</Link></li>
-                                <li><Link href="/about-us">About Us</Link></li>
+                                <li><Link href="/projects">Projects</Link></li>
+                                <li><Link href="/subscription">30 Days Free Trial</Link></li>
+                                <li><Link href="/how-it-works">How It Works</Link></li>
                             </ul>
                         </div>
 
@@ -117,12 +125,14 @@ export default function Footer() {
                         {/* Newsletter */}
                         <div className="col-lg-4 col-sm-6">
                             <div className="newsletter-card">
-                                <div className="title text-white fw-semibold">Join Our Newsletter</div>
-                                <form className="form-wrapper mb-3">
+                                <div className="title text-white fw-semibold">
+                                    Join Our Newsletter
+                                </div>
+                                <form className="form-wrapper mb-3" onSubmit={handleSubmit}>
                                     <input
                                         type="email"
                                         value={email}
-                                        // onchange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         placeholder="Your email address"
                                         className="form-control"
                                         required
@@ -133,7 +143,7 @@ export default function Footer() {
                                         value="Subscribe"
                                     />
                                 </form>
-                                <p className="mb-0 text-white opacity-50" style={{fontSize: '14px'}}>
+                                <p className="mb-0 text-white opacity-50" style={{ fontSize: '14px' }}>
                                     Will send you weekly updates for your better tool management.
                                 </p>
                             </div>
@@ -147,9 +157,15 @@ export default function Footer() {
                         © {new Date().getFullYear()} EZ Subcontractor. All Rights Reserved
                     </div>
                     <div className="right text-white fw-medium">
-                        Developed By: <Link href="https://designspartans.com"
-                                            className="text-primary fw-semibold text-decoration-underline">Design
-                        Spartans</Link>
+                        Developed By:{' '}
+                        <Link
+                            href="https://designspartans.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary fw-semibold text-decoration-underline"
+                        >
+                            Design Spartans
+                        </Link>
                     </div>
                 </div>
             </div>

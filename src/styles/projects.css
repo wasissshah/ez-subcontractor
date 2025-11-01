@@ -16,7 +16,7 @@
   justify-content: space-between;
   min-height: fit-content;
   padding: 5px;
-  border: 1px solid #272727;
+  border: 1px solid #272727 !important;
 }
 .hero-sec .content-wrapper .form-wrapper .input-wrapper {
   display: flex;
@@ -26,7 +26,7 @@
   width: 100%;
 }
 .hero-sec .content-wrapper .form-wrapper .input-wrapper:first-child {
-  border-right: 1px solid #272727;
+  border-right: 1px solid #272727 !important;
 }
 .hero-sec .content-wrapper .form-wrapper .input-wrapper .input-control {
   border: none;

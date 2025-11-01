@@ -8,58 +8,25 @@
   font-weight: 600;
   color: #6d6d6d;
 }
-.project-sec .slick-dots,
 .project-sec .custom-pagination {
-  display: flex !important;
-  justify-content: start;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  bottom: -80px;
-  left: 20px;
+  gap: 8px;
 }
-.project-sec .slick-dots li,
-.project-sec .slick-dots .page-dot,
-.project-sec .custom-pagination li,
 .project-sec .custom-pagination .page-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #272727;
+  background: #272727 !important;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.project-sec .slick-dots li.active, .project-sec .slick-dots li:hover,
-.project-sec .slick-dots .page-dot.active,
-.project-sec .slick-dots .page-dot:hover,
-.project-sec .custom-pagination li.active,
-.project-sec .custom-pagination li:hover,
-.project-sec .custom-pagination .page-dot.active,
-.project-sec .custom-pagination .page-dot:hover {
-  background: #C9DA2B;
-  border: 2px solid #272727;
+.project-sec .custom-pagination .page-dot.active, .project-sec .custom-pagination .page-dot:hover {
+  background: #C9DA2B !important;
+  border: 2px solid #272727 !important;
   width: 29px;
-  height: 12px;
-  border-radius: 30px;
-}
-.project-sec .slick-dots li button,
-.project-sec .slick-dots .page-dot button,
-.project-sec .custom-pagination li button,
-.project-sec .custom-pagination .page-dot button {
-  padding: 0;
-  width: 12px;
-  height: 12px;
-}
-.project-sec .slick-dots li button:before,
-.project-sec .slick-dots .page-dot button:before,
-.project-sec .custom-pagination li button:before,
-.project-sec .custom-pagination .page-dot button:before {
-  display: none;
-}
-.project-sec .slick-dots li.slick-active,
-.project-sec .custom-pagination li.slick-active {
-  background: #C9DA2B;
-  border: 2px solid #272727;
-  width: 29px;
-  height: 12px;
+  height: 11px;
   border-radius: 30px;
 }
 
@@ -80,7 +47,7 @@
   display: none;
   background: none;
   border: none;
-  color: #C9DA2B;
+  color: #C9DA2B !important;
   cursor: pointer;
   font-weight: 600;
   margin-top: 5px;

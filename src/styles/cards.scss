@@ -1,7 +1,8 @@
-$primary: #C9DA2B;
-$gray: #F9F9F9;
-$gray-light: #9A9A9A;
-$dark: #272727;
+$primary: #C9DA2B !important;
+$gray: #F9F9F9 !important;
+$gray-light: #9A9A9A !important;
+$dark: #272727 !important;
+$danger: #DC2626;
 
 .project-sec {
   padding: 50px 0;
@@ -15,15 +16,12 @@ $dark: #272727;
     color: #6d6d6d;
   }
 
-  .slick-dots,
   .custom-pagination {
-    display: flex !important;
-    justify-content: start;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    bottom: -80px;
-    left: 20px;
+    gap: 8px;
 
-    li,
     .page-dot {
       width: 12px;
       height: 12px;
@@ -37,24 +35,9 @@ $dark: #272727;
         background: $primary;
         border: 2px solid $dark;
         width: 29px;
-        height: 12px;
+        height: 11px;
         border-radius: 30px;
       }
-      button {
-        padding: 0;
-        width: 12px;
-        height: 12px;
-        &:before {
-          display: none;
-        }
-      }
-    }
-    li.slick-active {
-      background: $primary;
-      border: 2px solid $dark;
-      width: 29px;
-      height: 12px;
-      border-radius: 30px;
     }
   }
 }

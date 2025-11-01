@@ -4,18 +4,21 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation'; // 👈 Import this
+import { usePathname } from 'next/navigation';
 
 import '../../styles/header.css';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const pathname = usePathname(); // 👈 Get current route
+    const pathname = usePathname();
 
-    // Helper function to check if a link is active
     const isActive = (href: string) => {
         if (href === '/') return pathname === '/';
         return pathname.startsWith(href);
+    };
+
+    const toggleMenu = () => {
+        setIsMenuOpen((prev) => !prev);
     };
 
     return (
@@ -34,11 +37,11 @@ export default function Header() {
 
                     {/* Hamburger button */}
                     <button
-                        className="hamburger"
+                        className={`hamburger ${isMenuOpen ? 'open' : ''}`}
                         id="hamburger-icon"
                         aria-expanded={isMenuOpen}
                         aria-controls="primary-navigation"
-                        // onclick={() => setIsMenuOpen(!isMenuOpen)}
+                        onClick={toggleMenu}
                     >
                         <span className="line line-1"></span>
                         <span className="line line-2"></span>
@@ -48,34 +51,69 @@ export default function Header() {
                     {/* Navigation */}
                     <nav
                         id="primary-navigation"
-                        className={`${
-                            isMenuOpen ? 'nav-open' : 'nav-closed'
-                        }`}
+                        className={isMenuOpen ? 'd-block' : 'd-none d-lg-flex'}
+                        aria-hidden={!isMenuOpen}
                     >
                         <ul className="menu-links mb-0">
                             <li>
-                                <Link href="/" className="active">
+                                <Link
+                                    href="/"
+                                    className={isActive('/') ? 'active' : ''}
+                                    onClick={toggleMenu}
+                                >
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/projects">Projects</Link>
+                                <Link
+                                    href="/projects"
+                                    className={isActive('/projects') ? 'active' : ''}
+                                    onClick={toggleMenu}
+                                >
+                                    Projects
+                                </Link>
                             </li>
                             <li>
-                                <Link href="/subscription">30 Days Free Trial</Link>
+                                <Link
+                                    href="/subscription"
+                                    className={isActive('/subscription') ? 'active' : ''}
+                                    onClick={toggleMenu}
+                                >
+                                    30 Days Free Trial
+                                </Link>
                             </li>
                             <li>
-                                <Link href="/blogs">Blog</Link>
+                                <Link
+                                    href="/how-it-works"
+                                    className={isActive('/how-it-works') ? 'active' : ''}
+                                    onClick={toggleMenu}
+                                >
+                                    How It Works
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/blogs"
+                                    className={isActive('/blogs') ? 'active' : ''}
+                                    onClick={toggleMenu}
+                                >
+                                    Blog
+                                </Link>
                             </li>
                         </ul>
                         <div className="buttons d-flex align-items-center flex-wrap gap-3">
                             <Link
                                 href="/auth/login"
                                 className="btn btn-outline-dark rounded-3"
+                                onClick={toggleMenu}
                             >
                                 Log In
                             </Link>
-                            <Link href="/auth/signup" className="btn btn-primary rounded-3">
+                            <Link
+                                href="/auth/signup"
+                                className="btn btn-primary rounded-3"
+                                onClick={toggleMenu}
+                            >
                                 Sign Up
                             </Link>
                         </div>
