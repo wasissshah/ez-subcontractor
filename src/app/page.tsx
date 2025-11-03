@@ -53,6 +53,12 @@ export default function HomePage() {
                     slidesToShow: 1,
                 },
             },
+            {
+                breakpoint: 480, // Add this for smaller mobile devices
+                settings: {
+                    slidesToShow: 1,
+                },
+            },
         ],
     };
 
