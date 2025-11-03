@@ -78,7 +78,7 @@ export default function HomePage() {
                                 </h1>
                                 <div className="main-wrapper mx-auto" style={{ maxWidth: '876px' }}>
                                     <div className="buttons d-flex flex-wrap justify-content-center gap-3 mb-4">
-                                        <Link href="/" className="btn btn-primary rounded-3">
+                                        <Link href="/" className="btn btn-primary home-hero-btn rounded-3">
                                             <span>Post a Project</span>
                                             <Image
                                                 src="/assets/img/icons/arrow-white.svg"
@@ -88,7 +88,7 @@ export default function HomePage() {
                                                 style={{ filter: 'invert(1)' }}
                                             />
                                         </Link>
-                                        <Link href="/projects" className="btn bg-dark rounded-3">
+                                        <Link href="/projects" className="btn bg-dark home-hero-btn rounded-3">
                                             <span className="text-white">Search a Project</span>
                                             <Image
                                                 src="/assets/img/icons/arrow-white.svg"
