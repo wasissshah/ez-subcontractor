@@ -33,33 +33,21 @@ export default function HomePage() {
         setExpandedCards(newExpanded);
     };
 
-    const sliderSettings = {
+    const sliderSettingsDesktop = {
         slidesToShow: 3,
         slidesToScroll: 1,
         arrows: false,
         dots: true,
         infinite: true,
         speed: 600,
-        responsive: [
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 2,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                },
-            },
-            {
-                breakpoint: 480, // Add this for smaller mobile devices
-                settings: {
-                    slidesToShow: 1,
-                },
-            },
-        ],
+    };
+    const sliderSettingsMobile = {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        dots: true,
+        infinite: true,
+        speed: 600,
     };
 
     return (
@@ -120,8 +108,42 @@ export default function HomePage() {
                             <h2 className="main-title">Explore real projects posted by top general contractors</h2>
                         </div>
 
-                        <div className="main-card-slide">
-                            <Slider {...sliderSettings}>
+                        <div className="main-card-slide d-none d-lg-block">
+                            <Slider {...sliderSettingsDesktop}>
+                                {projects.map((project, index) => (
+                                    <div key={index} className="px-2">
+                                        <div className="custom-card">
+                                            <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
+                                                <Link
+                                                    href={`/projects?category=${project.category.toLowerCase()}`}
+                                                    className="btn btn-primary"
+                                                >
+                                                    {project.category}
+                                                </Link>
+                                                <div className="date text-primary-gray-light">
+                                                    {project.timeAgo}
+                                                </div>
+                                            </div>
+                                            <div className="title text-black fs-5 fw-semibold mb-3">
+                                                {project.location}
+                                            </div>
+                                            <div className="description">
+                                                {expandedCards.has(index)
+                                                    ? project.description.repeat(5)
+                                                    : `${project.description.substring(0, 150)}...`}
+                                            </div>
+                                            <button
+                                                className="see-more-btn btn btn-link p-0 text-primary"
+                                            >
+                                                {expandedCards.has(index) ? 'See less' : 'See more'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
+                        <div className="main-card-slide d-block d-lg-none">
+                            <Slider {...sliderSettingsMobile}>
                                 {projects.map((project, index) => (
                                     <div key={index} className="px-2">
                                         <div className="custom-card">
