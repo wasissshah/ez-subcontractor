@@ -64,8 +64,8 @@ export default function SubscribedPage() {
                                         <Slider ref={sliderRef} {...settings}>
                                             {[1, 2].map((_, i) => (
                                                 <div key={i} className="slider-item">
-                                                    <div className="topbar d-flex align-items-center gap-2 mb-3">
-                                                        <div className="icon">
+                                                    <div className="d-flex align-items-center gap-2 mb-3">
+                                                        <div className="icon bg-primary">
                                                             <Image src="/assets/img/icons/camera.svg" width={14} height={10} alt="icon" />
                                                         </div>
                                                         <div style={{ fontSize: '14px' }} className="content text-white fw-medium">
