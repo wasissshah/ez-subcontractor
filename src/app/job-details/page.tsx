@@ -16,7 +16,7 @@ export default function JobDetailsPage() {
             <div className="sections overflow-hidden">
                 <section className="banner-sec">
                     <div className="container">
-                        <div className="topbar">
+                        <div className="topbar bg-transparent">
                             <div className="d-flex align-items-center gap-2">
                                 <div className="icon">
                                     <Image src="assets/img/button-angle.svg" width={10} height={15} alt="Angle" />
@@ -29,7 +29,7 @@ export default function JobDetailsPage() {
                             {/* Left Side */}
                             <div className="col-lg-8">
                                 <div className="custom-card mb-4">
-                                    <div className="topbar d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                                    <div className="topbar bg-transparent d-flex align-items-center justify-content-between gap-2 flex-wrap">
                                         <Link href="#" className="btn btn-primary">Framing</Link>
                                         <div className="d-flex align-items-center gap-2">
                                             <div className="date custom-text-gray-light fs-14">23 mins ago</div>
