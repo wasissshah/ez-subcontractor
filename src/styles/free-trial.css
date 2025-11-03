@@ -151,7 +151,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white url("./../img/copy-icon.svg") center/20px 20px no-repeat;
+  background: white url("/assets/img/copy-icon.svg") center/20px 20px no-repeat;
   box-shadow: 0px 0px 0px 4px 0px rgba(0, 0, 0, 0.1882352941);
 }
 .filter-sec .filter-card .icon {

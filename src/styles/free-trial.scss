@@ -2,7 +2,6 @@ $primary: #C9DA2B !important;
 $gray: #F9F9F9 !important;
 $gray-light: #9A9A9A !important;
 $dark: #272727 !important;
-$danger: #DC2626;
 
 .banner-sec {
   padding-top: 150px;
@@ -181,7 +180,7 @@ $danger: #DC2626;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: white url('./../img/copy-icon.svg') center /20px 20px no-repeat;
+      background: white url('/assets/img/copy-icon.svg') center /20px 20px no-repeat;
       box-shadow: 0px 0px 0px 4px 0px #00000030;
     }
 
