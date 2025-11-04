@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,35 +14,17 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/job-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
-      "static/chunks/app/job-details/page.js"
-    ],
-    "/affiliate/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
-      "static/chunks/app/affiliate/dashboard/page.js"
-    ],
     "/affiliate/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
       "static/chunks/app/affiliate/profile/page.js"
     ],
-    "/auth/login/page": [
+    "/affiliate/edit-profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/login/page.js"
-    ],
-    "/auth/register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/register/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
+      "static/chunks/app/affiliate/edit-profile/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
