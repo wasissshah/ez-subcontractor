@@ -5,7 +5,7 @@ $dark: #272727;
 
 /* Hero */
 
-.hero-sec {
+.hero-sec.pricing {
     position: relative;
     z-index: 1;
     padding-top: 160px !important;
@@ -34,7 +34,7 @@ $dark: #272727;
 
 /* Pricing Section */
 .pricing-sec,
-.hero-sec {
+.hero-sec.pricing {
     padding: 50px 0;
     .nav-tabs {
         background-color: white;

@@ -1,9 +1,8 @@
 {
-  "/projects/page": "app/projects/page.js",
-  "/subscription/page": "app/subscription/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/how-it-works/page": "app/how-it-works/page.js",
-  "/blogs/page": "app/blogs/page.js",
   "/auth/login/page": "app/auth/login/page.js",
-  "/page": "app/page.js",
-  "/subscribed/page": "app/subscribed/page.js"
+  "/subscribed/page": "app/subscribed/page.js",
+  "/blogs/page": "app/blogs/page.js",
+  "/auth/register/page": "app/auth/register/page.js"
 }

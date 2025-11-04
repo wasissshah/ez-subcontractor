@@ -40,7 +40,7 @@ export default function FreeTrialPage() {
 
             <div className="sections overflow-hidden">
                 {/* Banner Section */}
-                <section className="banner-sec position-static">
+                <section className="banner-sec trial position-static">
                     <div className="container">
                         <div className="row g-4">
                             <div className="col-lg-6">

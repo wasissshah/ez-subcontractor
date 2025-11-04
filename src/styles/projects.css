@@ -1,15 +1,15 @@
 /* Hero */
-.hero-sec {
+.hero-sec.projects {
   background-color: #FAFBEA;
   padding-top: 160px;
   padding-bottom: 70px;
   position: relative;
 }
-.hero-sec .content-wrapper {
+.hero-sec.projects .content-wrapper {
   max-width: 1069px;
   margin: 0 auto;
 }
-.hero-sec .content-wrapper .form-wrapper {
+.hero-sec.projects .content-wrapper .form-wrapper {
   background-color: white;
   border-radius: 8px;
   display: flex;
@@ -19,17 +19,17 @@
   padding: 5px;
   border: 1px solid #272727 !important;
 }
-.hero-sec .content-wrapper .form-wrapper .input-wrapper {
+.hero-sec.projects .content-wrapper .form-wrapper .input-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px;
   width: 100%;
 }
-.hero-sec .content-wrapper .form-wrapper .input-wrapper:first-child {
+.hero-sec.projects .content-wrapper .form-wrapper .input-wrapper:first-child {
   border-right: 1px solid #272727 !important;
 }
-.hero-sec .content-wrapper .form-wrapper .input-wrapper .input-control {
+.hero-sec.projects .content-wrapper .form-wrapper .input-wrapper .input-control {
   border: none;
   background-color: transparent;
   width: 100%;
@@ -37,7 +37,7 @@
   margin: 0;
   font-size: 18px;
 }
-.hero-sec .content-wrapper .btn {
+.hero-sec.projects .content-wrapper .btn {
   padding: 10px 20px;
 }
 

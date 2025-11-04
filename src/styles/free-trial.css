@@ -1,15 +1,15 @@
-.banner-sec {
+.banner-sec.trial {
   padding-top: 150px;
   padding-bottom: 50px;
 }
-.banner-sec .banner-wrapper {
+.banner-sec.trial .banner-wrapper {
   background: center/cover no-repeat;
   padding: 12px;
   border-radius: 12px;
   box-shadow: 0 4px 35px 0 rgba(0, 0, 0, 0.1450980392);
   max-width: 100%;
 }
-.banner-sec .banner-wrapper .topbar .icon {
+.banner-sec.trial .banner-wrapper .topbar .icon {
   background-color: #C9DA2B;
   border-radius: 10px;
   display: flex;
@@ -18,7 +18,7 @@
   width: 29px;
   height: 29px;
 }
-.banner-sec .banner-wrapper .icon {
+.banner-sec.trial .banner-wrapper .icon {
   background-color: white;
   border-radius: 10px;
   width: 29px;
@@ -28,16 +28,16 @@
   align-items: center;
   border: none;
 }
-.banner-sec .main-slider {
+.banner-sec.trial .main-slider {
   position: relative;
 }
-.banner-sec .slider-controls {
+.banner-sec.trial .slider-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 16px;
 }
-.banner-sec .slider-controls .custom-arrows button {
+.banner-sec.trial .slider-controls .custom-arrows button {
   background: transparent;
   border: none;
 }

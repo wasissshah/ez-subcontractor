@@ -13,7 +13,7 @@ export default function HowItWorksPage() {
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                <section className="hero-sec position-static">
+                <section className="hero-sec how-it-works position-static v2">
                     <div className="container">
                         <h1 className="main-title text-center mb-5">How It Works</h1>
                         <div className="row g-3">

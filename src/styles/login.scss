@@ -4,7 +4,7 @@ $gray-light: #9A9A9A;
 $dark: #272727;
 $danger: #DC2626;
 
-.hero-sec {
+.hero-sec.login {
   .image-wrapper {
     .left-image {
       position: fixed;
@@ -22,9 +22,11 @@ $danger: #DC2626;
     }
   }
   .content-wrapper {
-    width: 50%;
+    width: 100%;
     margin-left: auto;
     min-height: 100vh;
+    max-width: 482px;
+    margin: 0 auto;
     /* screen height se chhoti na ho */
     display: flex;
     align-items: center;
@@ -154,7 +156,7 @@ $danger: #DC2626;
 }
 
 @media (max-width:576px) {
-  .hero-sec {
+  .hero-sec.login {
     .content-wrapper {
       .content {
         .account-wrapper {

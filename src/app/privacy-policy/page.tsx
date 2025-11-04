@@ -15,7 +15,7 @@ export default function AboutUsPage() {
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                <div className="hero-sec position-static">
+                <div className="hero-sec-privacy position-static">
                     <div className="container">
                         <h1 className="main-title text-center mb-4">Privacy Policy</h1>
                         <div className="content-wrapper" style={{maxWidth: '100%'}}>

@@ -1,11 +1,11 @@
-.banner-sec {
+.banner-sec.job-single {
   padding-top: 147px;
   padding-bottom: 50px;
 }
-.banner-sec .topbar {
+.banner-sec.job-single .topbar {
   margin-bottom: 40px;
 }
-.banner-sec .topbar .icon {
+.banner-sec.job-single .topbar .icon {
   width: 45px;
   height: 45px;
   border-radius: 10px;
@@ -14,16 +14,16 @@
   justify-content: center;
   background-color: #272727 !important;
 }
-.banner-sec .custom-card {
+.banner-sec.job-single .custom-card {
   border-left: none !important;
   box-shadow: none;
   padding: clamp(12px, 3vw, 30px);
   border-radius: 25px;
 }
-.banner-sec .custom-card .topbar {
+.banner-sec.job-single .custom-card .topbar {
   margin-bottom: 30px;
 }
-.banner-sec .custom-card .icon {
+.banner-sec.job-single .custom-card .icon {
   background-color: transparent !important;
   border-radius: 50%;
   display: flex;
@@ -33,19 +33,19 @@
   height: 40px;
   border: 1px solid #dadada;
 }
-.banner-sec .custom-card .list-with-dots {
+.banner-sec.job-single .custom-card .list-with-dots {
   padding: 0;
   margin: 0;
   list-style: disc;
   list-style-position: inside;
 }
-.banner-sec .custom-card .estimated-wrapper {
+.banner-sec.job-single .custom-card .estimated-wrapper {
   display: flex;
   align-items: center;
   gap: 30px;
   flex-wrap: wrap;
 }
-.banner-sec .custom-card .estimated-card {
+.banner-sec.job-single .custom-card .estimated-card {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -54,22 +54,22 @@
   max-width: 348px;
   width: 100%;
 }
-.banner-sec .custom-card .estimated-card.card-1 {
+.banner-sec.job-single .custom-card .estimated-card.card-1 {
   border-color: #00BBFF;
 }
-.banner-sec .custom-card .estimated-card.card-1 .icon {
+.banner-sec.job-single .custom-card .estimated-card.card-1 .icon {
   background-color: #00BBFF !important;
 }
-.banner-sec .custom-card .estimated-card.card-1 .content {
+.banner-sec.job-single .custom-card .estimated-card.card-1 .content {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.banner-sec .custom-card .estimated-card.card-1 .content > div:first-child {
+.banner-sec.job-single .custom-card .estimated-card.card-1 .content > div:first-child {
   border-right: 1px solid #00BBFF;
   padding-right: 10px;
 }
-.banner-sec .custom-card .estimated-card .icon {
+.banner-sec.job-single .custom-card .estimated-card .icon {
   background-color: #10BC17 !important;
   border-radius: 10px;
   display: flex;
@@ -78,13 +78,13 @@
   width: 56px;
   height: 56px;
 }
-.banner-sec .custom-card .link-wrapper {
+.banner-sec.job-single .custom-card .link-wrapper {
   display: flex;
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
 }
-.banner-sec .custom-card .link-wrapper .icon {
+.banner-sec.job-single .custom-card .link-wrapper .icon {
   background-color: #FAFBEA;
   width: 32px;
   height: 32px;
@@ -94,7 +94,7 @@
   border-radius: 50%;
   border: none;
 }
-.banner-sec .custom-card .pdf-card {
+.banner-sec.job-single .custom-card .pdf-card {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -104,7 +104,7 @@
   border-radius: 10px;
   width: 100%;
 }
-.banner-sec .custom-card .pdf-card.card-1 .icon {
+.banner-sec.job-single .custom-card .pdf-card.card-1 .icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,21 +114,21 @@
   border-left-color: #C9DA2B !important;
   text-decoration: none;
 }
-.banner-sec .custom-card .pdf-card.card-1 .icon .percantage {
+.banner-sec.job-single .custom-card .pdf-card.card-1 .icon .percantage {
   color: #272727 !important;
   font-size: 10px;
   font-weight: 600;
 }
-.banner-sec .custom-card .gallery-images {
+.banner-sec.job-single .custom-card .gallery-images {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
-.banner-sec .custom-card .gallery-images img {
+.banner-sec.job-single .custom-card .gallery-images img {
   border-radius: 10px;
   object-fit: cover;
 }
-.banner-sec .custom-card.card-2 {
+.banner-sec.job-single .custom-card.card-2 {
   padding: 30px clamp(30px, 5vw, 50px) clamp(30px, 23vw, 230px) clamp(30px, 5vw, 50px);
   margin-bottom: clamp(24px, 6vw, 62px);
 }

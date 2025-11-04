@@ -1,39 +1,41 @@
-.hero-sec .image-wrapper .left-image {
+.hero-sec.login .image-wrapper .left-image {
   position: fixed;
   inset: 0;
   object-fit: cover;
   width: 50%;
   height: 100vh;
 }
-.hero-sec .image-wrapper .main-title {
+.hero-sec.login .image-wrapper .main-title {
   font-weight: 600;
   position: fixed;
   left: 30px;
   bottom: 30px;
   color: white;
 }
-.hero-sec .content-wrapper {
-  width: 50%;
+.hero-sec.login .content-wrapper {
+  width: 100%;
   margin-left: auto;
   min-height: 100vh;
+  max-width: 482px;
+  margin: 0 auto;
   /* screen height se chhoti na ho */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
-.hero-sec .content-wrapper .content {
+.hero-sec.login .content-wrapper .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 100%;
 }
-.hero-sec .content-wrapper .content .numbers {
+.hero-sec.login .content-wrapper .content .numbers {
   display: flex;
   align-items: center;
   gap: 14px;
 }
-.hero-sec .content-wrapper .content .numbers .number {
+.hero-sec.login .content-wrapper .content .numbers .number {
   background-color: #F9F9F9;
   width: 77px;
   height: 61px;
@@ -46,10 +48,10 @@
   color: #000000;
   margin-bottom: 15px;
 }
-.hero-sec .content-wrapper .content .numbers .number.active {
+.hero-sec.login .content-wrapper .content .numbers .number.active {
   border: 1px solid #000000;
 }
-.hero-sec .content-wrapper .content .timer-button {
+.hero-sec.login .content-wrapper .content .timer-button {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -60,11 +62,11 @@
   margin: 0 auto;
   margin-bottom: 10px;
 }
-.hero-sec .content-wrapper .content .form {
+.hero-sec.login .content-wrapper .content .form {
   display: grid;
   gap: 20px;
 }
-.hero-sec .content-wrapper .content .icon {
+.hero-sec.login .content-wrapper .content .icon {
   width: 80px;
   height: 46px;
   border: 1px solid #dadada;
@@ -74,7 +76,7 @@
   align-items: center;
   margin-bottom: 40px;
 }
-.hero-sec .content-wrapper .account-card {
+.hero-sec.login .content-wrapper .account-card {
   background-color: #F9F9F9;
   border-radius: 25px;
   padding: 20px;
@@ -85,14 +87,14 @@
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.hero-sec .content-wrapper .note-card {
+.hero-sec.login .content-wrapper .note-card {
   background-color: rgba(0, 187, 255, 0.062745098);
   border: 1px solid #00BBFF;
   border-radius: 10px;
   padding: 21px 35px;
   font-weight: 600;
 }
-.hero-sec .register-topbar {
+.hero-sec.login .register-topbar {
   background-color: #F9F9F9;
   border-radius: 10px;
   padding: 15px;
@@ -137,10 +139,10 @@
   }
 }
 @media (max-width: 576px) {
-  .hero-sec .content-wrapper .content .account-wrapper {
+  .hero-sec.login .content-wrapper .content .account-wrapper {
     grid-template-columns: 1fr;
   }
-  .hero-sec .content-wrapper .content .input-wrapper-s2 .buttons {
+  .hero-sec.login .content-wrapper .content .input-wrapper-s2 .buttons {
     flex-wrap: wrap;
   }
 }

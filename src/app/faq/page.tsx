@@ -39,7 +39,7 @@ export default function AboutUsPage() {
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                <section className="hero-sec position-static">
+                <section className="hero-sec faqs position-static">
                     <div className="container">
                         <h1 className="main-title text-center mb-5">FAQs</h1>
                         <div className="accordion" id="faqAccordion">

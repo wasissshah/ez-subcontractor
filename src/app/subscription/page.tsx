@@ -212,7 +212,7 @@ export default function PricingPage() {
                     style={{
                         background: `url('/assets/img/pricing-hero.webp') center /cover no-repeat`,
                     }}
-                    className="hero-sec position-relative"
+                    className="hero-sec position-relative pricing"
                 >
                     <div className="container">
                         <div className="content-wrapper">

@@ -20,7 +20,7 @@ export default function PricingPage() {
                     style={{
                         background: `url('/assets/img/regular-bg.webp') center /cover no-repeat`,
                     }}
-                    className="hero-sec position-static"
+                    className="hero-sec blog position-static"
                 >
                     <div className="container">
                         <div className="row g-4">

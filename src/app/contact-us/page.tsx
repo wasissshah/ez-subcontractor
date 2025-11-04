@@ -22,7 +22,7 @@ export default function AboutUsPage() {
             <Header />
             <div className="sections overflow-hidden">
                 {/* Banner */}
-                <section className="banner-sec position-static">
+                <section className="banner-sec contact position-static">
                     <div className="container">
                         <div className="content-wrapper mb-5 text-center">
                             <h1 className="mb-2">Contact Us</h1>

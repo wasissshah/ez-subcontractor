@@ -39,7 +39,7 @@ export default function ProjectsPage() {
                     style={{
                         background: `url('/assets/img/regular-bg.webp') center / cover no-repeat`
                     }}
-                    className="hero-sec position-static"
+                    className="hero-sec projects position-static"
                 >
                     <div className="container">
                         <div className="content-wrapper">

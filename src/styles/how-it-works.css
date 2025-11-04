@@ -1,8 +1,8 @@
-.hero-sec {
+.hero-sec.how-it-works {
   padding-top: 160px;
   padding-bottom: 70px;
 }
-.hero-sec .tab .nav-tabs {
+.hero-sec.how-it-works .tab .nav-tabs {
   border: 1px solid #272727 !important;
   padding: 2px;
   border-radius: 30px;
@@ -11,7 +11,7 @@
   margin-bottom: 30px;
   display: flex;
 }
-.hero-sec .tab .nav-tabs .nav-item .nav-link {
+.hero-sec.how-it-works .tab .nav-tabs .nav-item .nav-link {
   background-color: transparent;
   border-radius: 30px;
   font-size: 18px;
@@ -20,15 +20,15 @@
   color: #272727 !important;
   transition: all 0.3s ease;
 }
-.hero-sec .tab .nav-tabs .nav-item .nav-link.active {
+.hero-sec.how-it-works .tab .nav-tabs .nav-item .nav-link.active {
   background: #272727 !important;
   color: #fff !important;
 }
-.hero-sec .tab .nav-tabs .nav-item .nav-link:hover {
+.hero-sec.how-it-works .tab .nav-tabs .nav-item .nav-link:hover {
   background: #272727 !important;
   color: #fff !important;
 }
-.hero-sec .tab .content {
+.hero-sec.how-it-works .tab .content {
   display: flex;
   flex-direction: column;
   gap: 24px;

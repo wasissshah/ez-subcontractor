@@ -4,7 +4,7 @@ $gray-light: #9A9A9A !important;
 $dark: #272727 !important;
 $danger: #DC2626;
 
-.banner-sec {
+.banner-sec.profile {
   padding-top: 150px;
   padding-bottom: 50px;
   .sidebar {
@@ -433,7 +433,7 @@ $danger: #DC2626;
   .md-flex-wrap {
     flex-wrap: wrap;
   }
-  .banner-sec {
+  .banner-sec.profile {
     .form {
       grid-template-columns: 1fr;
       gap: 16px;

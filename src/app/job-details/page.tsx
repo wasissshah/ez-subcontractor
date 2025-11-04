@@ -14,7 +14,7 @@ export default function JobDetailsPage() {
             <Header />
 
             <div className="sections overflow-hidden">
-                <section className="banner-sec position-static">
+                <section className="banner-sec job-single position-static">
                     <div className="container">
                         <div style={{ backgroundColor: 'transparent !important' }} className="topbar">
                             <div className="d-flex align-items-center gap-2">

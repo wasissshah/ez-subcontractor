@@ -3,7 +3,7 @@ $gray: #F9F9F9;
 $gray-light: #9A9A9A;
 $dark: #272727;
 
-.banner-sec {
+.banner-sec.contact {
   padding-top: 172px;
   padding-bottom: 60px;
   .main-wrapper {
@@ -155,7 +155,7 @@ $dark: #272727;
 
 /* Media Query */ 
 @media (max-width: 992px) {
-  .banner-sec {
+  .banner-sec.contact {
     .contact-wrapper {
       max-width: 480px;
       margin: 0 auto;

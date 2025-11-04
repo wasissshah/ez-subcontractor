@@ -1,12 +1,12 @@
-.hero-sec {
+.hero-sec.blog {
   padding-top: 160px;
   padding-bottom: 70px;
 }
-.hero-sec .hero-img {
+.hero-sec.blog .hero-img {
   border-radius: 36px;
   box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.1450980392);
 }
-.hero-sec:before {
+.hero-sec.blog:before {
   display: none;
 }
 
