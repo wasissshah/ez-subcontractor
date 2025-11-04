@@ -14,7 +14,7 @@ export default function ContractorDetails() {
                     <div className="container">
                         <div className="right-bar">
                             {/* Top Bar */}
-                            <div className="topbar d-flex align-items-center gap-2 justify-content-between flex-wrap mb-5">
+                            <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                 <div className="icon-wrapper d-flex align-items-center gap-3">
                                     <Link href="#" className="icon">
                                         <Image
