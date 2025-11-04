@@ -86,6 +86,12 @@
       "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_footer_css-sr-78263a.css",
       "static/chunks/app/subscribed/page.js"
     ],
+    "/affiliate/saved-user/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_about-us_css-src_styles_blog_css-src_styles_cards_css-src_styles_footer_css-sr-78263a.css",
+      "static/chunks/app/affiliate/saved-user/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
