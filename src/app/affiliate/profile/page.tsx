@@ -19,7 +19,7 @@ export default function ProfilePage() {
                             {/* Sidebar */}
                             <div className="col-xl-3">
                                 <div className="sidebar">
-                                    <div className="main-wrapper">
+                                    <div className="main-wrapper bg-dark p-0">
 
                                         <div className="topbar mb-5 d-flex justify-content-between align-items-start">
                                             <div className="icon-wrapper d-flex align-items-start gap-3">
