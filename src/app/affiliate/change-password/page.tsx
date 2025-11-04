@@ -7,10 +7,28 @@ import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
 export default function ChangePassword() {
-    // Password visibility states
     const [showOld, setShowOld] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+
+    const EyeIcon = ({ active }: { active: boolean }) => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={`eye-icon ${active ? 'active' : ''}`}
+        >
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+            <line className="slash" x1="2" y1="2" x2="22" y2="22"></line>
+        </svg>
+    );
 
     return (
         <>
@@ -141,7 +159,6 @@ export default function ChangePassword() {
                                         </div>
                                     </div>
 
-                                    {/* Input Fields */}
                                     {/* Old Password */}
                                     <div className="input-wrapper d-flex flex-column position-relative mb-4">
                                         <label htmlFor="old_password" className="mb-1 fw-semibold">
@@ -158,7 +175,7 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowOld(!showOld)}
                                         >
-                      <i className={`bi ${showOld ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+                      <EyeIcon active={showOld} />
                     </span>
                                     </div>
 
@@ -178,7 +195,7 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowNew(!showNew)}
                                         >
-                      <i className={`bi ${showNew ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+                      <EyeIcon active={showNew} />
                     </span>
                                     </div>
 
@@ -198,7 +215,7 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowConfirm(!showConfirm)}
                                         >
-                      <i className={`bi ${showConfirm ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+                      <EyeIcon active={showConfirm} />
                     </span>
                                     </div>
 
