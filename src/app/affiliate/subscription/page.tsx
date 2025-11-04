@@ -127,7 +127,7 @@ export default function PricingPage() {
 
                             {/* Right Side */}
                             <div className="col-xl-9">
-                                <div className="right-bar pricing-sec">
+                                <div className="right-bar pricing-sec p-0">
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
                                             <Link href="#" className="icon">

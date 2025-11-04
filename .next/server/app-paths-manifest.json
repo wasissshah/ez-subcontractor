@@ -1,7 +1,7 @@
 {
-  "/affiliate/change-password/page": "app/affiliate/change-password/page.js",
-  "/affiliate/saved-user/page": "app/affiliate/saved-user/page.js",
   "/affiliate/contractor-detail/page": "app/affiliate/contractor-detail/page.js",
   "/affiliate/subscription/page": "app/affiliate/subscription/page.js",
-  "/affiliate/transaction-history/page": "app/affiliate/transaction-history/page.js"
+  "/affiliate/transaction-history/page": "app/affiliate/transaction-history/page.js",
+  "/page": "app/page.js",
+  "/auth/login/page": "app/auth/login/page.js"
 }

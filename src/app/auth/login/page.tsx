@@ -139,15 +139,6 @@ export default function LoginPage() {
 
                           <div className="fw-semibold text-center mb-3">Or Login With</div>
 
-                          <Link href="#" className="icon mx-auto">
-                              <Image
-                                  src="/assets/img/icons/google-logo.webp"
-                                  width={26}
-                                  height={26}
-                                  alt="Google Logo"
-                              />
-                          </Link>
-
                           <div className="text-center fw-medium text-gray-light">
                               Don’t have an account?{' '}
                               <Link href="#" className="fw-semibold text-black">
