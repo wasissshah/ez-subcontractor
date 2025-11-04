@@ -133,7 +133,7 @@ export default function ProfilePage() {
                                 <div className="right-bar">
 
                                     {/* Topbar */}
-                                    <div className="d-flex align-items-center gap-2 justify-content-between flex-wrap mb-5">
+                                    <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-2">
                                             <span className="fs-4 fw-semibold">Profile Details</span>
                                         </div>

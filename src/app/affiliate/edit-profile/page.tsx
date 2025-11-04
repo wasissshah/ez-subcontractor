@@ -18,7 +18,7 @@ export default function EditProfilePage() {
                             {/* Sidebar */}
                             <div className="col-xl-3">
                                 <div className="sidebar">
-                                    <div className="main-wrapper">
+                                    <div className="main-wrapper bg-dark p-0">
                                         <div className="topbar mb-5">
                                             <div className="icon-wrapper">
                                                 <Image
@@ -128,7 +128,7 @@ export default function EditProfilePage() {
                             {/* Right Side */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-                                    <div className="d-flex align-items-center gap-2 justify-content-between flex-wrap mb-5">
+                                    <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
                                             <Link href="#" className="icon">
                                                 <Image
