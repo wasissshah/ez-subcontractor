@@ -6,21 +6,67 @@ $danger: #DC2626;
 
 .hero-sec {
   .image-wrapper {
-    background: center /cover no-repeat;
-    min-height: 100vh;
-    padding: 40px 50px;
-    display: flex;
-    align-items: end;
-    position: fixed;
-    width: 50%;
+    .left-image {
+      position: fixed;
+      inset: 0;
+      object-fit: cover;
+      width: 50%;
+    }
+    .main-title{
+      font-size: 24px;
+      font-weight: 600;
+      position: fixed;
+      left: 30px;
+      bottom: 30px;
+      color: white;
+    }
   }
   .content-wrapper {
-    height: 100vh;
+    width: 50%;
+    margin-left: auto;
+    min-height: 100vh;
+    /* screen height se chhoti na ho */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
     .content {
       display: flex;
       flex-direction: column;
       justify-content: center;
       height: 100%;
+      .numbers{
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        .number{
+          background-color: $gray;
+          width: 77px;
+          height: 61px;
+          border-radius: 6px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: clamp(20px,2.5vw,24px);
+          font-weight: 600;
+          color: #000000;
+          margin-bottom: 15px;
+          &.active{
+            border: 1px solid #000000;
+          }
+        }
+      }
+      .timer-button{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 12px;
+        border-radius: 30px;
+        border: 1px solid $primary;
+        width: fit-content;
+        margin: 0 auto;
+        margin-bottom: 10px;
+      }
       .form {
         display: grid;
         gap: 20px;
@@ -36,36 +82,38 @@ $danger: #DC2626;
         margin-bottom: 40px;
       }
     }
-    // Account  
-      .account-card {
-        background-color: $gray;
-        border-radius: 25px;
-        padding: 20px;
-        position: relative;
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-      }
-      .note-card{
-        background-color: #00BBFF10;
-        border: 1px solid #00BBFF;
-        border-radius: 10px;
-        padding: 21px 35px;
-        font-weight: 600;
-      }
-    }
-    .register-topbar {
+    // Account
+    .account-card {
       background-color: $gray;
-      border-radius: 10px;
-      padding: 15px;
+      border-radius: 25px;
+      padding: 20px;
+      position: relative;
       display: flex;
+      gap: 8px;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       flex-wrap: wrap;
     }
+    .note-card {
+      background-color: #00BBFF10;
+      border: 1px solid #00BBFF;
+      border-radius: 10px;
+      padding: 21px 35px;
+      font-weight: 600;
+    }
   }
+
+  .register-topbar {
+    background-color: $gray;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
+
 /* Media Query */
 @media (min-width:768px) {
   .input-wrapper-s1 {
@@ -74,32 +122,38 @@ $danger: #DC2626;
     gap: 20px;
   }
 }
+
 @media (max-width:992px) {
   .hero-sec {
-    .image-wrapper {
-      position: static;
-      width: 100%;
-    }
-    .content-wrapper {
-      padding: 20px;
-      height: 100%;
-      max-width: 100% !important;
-      .content {
-        max-width: 100% !important;
-        width: 100%;
-        margin: unset;
-        padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    .image-wrapper{
+      .left-image{
+        display: none;
       }
+      .main-title{
+        color: $dark;
+        font-size: 20px;
+        position: static;
+        padding:20px;
+        text-align: center;
+      }
+    }
+    .content-wrapper{
+      width: 100%;
+      min-height: 100%;
     }
   }
 }
+
 @media (max-width:768px) {
-  .input-wrapper-s1{
+  .input-wrapper-s1 {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 }
+
 @media (max-width:576px) {
   .hero-sec {
     .content-wrapper {
@@ -107,8 +161,9 @@ $danger: #DC2626;
         .account-wrapper {
           grid-template-columns: 1fr;
         }
-        .input-wrapper-s2{
-          .buttons{
+
+        .input-wrapper-s2 {
+          .buttons {
             flex-wrap: wrap;
           }
         }
