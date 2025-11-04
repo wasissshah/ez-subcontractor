@@ -41,7 +41,7 @@ export default function SubscribedPage() {
 
             <div className="sections overflow-hidden">
                 {/* Banner Section */}
-                <section className="banner-sec">
+                <section className="banner-sec position-static">
                     <div className="container">
                         <div className="row g-4">
                             <div className="col-lg-6">

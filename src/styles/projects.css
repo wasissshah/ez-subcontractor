@@ -3,6 +3,7 @@
   background-color: #FAFBEA;
   padding-top: 160px;
   padding-bottom: 70px;
+  position: relative;
 }
 .hero-sec .content-wrapper {
   max-width: 1069px;

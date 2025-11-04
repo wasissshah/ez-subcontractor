@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
 import '../../styles/projects.css';
 import '../../styles/cards.css';
 
@@ -40,7 +39,7 @@ export default function ProjectsPage() {
                     style={{
                         background: `url('/assets/img/regular-bg.webp') center / cover no-repeat`
                     }}
-                    className="hero-sec"
+                    className="hero-sec position-static"
                 >
                     <div className="container">
                         <div className="content-wrapper">

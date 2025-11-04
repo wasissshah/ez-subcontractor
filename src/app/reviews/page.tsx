@@ -14,7 +14,7 @@ export default function ReviewsPage() {
             <Header />
 
             <div className="sections overflow-hidden">
-                <section className="banner-sec">
+                <section className="banner-sec position-static">
                     <div className="container">
 
                         {/* Filter Bar */}

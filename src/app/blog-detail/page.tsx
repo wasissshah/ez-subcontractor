@@ -17,7 +17,7 @@ export default function BlogSinglePage() {
                 {/* Banner */}
                 <section
                     style={{ background: "url('/assets/img/blog-sinlge-hero.webp')" }}
-                    className="blog-single-hero"
+                    className="blog-single-hero position-static"
                 ></section>
 
                 {/* Blog Section */}

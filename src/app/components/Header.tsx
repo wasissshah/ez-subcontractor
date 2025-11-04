@@ -51,7 +51,7 @@ export default function Header() {
                     {/* Navigation */}
                     <nav
                         id="primary-navigation"
-                        className={isMenuOpen ? 'd-block' : 'd-none d-lg-flex'}
+                        className={isMenuOpen ? 'd-flex' : 'd-none d-lg-flex'}
                         aria-hidden={!isMenuOpen}
                     >
                         <ul className="menu-links mb-0">
@@ -110,7 +110,7 @@ export default function Header() {
                                 Log In
                             </Link>
                             <Link
-                                href="/auth/signup"
+                                href="/auth/register"
                                 className="btn btn-primary rounded-3"
                                 onClick={toggleMenu}
                             >

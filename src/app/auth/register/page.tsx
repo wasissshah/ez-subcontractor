@@ -69,7 +69,7 @@ export default function RegisterPage() {
   };
 
   return (
-      <section className="hero-sec overflow-hidden">
+      <section className="hero-sec overflow-hidden position-static">
           <div className="image-wrapper">
               <Image
                   src="/assets/img/left-image.webp"

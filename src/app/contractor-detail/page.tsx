@@ -13,7 +13,7 @@ export default function ContractorDetails() {
         <>
             <Header />
             <div className="sections overflow-hidden">
-                <section className="banner-sec">
+                <section className="banner-sec position-static">
                     <div className="container">
                         <div className="right-bar">
 

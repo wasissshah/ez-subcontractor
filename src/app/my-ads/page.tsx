@@ -13,7 +13,7 @@ export default function MyAdsPage() {
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                <section className="banner-sec">
+                <section className="banner-sec position-static">
                     <div className="container">
                         <div className="title fs-4 fw-semibold">My Ads</div>
                         <div className="image-box h-100 d-flex flex-column align-items-center justify-content-center mt-4">

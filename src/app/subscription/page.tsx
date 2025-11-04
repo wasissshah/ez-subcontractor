@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
 import '../../styles/pricing.css';
 
 // Pricing plan data
@@ -213,7 +212,7 @@ export default function PricingPage() {
                     style={{
                         background: `url('/assets/img/pricing-hero.webp') center /cover no-repeat`,
                     }}
-                    className="hero-sec"
+                    className="hero-sec position-relative"
                 >
                     <div className="container">
                         <div className="content-wrapper">
@@ -282,6 +281,24 @@ export default function PricingPage() {
                 </section>
             </div>
             <Footer />
+            <style jsx>{`
+        .hero-sec {
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero-sec::before {
+          content: '';
+          position: absolute;
+          inset: 0; /* shorthand for top:0; left:0; right:0; bottom:0 */
+          width: 100%;
+          height: 100%;
+          background-color: #000;
+          opacity: 0.85;
+          z-index: -1;
+          display: block;
+        }
+      `}</style>
         </div>
     );
 }

@@ -59,7 +59,7 @@ export default function AboutUsPage() {
                     style={{
                         background: `url('/assets/img/regular-bg.webp') center /cover no-repeat`,
                     }}
-                    className="hero-sec"
+                    className="hero-sec position-static"
                 >
                     <div className="container">
                         <div className="row g-4">
