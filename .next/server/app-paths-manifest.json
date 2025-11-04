@@ -1,7 +1,8 @@
 {
-  "/blogs/page": "app/blogs/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/auth/register/page": "app/auth/register/page.js",
   "/affiliate/change-password/page": "app/affiliate/change-password/page.js",
+  "/affiliate/saved-user/page": "app/affiliate/saved-user/page.js",
   "/affiliate/contractor-detail/page": "app/affiliate/contractor-detail/page.js",
-  "/affiliate/saved-user/page": "app/affiliate/saved-user/page.js"
+  "/affiliate/subscription/page": "app/affiliate/subscription/page.js"
 }
