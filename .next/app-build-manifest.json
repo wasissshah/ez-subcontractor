@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-856319.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -17,14 +17,20 @@
     "/job-details/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-856319.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
       "static/chunks/app/job-details/page.js"
     ],
     "/affiliate/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-856319.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
       "static/chunks/app/affiliate/dashboard/page.js"
+    ],
+    "/affiliate/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-1bc0d0.css",
+      "static/chunks/app/affiliate/profile/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
