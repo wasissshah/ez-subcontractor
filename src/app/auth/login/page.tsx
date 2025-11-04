@@ -63,7 +63,7 @@ export default function LoginPage() {
               />
               <p className="main-title mb-0">
                   Developed by:
-                  <span className="text-primary fw-semibold">Design Spartans</span>
+                   <span className="text-primary fw-semibold"> Design Spartans</span>
               </p>
           </div>
 
