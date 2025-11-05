@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
-import '../../styles/job-single.css';
+import '../../../styles/job-single.css';
 
 export default function JobDetailsPage() {
     return (
@@ -19,7 +19,7 @@ export default function JobDetailsPage() {
                         <div style={{ backgroundColor: 'transparent !important' }} className="topbar">
                             <div className="d-flex align-items-center gap-2">
                                 <div className="icon">
-                                    <Image src="assets/img/button-angle.svg" width={10} height={15} alt="Angle" />
+                                    <Image src="/assets/img/button-angle.svg" width={10} height={15} alt="Angle" />
                                 </div>
                                 <div className="login-title fw-semibold fs-4 text-center">Job Details</div>
                             </div>

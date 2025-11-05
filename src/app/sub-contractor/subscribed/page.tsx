@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Slider from 'react-slick';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import '../../styles/free-trial.css';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import '../../../styles/free-trial.css';
 
 export default function SubscribedPage() {
     const sliderRef = useRef<Slider | null>(null);

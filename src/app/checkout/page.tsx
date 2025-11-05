@@ -190,10 +190,11 @@ export default function BusinessDetailsPage() {
 
                                         <div className="pricing-body mb-4">
                                             <ul className="m-0 p-0 list-with-icon">
-                                                <li>Registration with full company profile, license number, insurance, and workers’ comp details.</li>
-                                                <li>Registration with full company profile, license number, insurance, and workers’ comp details.</li>
-                                                <li>Registration with full company profile, license number, insurance, and workers’ comp details.</li>
-                                                <li>Registration with full company profile, license number, insurance, and workers’ comp details.</li>
+                                                <li>Full access to all job postings within their licensed categories.</li>
+                                                <li>Access to live chat and PDF file exchange with General Contractors</li>
+                                                <li>View contact information for general contractors , phone, text , direct message or email
+                                                </li>
+                                                <li>Ability to view project timelines, budgets, and requirements in detail. </li>
                                             </ul>
                                         </div>
                                     </div>
