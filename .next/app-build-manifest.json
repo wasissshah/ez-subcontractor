@@ -67,6 +67,12 @@
       "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
       "static/chunks/app/sub-contractor/profile/page.js"
     ],
+    "/sub-contractor/edit-profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/edit-profile/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
