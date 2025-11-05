@@ -25,7 +25,7 @@ export default function FreeTrialPage() {
 
             <div className="sections overflow-hidden">
                 {/* ===================== Banner Section ===================== */}
-                <section className="banner-sec profile position-static">
+                <section className="banner-sec trial position-static">
                     <div className="container">
                         <div className="row g-4">
                             <div className="col-lg-6">
@@ -34,10 +34,11 @@ export default function FreeTrialPage() {
                                     width={800}
                                     height={600}
                                     alt="Section Image"
-                                    className="img-fluid w-100"
+                                    className="img-fluid w-100 h-100"
                                     style={{
                                         borderRadius: '25px',
                                         boxShadow: '0 4px 35px 0 #00000025',
+                                        objectFit: 'cover',
                                     }}
                                 />
                             </div>
