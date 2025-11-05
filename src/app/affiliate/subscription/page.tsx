@@ -1,283 +1,241 @@
+// app/pricing/page.tsx
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import '../../../styles/profile.css';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import '../../../styles/pricing.css';
+
+// ✅ Pricing plan data (Affiliate removed + unique content added)
+const pricingPlans = {
+    'sub-contractor': [
+        {
+            id: 1,
+            title: 'Free Registration',
+            price: 'Free',
+            features: [
+                'Free registration',
+                'See unlimited projects',
+                'No credit card required',
+                'Set radius to receive Projects',
+            ],
+            hasNote: false,
+            isPopular: false,
+            showStrike: false,
+            saveText: null,
+            saveColor: null,
+        },
+        {
+            id: 2,
+            title: '30-Days Free Trial',
+            price: 'Free',
+            features: [
+                'Free registration',
+                'See unlimited projects',
+                'Receive email and text alerts when new projects are posted nearby. ',
+                'Set radius to receive Projects',
+                'Contact General contractor through email, text or direct message',
+            ],
+            hasNote: true,
+            isPopular: false,
+            showStrike: false,
+            saveText: null,
+            saveColor: null,
+        },
+        {
+            id: 3,
+            title: 'Monthly',
+            price: '50',
+            features: [
+                'Full access to all job postings within their licensed categories.',
+                'Access to live chat and PDF file exchange with General Contractors',
+                'View contact information for general contractors , phone, text , direct message or email\n',
+                'Ability to view project timelines, budgets, and requirements in detail. ',
+            ],
+            hasNote: true,
+            isPopular: false,
+            showStrike: false,
+            saveText: null,
+            saveColor: null,
+        },
+        {
+            id: 4,
+            title: 'Yearly Plan',
+            price: '400',
+            features: [
+                'Full access to all job postings within their licensed categories.',
+                'Access to live chat and PDF file exchange with General Contractors',
+                'View contact information for general contractors , phone, text , direct message or email\n',
+                'Ability to view project timelines, budgets, and requirements in detail. ',
+            ],
+            hasNote: true,
+            isPopular: true,
+            showStrike: true,
+            saveText: 'Save $200',
+            saveColor: '#DC2626',
+        },
+    ],
+};
+
 export default function PricingPage() {
-    return (
-        <>
-            <Header />
+    const renderNoteCard = () => (
+        <div className="note-card d-flex align-items-start gap-1">
+            <Image
+                src="/assets/img/icons/note.webp"
+                width={24}
+                height={24}
+                alt="Note"
+                loading="lazy"
+                className="d-block"
+            />
+            <div className="content">
+        <span style={{ fontSize: '14px' }} className="d-block fw-semibold mb-1">
+          Note
+        </span>
+                <p style={{ fontSize: '12px' }} className="mb-0">
+                    After your trial ends, you’ll need to subscribe to keep bidding on projects,
+                    chatting with contractors, and accessing premium tools.
+                </p>
+            </div>
+        </div>
+    );
 
-            <div className="sections overflow-hidden">
-                <section className="banner-sec profile position-static">
-                    <div className="container">
-                        <div className="row g-4">
-                            {/* Sidebar */}
-                            <div className="col-xl-3">
-                                <div className="sidebar">
-                                    <div className="main-wrapper bg-dark p-0">
-                                        <div className="topbar mb-5">
-                                            <div className="icon-wrapper">
-                                                <Image
-                                                    src="/assets/img/profile-img.webp"
-                                                    width={80}
-                                                    height={80}
-                                                    alt="Worker Icon"
-                                                />
-                                                <div className="content-wrapper">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">
-                                                        Joseph Dome
-                                                    </div>
-
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/message-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Message Icon"
-                                                        />
-                                                        <Link
-                                                            href="mailto:hello@example.com"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
-                                                            hello@example.com
-                                                        </Link>
-                                                    </div>
-
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/call-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Call Icon"
-                                                        />
-                                                        <Link
-                                                            href="tel:+(000)000-000"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
-                                                            (000) 000-000
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <Image
-                                                src="/assets/img/icons/arrow-dark.svg"
-                                                width={16}
-                                                height={10}
-                                                alt="Arrow"
-                                                style={{ objectFit: 'contain' }}
-                                            />
-                                        </div>
-
-                                        <div className="buttons-wrapper">
-                                            {[1, 2, 3, 4, 5].map((_, i) => (
-                                                <Link href="#" key={i} className="custom-btn">
-                                                    <div className="d-flex align-items-center gap-2">
-                                                        <Image
-                                                            src="/assets/img/icons/saved.svg"
-                                                            width={20}
-                                                            height={20}
-                                                            alt="Icon"
-                                                        />
-                                                        <span className="text-white">Switch Account</span>
-                                                    </div>
-                                                    <Image
-                                                        src="/assets/img/icons/angle-right.svg"
-                                                        width={15}
-                                                        height={9}
-                                                        alt="Arrow"
-                                                        style={{ objectFit: 'contain' }}
-                                                    />
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="bottom-bar">
-                                        <div className="buttons-wrapper">
-                                            <Link
-                                                href="#"
-                                                className="custom-btn bg-danger"
-                                                style={{ borderColor: '#DC2626' }}
-                                            >
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <Image
-                                                        src="/assets/img/icons/logout.svg"
-                                                        width={20}
-                                                        height={20}
-                                                        alt="Logout Icon"
-                                                    />
-                                                    <span className="text-white">Logout</span>
-                                                </div>
-                                                <Image
-                                                    src="/assets/img/icons/angle-right.svg"
-                                                    width={15}
-                                                    height={9}
-                                                    alt="Arrow"
-                                                    style={{ objectFit: 'contain' }}
-                                                />
-                                            </Link>
-                                        </div>
-                                    </div>
+    const renderPlanCard = (plan: (typeof pricingPlans)['sub-contractor'][0], index: number) => (
+        <div
+            key={plan.id}
+            className={`col-lg-${index === 3 ? '3' : index >= 2 && plan.isPopular ? '4' : '3'} col-md-${plan.isPopular ? '12' : '6'}`}
+        >
+            <div className={`price-card ${plan.isPopular ? 'price-card1' : ''} free`}>
+                <div>
+                    <div className="pricing-header">
+                        {plan.isPopular ? (
+                            <div className="d-flex align-items-center gap-1 justify-content-between mb-3">
+                                <span className="title1 mb-0">{plan.title}</span>
+                                <div style={{ fontSize: '14px' }} className="custom-btn bg-white shadow p-2 rounded-pill">
+                                    🔥 Popular
                                 </div>
                             </div>
+                        ) : (
+                            <span className="title1">{plan.title}</span>
+                        )}
 
-                            {/* Right Side */}
-                            <div className="col-xl-9">
-                                <div className="right-bar pricing-sec p-0">
-                                    <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
-                                        <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
-                                                <Image
-                                                    src="/assets/img/button-angle.svg"
-                                                    width={10}
-                                                    height={15}
-                                                    alt="Icon"
-                                                />
-                                            </Link>
-                                            <span className="fs-4 fw-semibold">Edit Profile</span>
-                                        </div>
-                                        <Link href="#" className="btn btn-primary rounded-3">
-                                            Save Changes
-                                        </Link>
-                                    </div>
-
-                                    <div className="row g-3">
-                                        {/* CARD 1 */}
-                                        <div className="col-lg-4 col-md-6">
-                                            <div className="price-card free">
-                                                <div className="pricing-header">
-                                                    <span className="title1">30-Days Free Trial</span>
-                                                    <span className="price">
-                                                    $<span className="fw-bold">Free</span>
-                                                  </span>
-                                                </div>
-
-                                                <div className="pricing-body">
-                                                    <ul className="m-0 p-0 list-with-icon">
-                                                        <li>
-                                                            Registration with full company profile, license number,
-                                                            insurance, and workers’ comp details.
-                                                        </li>
-                                                        <li>
-                                                            Registration with full company profile, license number,
-                                                            insurance, and workers’ comp details.
-                                                        </li>
-                                                    </ul>
-                                                </div>
-
-                                                <div className="h-100 align-content-end">
-                                                    <div className="note-card d-flex align-items-start gap-1">
-                                                        <Image
-                                                            src="/assets/img/icons/note.webp"
-                                                            width={24}
-                                                            height={24}
-                                                            alt="Note"
-                                                            className="d-block"
-                                                        />
-                                                        <div className="content">
-                  <span
-                      style={{ fontSize: '14px' }}
-                      className="d-block fw-semibold mb-1"
-                  >
-                    Note
+                        {plan.showStrike ? (
+                            <div className="d-flex align-items-center gap-1 flex-wrap">
+                                <del className="fs-4 fw-medium text-black">$ 600</del>
+                                <div className="d-flex align-items-center gap-2">
+                  <span className="price">
+                    $<span className="fw-bold">{plan.price}</span>
                   </span>
-                                                            <p style={{ fontSize: '12px' }} className="mb-0">
-                                                                After your trial ends, you’ll need to subscribe to keep
-                                                                bidding on projects, chatting with contractors, and
-                                                                accessing premium tools.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="pricing-button">
-                                                        <button className="btn">Get Started</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* CARD 2 */}
-                                        <div className="col-lg-4 col-md-6">
-                                            <div className="price-card free">
-                                                <div className="pricing-header">
-                                                    <span className="title1">30-Days Free Trial</span>
-                                                    <span className="price">
-                $<span className="fw-bold">Free</span>
-              </span>
-                                                </div>
-
-                                                <div className="pricing-body">
-                                                    <ul className="m-0 p-0 list-with-icon">
-                                                        {[1, 2, 3, 4].map((i) => (
-                                                            <li key={i}>
-                                                                Registration with full company profile, license number,
-                                                                insurance, and workers’ comp details.
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-
-                                                <div className="pricing-button h-100 align-content-end">
-                                                    <button className="btn">Get Started</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* CARD 3 */}
-                                        <div className="col-lg-4 col-md-12">
-                                            <div className="price-card price-card1 free">
-                                                <div className="pricing-header">
-                                                    <div className="d-flex align-items-center gap-1 justify-content-between mb-3">
-                                                        <span className="title1 mb-0">Yearly</span>
-                                                        <div
-                                                            style={{ fontSize: '14px' }}
-                                                            className="custom-btn bg-white shadow p-2 rounded-pill"
-                                                        >
-                                                            🔥 Popular
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="d-flex align-items-center gap-2">
+                                    {plan.saveText && (
+                                        <button
+                                            type="button"
+                                            style={{ backgroundColor: plan.saveColor! }}
+                                            className="custom-btn text-white p-2 rounded-pill"
+                                        >
+                                            {plan.saveText}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="d-flex align-items-center gap-2">
                 <span className="price">
-                  $<span className="fw-bold">Free</span>
+                  $<span className="fw-bold">{plan.price}</span>
                 </span>
-                                                        <Link
-                                                            href="#"
-                                                            className="btn bg-danger p-2"
-                                                            style={{ color: 'white' }}
-                                                        >
-                                                            Save $200
-                                                        </Link>
-                                                    </div>
-                                                </div>
+                                {plan.saveText && (
+                                    <button
+                                        type="button"
+                                        style={{ backgroundColor: plan.saveColor! }}
+                                        className="custom-btn text-white p-2"
+                                    >
+                                        {plan.saveText}
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
 
-                                                <div className="pricing-body">
-                                                    <ul className="m-0 p-0 list-with-icon">
-                                                        {[1, 2, 3, 4].map((i) => (
-                                                            <li key={i}>
-                                                                Registration with full company profile, license number,
-                                                                insurance, and workers’ comp details.
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
+                    <div className="pricing-body">
+                        <ul className="m-0 p-0 list-with-icon">
+                            {plan.features.map((feature, i) => (
+                                <li key={i}>{feature}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
 
-                                                <div className="pricing-button">
-                                                    <button className="btn">Get Started</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                {plan.hasNote && renderNoteCard()}
+
+                <div className="pricing-button">
+                    <button className="btn">Get Started</button>
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <div>
+            <Header />
+            <div className="sections overflow-hidden">
+                {/* Hero Section */}
+                <section
+                    style={{
+                        background: `url('/assets/img/pricing-hero.webp') center /cover no-repeat`,
+                    }}
+                    className="hero-sec position-relative pricing"
+                >
+                    <div className="container">
+                        <div className="content-wrapper">
+                            <h1 className="text-primary text-center mb-3">
+                                Choose Your Plan and Start Getting Project Leads Today
+                            </h1>
+                            <p className="mb-0 text-white text-center fs-5 fw-medium">
+                                Unlock full access to jobs, messaging, and contractor tools — no hidden fees.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Pricing Section */}
+                <section className="pricing-sec">
+                    <div className="container-fluid">
+                        <div className="tab-content pricing-wrapper" id="pricingTabContent">
+                            {/* ✅ Only Sub Contractor Tab */}
+                            <div
+                                className="tab-pane fade show active pricing-content"
+                                id="sub-contractor"
+                                role="tabpanel"
+                            >
+                                <div className="row g-3">
+                                    {pricingPlans['sub-contractor'].map((plan, index) =>
+                                        renderPlanCard(plan, index)
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
-
             <Footer />
-        </>
+            <style jsx>{`
+                .hero-sec {
+                    position: relative;
+                    z-index: 1;
+                }
+                .hero-sec::before {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #000;
+                    opacity: 0.85;
+                    z-index: -1;
+                    display: block;
+                }
+            `}</style>
+        </div>
     );
 }

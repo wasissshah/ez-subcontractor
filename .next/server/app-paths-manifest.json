@@ -1,8 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/sub-contractor/profile-subscription/page": "app/sub-contractor/profile-subscription/page.js",
   "/sub-contractor/transaction-history/page": "app/sub-contractor/transaction-history/page.js",
   "/affiliate/success/page": "app/affiliate/success/page.js",
   "/affiliate/checkout/page": "app/affiliate/checkout/page.js",
-  "/sub-contractor/checkout/page": "app/sub-contractor/checkout/page.js"
+  "/sub-contractor/checkout/page": "app/sub-contractor/checkout/page.js",
+  "/affiliate/subscription/page": "app/affiliate/subscription/page.js"
 }
