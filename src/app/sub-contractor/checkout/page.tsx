@@ -3,10 +3,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import '../../styles/pricing.css';
-import '../../styles/checkout.css';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import '../../../styles/pricing.css';
+import '../../../styles/checkout.css';
 export default function BusinessDetailsPage() {
     return (
         <div className="sections overflow-hidden">
