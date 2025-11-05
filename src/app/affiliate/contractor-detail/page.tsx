@@ -78,6 +78,7 @@ export default function ContractorDetails() {
                                         <div className="text-black text-center fs-3 fw-bold mb-1">
                                             4.5/5
                                         </div>
+                                        <a href="#" className="text-gray-light text-decoration-underline">223 Reviews</a>
                                     </div>
                                 </div>
                             </div>

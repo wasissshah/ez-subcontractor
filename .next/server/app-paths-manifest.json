@@ -1,7 +1,8 @@
 {
-  "/sub-contractor/checkout/page": "app/sub-contractor/checkout/page.js",
-  "/affiliate/subscription/page": "app/affiliate/subscription/page.js",
   "/affiliate/dashboard/page": "app/affiliate/dashboard/page.js",
   "/affiliate/contractor-detail/page": "app/affiliate/contractor-detail/page.js",
-  "/affiliate/profile/page": "app/affiliate/profile/page.js"
+  "/affiliate/profile/page": "app/affiliate/profile/page.js",
+  "/affiliate/change-password/page": "app/affiliate/change-password/page.js",
+  "/affiliate/saved-user/page": "app/affiliate/saved-user/page.js",
+  "/affiliate/profile-subscription/page": "app/affiliate/profile-subscription/page.js"
 }
