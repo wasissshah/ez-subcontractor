@@ -1,8 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/sub-contractor/subscribed/page": "app/sub-contractor/subscribed/page.js",
-  "/sub-contractor/free-registration/page": "app/sub-contractor/free-registration/page.js",
   "/sub-contractor/job-details/page": "app/sub-contractor/job-details/page.js",
+  "/sub-contractor/free-registration/page": "app/sub-contractor/free-registration/page.js",
   "/sub-contractor/profile/page": "app/sub-contractor/profile/page.js",
-  "/sub-contractor/edit-profile/page": "app/sub-contractor/edit-profile/page.js"
+  "/sub-contractor/edit-profile/page": "app/sub-contractor/edit-profile/page.js",
+  "/sub-contractor/change-password/page": "app/sub-contractor/change-password/page.js"
 }
