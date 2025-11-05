@@ -91,10 +91,11 @@
       "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
       "static/chunks/app/sub-contractor/profile-subscription/page.js"
     ],
-    "/_not-found/page": [
+    "/sub-contractor/transaction-history/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/transaction-history/page.js"
     ]
   }
 }
