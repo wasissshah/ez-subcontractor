@@ -1,9 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/affiliate/success/page": "app/affiliate/success/page.js",
-  "/affiliate/checkout/page": "app/affiliate/checkout/page.js",
   "/sub-contractor/checkout/page": "app/sub-contractor/checkout/page.js",
   "/affiliate/subscription/page": "app/affiliate/subscription/page.js",
   "/affiliate/dashboard/page": "app/affiliate/dashboard/page.js",
-  "/affiliate/contractor-detail/page": "app/affiliate/contractor-detail/page.js"
+  "/affiliate/contractor-detail/page": "app/affiliate/contractor-detail/page.js",
+  "/affiliate/profile/page": "app/affiliate/profile/page.js"
 }

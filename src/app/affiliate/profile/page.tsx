@@ -12,7 +12,7 @@ export default function ProfilePage() {
             <Header />
 
             <div className="sections overflow-hidden">
-                <section className="banner-sec position-static">
+                <section className="banner-sec profile position-static">
                     <div className="container">
                         <div className="row g-4">
 
@@ -134,8 +134,16 @@ export default function ProfilePage() {
 
                                     {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
-                                        <div className="icon-wrapper d-flex align-items-center gap-2">
-                                            <span className="fs-4 fw-semibold">Profile Details</span>
+                                        <div className="icon-wrapper d-flex align-items-center gap-3">
+                                            <Link href="#" className="icon">
+                                                <Image
+                                                    src="/assets/img/button-angle.svg"
+                                                    width={10}
+                                                    height={15}
+                                                    alt="Icon"
+                                                />
+                                            </Link>
+                                            <span className="fs-4 fw-semibold">Profile Detail</span>
                                         </div>
 
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
@@ -176,38 +184,6 @@ export default function ProfilePage() {
                                                 <div className="title fw-semibold fs-4 mb-2">Jason Doe</div>
                                                 <p className="mb-1 text-gray-light">Subcontractor</p>
                                                 <p className="mb-1 text-gray-light">Whittier, CA 30201</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="right d-flex align-items-center gap-4 flex-wrap">
-                                            <div className="rating-icons d-flex align-items-center gap-1 flex-wrap">
-                                                {[1, 2, 3, 4].map((_, i) => (
-                                                    <Image
-                                                        key={i}
-                                                        src="/assets/img/start1.svg"
-                                                        width={50}
-                                                        height={50}
-                                                        alt="Star Icon"
-                                                        style={{
-                                                            width: 'clamp(20px,5vw,50px)',
-                                                            height: 'clamp(20px,5vw,50px)',
-                                                        }}
-                                                    />
-                                                ))}
-                                                <Image
-                                                    src="/assets/img/star2.svg"
-                                                    width={50}
-                                                    height={50}
-                                                    alt="Star Icon"
-                                                    style={{
-                                                        width: 'clamp(20px,5vw,50px)',
-                                                        height: 'clamp(20px,5vw,50px)',
-                                                    }}
-                                                />
-                                            </div>
-
-                                            <div className="content">
-                                                <div className="text-black text-center fs-3 fw-bold">4.5/5</div>
                                             </div>
                                         </div>
                                     </div>
@@ -259,21 +235,6 @@ export default function ProfilePage() {
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="text-gray-light fw-medium mb-2">Categories</div>
-                                        <div className="d-flex align-items-center gap-2 flex-wrap mb-4">
-                                            {['Framing', 'Electrical', 'Plumbing'].map((cat, i) => (
-                                                <Link
-                                                    href="#"
-                                                    key={i}
-                                                    className="btn bg-dark rounded-3 p-2 fs-18 fw-semibold"
-                                                    style={{ color: 'white' }}
-                                                >
-                                                    {cat}
-                                                </Link>
-                                            ))}
-                                        </div>
-
                                         <div className="row g-2">
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
