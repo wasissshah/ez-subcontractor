@@ -41,6 +41,24 @@
   background: transparent;
   border: none;
 }
+.banner-sec.trial .nav-tabs {
+  border: 1px solid #272727 !important;
+  border-radius: 30px;
+  padding: 2px;
+  width: fit-content;
+  flex-wrap: wrap;
+}
+.banner-sec.trial .nav-tabs .nav-item button {
+  border-radius: 30px;
+  padding: 9px 27px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+}
+.banner-sec.trial .nav-tabs .nav-item button.active {
+  background-color: #C9DA2B !important;
+  color: #272727 !important;
+}
 
 /* Filter Section */
 .filter-sec {

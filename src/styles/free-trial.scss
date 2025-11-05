@@ -55,6 +55,26 @@ $dark: #272727 !important;
       }
     }
   }
+  .nav-tabs{
+    border: 1px solid $dark;
+    border-radius: 30px;
+    padding: 2px;
+    width: fit-content;
+    flex-wrap: wrap;
+    .nav-item{
+      button{
+        border-radius: 30px;
+        padding: 9px 27px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        &.active{
+          background-color: $primary;
+          color: $dark;
+        }
+      }
+    }
+  }
 }
 
 /* Filter Section */
