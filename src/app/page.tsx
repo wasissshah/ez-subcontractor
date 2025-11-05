@@ -28,9 +28,9 @@ export default function HomePage() {
             id: 2,
             image: "/assets/img/home-banner-img2.webp",
             title: "Connects Contractors with Trusted, Licensed Subs.",
-            btn1Text: "Get Started",
+            btn1Text: "Post a Project",
             btn1Link: "/signup",
-            btn2Text: "Browse Projects",
+            btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required enjoy a free to subscribe"
         },
@@ -38,9 +38,9 @@ export default function HomePage() {
             id: 3,
             image: "/assets/img/home-banner-img3.webp",
             title: "Find Trusted Subs quickly, Post Your Project Free",
-            btn1Text: "Create Project",
+            btn1Text: "Post a Project",
             btn1Link: "/",
-            btn2Text: "Find Work",
+            btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required enjoy a free to subscribe"
         },
@@ -48,9 +48,9 @@ export default function HomePage() {
             id: 4,
             image: "/assets/img/home-banner-img4.webp",
             title: "Access Verified Contractor Projects No Brokers, No Middlemen, Just Real Jobs Daily.",
-            btn1Text: "Create Project",
+            btn1Text: "Post a Project",
             btn1Link: "/",
-            btn2Text: "Find Work",
+            btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required enjoy a free to subscribe"
         },
@@ -58,9 +58,9 @@ export default function HomePage() {
             id: 5,
             image: "/assets/img/home-banner-img5.webp",
             title: "Stop Chasing Leads. Start Bidding Jobs.",
-            btn1Text: "Create Project",
+            btn1Text: "Post a Project",
             btn1Link: "/",
-            btn2Text: "Find Work",
+            btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required enjoy a free to subscribe"
         }
