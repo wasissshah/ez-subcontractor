@@ -3,6 +3,24 @@
   width: 100%;
   overflow: hidden;
 }
+.home-banner-sec .custom-pagination {
+  transform: translateY(-160px);
+}
+.home-banner-sec .custom-pagination .custom-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #272727;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.home-banner-sec .custom-pagination .custom-dot.active {
+  background: #c9da2b;
+  border: 2px solid #272727;
+  width: 29px;
+  height: 12px;
+  border-radius: 30px;
+}
 .home-banner-sec .slick-slider,
 .home-banner-sec .slick-list,
 .home-banner-sec .slick-track {
@@ -10,6 +28,10 @@
 }
 .home-banner-sec .slick-slide div {
   height: 100%;
+}
+.home-banner-sec .slick-dots {
+  bottom: 100px;
+  justify-content: center;
 }
 .home-banner-sec .banner-wrapper {
   position: relative;

@@ -68,7 +68,7 @@ export default function HomePage() {
 
     // 🔹 Banner slider settings
     const bannerSettings = {
-        dots: false,
+        dots: true,
         infinite: true,
         fade: true,
         autoplay: true,
@@ -182,7 +182,7 @@ export default function HomePage() {
                                                     ? project.description.repeat(2)
                                                     : `${project.description.substring(0, 150)}...`}
                                             </div>
-                                            <button onClick={() => toggleExpand(index)} className="see-more-btn btn btn-link p-0 text-primary">
+                                            <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
                                                 {expandedCards.has(index) ? 'See less' : 'See more'}
                                             </button>
                                         </div>
@@ -209,7 +209,7 @@ export default function HomePage() {
                                                     ? project.description.repeat(2)
                                                     : `${project.description.substring(0, 150)}...`}
                                             </div>
-                                            <button onClick={() => toggleExpand(index)} className="see-more-btn btn btn-link p-0 text-primary">
+                                            <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
                                                 {expandedCards.has(index) ? 'See less' : 'See more'}
                                             </button>
                                         </div>

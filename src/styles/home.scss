@@ -7,6 +7,26 @@ $dark: #272727;
   position: relative;
   width: 100%;
   overflow: hidden;
+  .custom-pagination {
+    transform: translateY(-160px);
+    .custom-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #272727;
+      cursor: pointer;
+      transition: all 0.3s
+      ease;
+
+      &.active {
+        background: #c9da2b;
+        border: 2px solid #272727;
+        width: 29px;
+        height: 12px;
+        border-radius: 30px;
+      }
+    }
+  }
 
   // Slider wrapper
   .slick-slider,
@@ -19,6 +39,10 @@ $dark: #272727;
     div {
       height: 100%;
     }
+  }
+  .slick-dots{
+    bottom: 100px;
+    justify-content: center;
   }
 
   .banner-wrapper {
