@@ -8,7 +8,7 @@ $dark: #272727;
   width: 100%;
   overflow: hidden;
   .custom-pagination {
-    transform: translateY(-160px);
+    transform: translateY(-70px);
     .custom-dot {
       width: 12px;
       height: 12px;
@@ -17,6 +17,7 @@ $dark: #272727;
       cursor: pointer;
       transition: all 0.3s
       ease;
+      border: none;
 
       &.active {
         background: #c9da2b;
@@ -24,6 +25,7 @@ $dark: #272727;
         width: 29px;
         height: 12px;
         border-radius: 30px;
+        border: none;
       }
     }
   }
@@ -31,14 +33,9 @@ $dark: #272727;
   // Slider wrapper
   .slick-slider,
   .slick-list,
-  .slick-track {
-    height: 100%;
-  }
-
-  .slick-slide {
-    div {
-      height: 100%;
-    }
+  .slick-track,
+  .banner-wrapper{
+    height: 100vh;
   }
   .slick-dots{
     bottom: 100px;
@@ -51,7 +48,6 @@ $dark: #272727;
     align-items: center;
     justify-content: center;
     background: center / cover no-repeat;
-    min-height: 100vh;
     padding: clamp(140px, 28vw, 280px) 20px;
     text-align: center;
 
@@ -127,7 +123,7 @@ $dark: #272727;
         border: 1px solid #00bbff;
         border-radius: 30px;
         padding: 10px 35px;
-        max-width: 696px;
+        max-width: 720px;
         width: 100%;
         margin: 0 auto;
         text-align: center;

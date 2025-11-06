@@ -4,7 +4,7 @@
   overflow: hidden;
 }
 .home-banner-sec .custom-pagination {
-  transform: translateY(-160px);
+  transform: translateY(-70px);
 }
 .home-banner-sec .custom-pagination .custom-dot {
   width: 12px;
@@ -13,6 +13,7 @@
   background: #272727;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: none;
 }
 .home-banner-sec .custom-pagination .custom-dot.active {
   background: #c9da2b;
@@ -20,14 +21,13 @@
   width: 29px;
   height: 12px;
   border-radius: 30px;
+  border: none;
 }
 .home-banner-sec .slick-slider,
 .home-banner-sec .slick-list,
-.home-banner-sec .slick-track {
-  height: 100%;
-}
-.home-banner-sec .slick-slide div {
-  height: 100%;
+.home-banner-sec .slick-track,
+.home-banner-sec .banner-wrapper {
+  height: 100vh;
 }
 .home-banner-sec .slick-dots {
   bottom: 100px;
@@ -39,7 +39,6 @@
   align-items: center;
   justify-content: center;
   background: center/cover no-repeat;
-  min-height: 100vh;
   padding: clamp(140px, 28vw, 280px) 20px;
   text-align: center;
 }
@@ -105,7 +104,7 @@
   border: 1px solid #00bbff;
   border-radius: 30px;
   padding: 10px 35px;
-  max-width: 696px;
+  max-width: 720px;
   width: 100%;
   margin: 0 auto;
   text-align: center;

@@ -132,7 +132,6 @@ export default function HomePage() {
                                                 backgroundImage: `url(${banner.image})`,
                                                 backgroundSize: "cover",
                                                 backgroundPosition: "center",
-                                                minHeight: "90vh",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center"
