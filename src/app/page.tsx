@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import Slider from 'react-slick';
-import { useState } from 'react';
+import Slider from "react-slick";
+import { useRef, useState } from "react";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -12,7 +13,10 @@ import '../styles/cards.css';
 import '../styles/slick-slider.css';
 
 export default function HomePage() {
-    // 🔹 Banner data
+    const sliderRef = useRef<any>(null);
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    // 🔹 Banner Data
     const banners = [
         {
             id: 1,
@@ -32,7 +36,7 @@ export default function HomePage() {
             btn1Link: "/signup",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
-            notice: "No credit card required enjoy a free to subscribe"
+            notice: "No credit card required — enjoy a free to subscribe"
         },
         {
             id: 3,
@@ -42,17 +46,17 @@ export default function HomePage() {
             btn1Link: "/",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
-            notice: "No credit card required enjoy a free to subscribe"
+            notice: "No credit card required — enjoy a free to subscribe"
         },
         {
             id: 4,
             image: "/assets/img/home-banner-img4.webp",
-            title: "Access Verified Contractor Projects No Brokers, No Middlemen, Just Real Jobs Daily.",
+            title: "Access Verified Contractor Projects — No Brokers, No Middlemen, Just Real Jobs Daily.",
             btn1Text: "Post a Project",
             btn1Link: "/",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
-            notice: "No credit card required enjoy a free to subscribe"
+            notice: "No credit card required — enjoy a free to subscribe"
         },
         {
             id: 5,
@@ -62,23 +66,24 @@ export default function HomePage() {
             btn1Link: "/",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
-            notice: "No credit card required enjoy a free to subscribe"
+            notice: "No credit card required — enjoy a free to subscribe"
         }
     ];
 
-    // 🔹 Banner slider settings
+    // 🔹 Fixed Slick Settings (Bug-free)
     const bannerSettings = {
-        dots: true,
         infinite: true,
         fade: true,
-        autoplay: true,
+        autoplay: false, // ✅ autoplay off = no sync issue
         autoplaySpeed: 4000,
         speed: 1500,
         arrows: false,
-        pauseOnHover: false
+        pauseOnHover: false,
+        dots: false,
+        beforeChange: (_: number, next: number) => setCurrentSlide(next),
     };
 
-    // 🔹 Projects mock data
+    // 🔹 Mock Projects
     const projects = Array(6).fill({
         category: 'Framing',
         location: 'Whittier, CA',
@@ -86,7 +91,6 @@ export default function HomePage() {
         timeAgo: '23 mins ago'
     });
 
-    // 🔹 States
     const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
     const toggleExpand = (id: number) => {
         const newExpanded = new Set(expandedCards);
@@ -94,7 +98,6 @@ export default function HomePage() {
         setExpandedCards(newExpanded);
     };
 
-    // 🔹 Slider settings for cards
     const sliderSettingsDesktop = {
         slidesToShow: 3,
         slidesToScroll: 1,
@@ -103,6 +106,7 @@ export default function HomePage() {
         infinite: true,
         speed: 600,
     };
+
     const sliderSettingsMobile = {
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -115,120 +119,134 @@ export default function HomePage() {
     return (
         <div>
             <Header />
+
             <div className="sections overflow-hidden">
-                {/* 🔹 Home Banner Section */}
-                <section className="home-banner-sec">
-                    <Slider {...bannerSettings}>
-                        {banners.map((banner) => (
-                            <div key={banner.id}>
-                                <div
-                                    className="banner-wrapper"
-                                    style={{
-                                        backgroundImage: `url(${banner.image})`,
-                                        backgroundSize: "cover",
-                                        backgroundPosition: "center",
-                                        minHeight: "90vh",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center"
-                                    }}
-                                >
-                                    <div className="content-wrapper text-center text-white px-3">
-                                        <h1 className="main-title mb-4">{banner.title}</h1>
-                                        <div className="main-wrapper mx-auto" style={{ maxWidth: "876px" }}>
-                                            <div className="buttons d-flex flex-wrap justify-content-center gap-3 mb-4">
-                                                <Link href={banner.btn1Link} className="btn btn-primary home-hero-btn rounded-3 d-flex align-items-center gap-2">
-                                                    <span>{banner.btn1Text}</span>
-                                                    <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" style={{ filter: "invert(1)" }} />
-                                                </Link>
-                                                <Link href={banner.btn2Link} className="btn bg-dark home-hero-btn rounded-3 d-flex align-items-center gap-2">
-                                                    <span className="text-white">{banner.btn2Text}</span>
-                                                    <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" />
-                                                </Link>
+                    {/* 🔹 Home Banner Section */}
+                        <section className="home-banner-sec">
+                            <Slider ref={sliderRef} {...bannerSettings}>
+                                {banners.map((banner) => (
+                                    <div key={banner.id}>
+                                        <div
+                                            className="banner-wrapper"
+                                            style={{
+                                                backgroundImage: `url(${banner.image})`,
+                                                backgroundSize: "cover",
+                                                backgroundPosition: "center",
+                                                minHeight: "90vh",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }}
+                                        >
+                                            <div className="content-wrapper text-center text-white px-3">
+                                                <h1 className="main-title mb-4">{banner.title}</h1>
+                                                <div className="main-wrapper mx-auto" style={{ maxWidth: "876px" }}>
+                                                    <div className="buttons d-flex flex-wrap justify-content-center gap-3 mb-4">
+                                                        <Link href={banner.btn1Link} className="btn btn-primary home-hero-btn rounded-3 d-flex align-items-center gap-2">
+                                                            <span>{banner.btn1Text}</span>
+                                                            <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" style={{ filter: "invert(1)" }} />
+                                                        </Link>
+                                                        <Link href={banner.btn2Link} className="btn bg-dark home-hero-btn rounded-3 d-flex align-items-center gap-2">
+                                                            <span className="text-white">{banner.btn2Text}</span>
+                                                            <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" />
+                                                        </Link>
+                                                    </div>
+                                                    <Link href="/subscription" className="notice-button d-flex justify-content-center text-white">
+                                                        {banner.notice}
+                                                    </Link>
+                                                </div>
                                             </div>
-                                            <Link href="/subscription" className="notice-button d-flex justify-content-center text-white">
-                                                {banner.notice}
-                                            </Link>
                                         </div>
                                     </div>
+                                ))}
+                            </Slider>
+
+                            {/* 🔹 Custom Pagination */}
+                            <div className="custom-pagination d-flex align-items-center justify-content-center gap-2 mt-3">
+                                {banners.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => sliderRef.current?.slickGoTo(index)}
+                                        className={`custom-dot ${currentSlide === index ? "active" : ""}`}
+                                        aria-label={`Go to slide ${index + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* 🔹 Project Section */}
+                        <section className="project-sec py-5">
+                            <div className="container">
+                                <div className="content-wrapper mb-4 text-center">
+                                    <h2 className="main-title">Explore real projects posted by top general contractors</h2>
+                                </div>
+
+                                {/* Desktop Slider */}
+                                <div className="main-card-slide d-none d-lg-block">
+                                    <Slider {...sliderSettingsDesktop}>
+                                        {projects.map((project, index) => (
+                                            <div key={index} className="px-2">
+                                                <div className="custom-card">
+                                                    <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
+                                                        <Link href={`/projects?category=${project.category.toLowerCase()}`} className="btn btn-primary">
+                                                            {project.category}
+                                                        </Link>
+                                                        <div className="date text-primary-gray-light">{project.timeAgo}</div>
+                                                    </div>
+                                                    <div className="title text-black fs-5 fw-semibold mb-3">{project.location}</div>
+                                                    <div className="description">
+                                                        {expandedCards.has(index)
+                                                            ? project.description.repeat(2)
+                                                            : `${project.description.substring(0, 150)}...`}
+                                                    </div>
+                                                    <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
+                                                        {expandedCards.has(index) ? 'See less' : 'See more'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                </div>
+
+                                {/* Mobile Slider */}
+                                <div className="main-card-slide d-block d-lg-none">
+                                    <Slider {...sliderSettingsMobile}>
+                                        {projects.map((project, index) => (
+                                            <div key={index} className="px-2">
+                                                <div className="custom-card">
+                                                    <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
+                                                        <Link href={`/projects?category=${project.category.toLowerCase()}`} className="btn btn-primary">
+                                                            {project.category}
+                                                        </Link>
+                                                        <div className="date text-primary-gray-light">{project.timeAgo}</div>
+                                                    </div>
+                                                    <div className="title text-black fs-5 fw-semibold mb-3">{project.location}</div>
+                                                    <div className="description">
+                                                        {expandedCards.has(index)
+                                                            ? project.description.repeat(2)
+                                                            : `${project.description.substring(0, 150)}...`}
+                                                    </div>
+                                                    <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
+                                                        {expandedCards.has(index) ? 'See less' : 'See more'}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                </div>
+
+                                {/* Bottom Button */}
+                                <div className="buttons d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5">
+                                    <div className="custom-pagination d-flex align-items-center justify-content-center gap-2" />
+                                    <Link href="/" className="btn bg-dark rounded-3">
+                                        <span className="text-white">See All</span>
+                                        <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" className="d-block" />
+                                    </Link>
                                 </div>
                             </div>
-                        ))}
-                    </Slider>
-                </section>
-
-                {/* 🔹 Project Section */}
-                <section className="project-sec py-5">
-                    <div className="container">
-                        <div className="content-wrappper mb-4 text-center">
-                            <h2 className="main-title">Explore real projects posted by top general contractors</h2>
-                        </div>
-
-                        {/* Desktop Slider */}
-                        <div className="main-card-slide d-none d-lg-block">
-                            <Slider {...sliderSettingsDesktop}>
-                                {projects.map((project, index) => (
-                                    <div key={index} className="px-2">
-                                        <div className="custom-card">
-                                            <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                                <Link href={`/projects?category=${project.category.toLowerCase()}`} className="btn btn-primary">
-                                                    {project.category}
-                                                </Link>
-                                                <div className="date text-primary-gray-light">{project.timeAgo}</div>
-                                            </div>
-                                            <div className="title text-black fs-5 fw-semibold mb-3">{project.location}</div>
-                                            <div className="description">
-                                                {expandedCards.has(index)
-                                                    ? project.description.repeat(2)
-                                                    : `${project.description.substring(0, 150)}...`}
-                                            </div>
-                                            <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
-                                                {expandedCards.has(index) ? 'See less' : 'See more'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
-                        </div>
-
-                        {/* Mobile Slider */}
-                        <div className="main-card-slide d-block d-lg-none">
-                            <Slider {...sliderSettingsMobile}>
-                                {projects.map((project, index) => (
-                                    <div key={index} className="px-2">
-                                        <div className="custom-card">
-                                            <div className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                                <Link href={`/projects?category=${project.category.toLowerCase()}`} className="btn btn-primary">
-                                                    {project.category}
-                                                </Link>
-                                                <div className="date text-primary-gray-light">{project.timeAgo}</div>
-                                            </div>
-                                            <div className="title text-black fs-5 fw-semibold mb-3">{project.location}</div>
-                                            <div className="description">
-                                                {expandedCards.has(index)
-                                                    ? project.description.repeat(2)
-                                                    : `${project.description.substring(0, 150)}...`}
-                                            </div>
-                                            <button onClick={() => toggleExpand(index)} className="see-more-btn d-block btn btn-link p-0 text-primary">
-                                                {expandedCards.has(index) ? 'See less' : 'See more'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
-                        </div>
-
-                        {/* Bottom Button */}
-                        <div className="buttons d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5">
-                            <div className="custom-pagination d-flex align-items-center justify-content-center gap-2" />
-                            <Link href="/" className="btn bg-dark rounded-3">
-                                <span className="text-white">See All</span>
-                                <Image src="/assets/img/icons/arrow-white.svg" width={12} height={14} alt="Arrow" className="d-block" />
-                            </Link>
-                        </div>
-                    </div>
-                </section>
+                        </section>
             </div>
+
             <Footer />
         </div>
     );
