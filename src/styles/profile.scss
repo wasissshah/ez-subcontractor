@@ -350,6 +350,46 @@ $danger: #DC2626;
     row-gap: 30px;
     margin-top: 30px;
   }
+  .credit-card {
+    background-color: $primary;
+    padding: 64px 8px 21px 8px;
+    border-radius: 16px;
+  }
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .checkbox[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #DADADA;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
+      background-color: transparent;
+      transition: all 0.2s ease;
+      margin-bottom: 0;
+      &:checked {
+        background-color: $primary;
+        border-color: $primary;
+        &::after {
+          content: '';
+          position: absolute;
+          top: 4px;
+          left: 8px;
+          width: 6px;
+          height: 12px;
+          border: solid white;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
 }
 .pricing-sec {
   .price-card {

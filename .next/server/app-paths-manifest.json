@@ -1,6 +1,8 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
   "/general-contractor/profile/page": "app/general-contractor/profile/page.js",
   "/general-contractor/edit-profile/page": "app/general-contractor/edit-profile/page.js",
-  "/general-contractor/change-password/page": "app/general-contractor/change-password/page.js"
+  "/general-contractor/change-password/page": "app/general-contractor/change-password/page.js",
+  "/sub-contractor/saved-cards/page": "app/sub-contractor/saved-cards/page.js"
 }
