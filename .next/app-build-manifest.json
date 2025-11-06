@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css--dc3a64.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,11 +14,11 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/terms-and-conditions/page": [
+    "/general-contractor/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_about-us_css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css--dc3a64.css",
-      "static/chunks/app/terms-and-conditions/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
+      "static/chunks/app/general-contractor/profile/page.js"
     ]
   }
 }

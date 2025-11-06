@@ -1,3 +1,4 @@
 {
-  "/terms-and-conditions/page": "app/terms-and-conditions/page.js"
+  "/page": "app/page.js",
+  "/general-contractor/profile/page": "app/general-contractor/profile/page.js"
 }
