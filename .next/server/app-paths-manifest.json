@@ -1,4 +1,5 @@
 {
   "/page": "app/page.js",
-  "/general-contractor/profile/page": "app/general-contractor/profile/page.js"
+  "/general-contractor/profile/page": "app/general-contractor/profile/page.js",
+  "/general-contractor/edit-profile/page": "app/general-contractor/edit-profile/page.js"
 }

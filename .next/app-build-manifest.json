@@ -19,6 +19,12 @@
       "static/chunks/main-app.js",
       "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
       "static/chunks/app/general-contractor/profile/page.js"
+    ],
+    "/general-contractor/edit-profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-8b00e6.css",
+      "static/chunks/app/general-contractor/edit-profile/page.js"
     ]
   }
 }
