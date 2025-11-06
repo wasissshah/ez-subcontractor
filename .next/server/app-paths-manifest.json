@@ -4,5 +4,6 @@
   "/affiliate/dashboard/page": "app/affiliate/dashboard/page.js",
   "/affiliate/dashboard-1/page": "app/affiliate/dashboard-1/page.js",
   "/general-contractor/view-more-reviews/page": "app/general-contractor/view-more-reviews/page.js",
-  "/affiliate/checkout/page": "app/affiliate/checkout/page.js"
+  "/affiliate/checkout/page": "app/affiliate/checkout/page.js",
+  "/general-contractor/register/page": "app/general-contractor/register/page.js"
 }

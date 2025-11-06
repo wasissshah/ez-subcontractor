@@ -62,6 +62,12 @@
       "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-c912b4.css",
       "static/chunks/app/affiliate/checkout/page.js"
     ],
+    "/general-contractor/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/general-contractor/register/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
