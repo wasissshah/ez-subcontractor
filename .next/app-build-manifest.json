@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/css/css-src_styles_about-us_css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css--dc3a64.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,153 +14,11 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/subscription/page": [
+    "/terms-and-conditions/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/subscription/page.js"
-    ],
-    "/sub-contractor/subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/subscription/page.js"
-    ],
-    "/sub-contractor/subscribed/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/subscribed/page.js"
-    ],
-    "/sub-contractor/free-registration/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/free-registration/page.js"
-    ],
-    "/sub-contractor/job-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/job-details/page.js"
-    ],
-    "/sub-contractor/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/profile/page.js"
-    ],
-    "/sub-contractor/edit-profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/edit-profile/page.js"
-    ],
-    "/sub-contractor/change-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/change-password/page.js"
-    ],
-    "/sub-contractor/saved-listing/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/saved-listing/page.js"
-    ],
-    "/sub-contractor/profile-subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/profile-subscription/page.js"
-    ],
-    "/sub-contractor/transaction-history/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/transaction-history/page.js"
-    ],
-    "/affiliate/success/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/affiliate/success/page.js"
-    ],
-    "/affiliate/checkout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/checkout/page.js"
-    ],
-    "/sub-contractor/checkout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/sub-contractor/checkout/page.js"
-    ],
-    "/affiliate/subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/subscription/page.js"
-    ],
-    "/affiliate/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/dashboard/page.js"
-    ],
-    "/affiliate/contractor-detail/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/contractor-detail/page.js"
-    ],
-    "/affiliate/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/profile/page.js"
-    ],
-    "/affiliate/change-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/change-password/page.js"
-    ],
-    "/affiliate/saved-user/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/saved-user/page.js"
-    ],
-    "/affiliate/profile-subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/profile-subscription/page.js"
-    ],
-    "/affiliate/dashboard-1/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/affiliate/dashboard-1/page.js"
-    ],
-    "/general-contractor/my-projects/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/general-contractor/my-projects/page.js"
-    ],
-    "/general-contractor/job-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
-      "static/chunks/app/general-contractor/job-details/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/css/css-src_styles_about-us_css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css--dc3a64.css",
+      "static/chunks/app/terms-and-conditions/page.js"
     ]
   }
 }

@@ -6,16 +6,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
 import '../../styles/about-us.css';
 
 
-export default function AboutUsPage() {
+export default function TermsPage() {
     return (
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                <div className="hero-sec-terms position-static">
+                <div className="hero-sec about position-static">
                     <div className="container">
                         <h1 className="main-title text-center mb-4">Terms & Conditions</h1>
                         <div className="content-wrapper">

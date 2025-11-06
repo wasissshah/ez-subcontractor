@@ -1,8 +1,3 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/affiliate/dashboard/page": "app/affiliate/dashboard/page.js",
-  "/affiliate/dashboard-1/page": "app/affiliate/dashboard-1/page.js",
-  "/general-contractor/my-projects/page": "app/general-contractor/my-projects/page.js",
-  "/general-contractor/job-details/page": "app/general-contractor/job-details/page.js",
-  "/page": "app/page.js"
+  "/terms-and-conditions/page": "app/terms-and-conditions/page.js"
 }
