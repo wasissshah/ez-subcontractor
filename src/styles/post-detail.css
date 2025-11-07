@@ -192,9 +192,13 @@
   padding-bottom: 10px;
   transition: all 0.3s ease;
 }
+.banner-sec.post .tab .nav-tabs .nav-item .nav-link:hover {
+  background-color: transparent !important;
+}
 .banner-sec.post .tab .nav-tabs .nav-item .nav-link.active {
   color: #6F7818 !important;
   position: relative;
+  background-color: #272727 !important;
 }
 .banner-sec.post .tab .nav-tabs .nav-item .nav-link.active::after {
   content: "";

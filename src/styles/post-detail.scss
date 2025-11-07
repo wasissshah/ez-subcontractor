@@ -198,9 +198,13 @@ $danger: #DC2626;
           padding: 0;
           padding-bottom: 10px;
           transition: all .3s ease;
+          &:hover{
+            background-color: transparent !important;
+          }
           &.active {
             color: #6F7818 !important;
             position: relative;
+            background-color: $dark !important;
             &::after {
               content: '';
               position: absolute;
