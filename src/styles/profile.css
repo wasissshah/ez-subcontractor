@@ -349,7 +349,8 @@
   align-items: center;
   gap: 8px;
 }
-.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox] {
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox],
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -364,11 +365,37 @@
   transition: all 0.2s ease;
   margin-bottom: 0;
 }
-.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox]:checked {
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox].checkbox1,
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox].checkbox1 {
+  border: 2px solid #272727 !important;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox].checkbox1:checked,
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox].checkbox1:checked {
+  background-color: #272727 !important;
+  border-color: #272727 !important;
+}
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox].checkbox1:checked::after,
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox].checkbox1:checked::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox]:checked,
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox]:checked {
   background-color: #C9DA2B !important;
   border-color: #C9DA2B !important;
 }
-.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox]:checked::after {
+.banner-sec.profile .checkbox-wrapper .checkbox[type=checkbox]:checked::after,
+.banner-sec.profile .checkbox-wrapper .checkbox1[type=checkbox]:checked::after {
   content: "";
   position: absolute;
   top: 4px;

@@ -359,7 +359,8 @@ $danger: #DC2626;
     display: flex;
     align-items: center;
     gap: 8px;
-    .checkbox[type="checkbox"] {
+    .checkbox[type="checkbox"],
+    .checkbox1[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -373,6 +374,27 @@ $danger: #DC2626;
       background-color: transparent;
       transition: all 0.2s ease;
       margin-bottom: 0;
+      &.checkbox1{
+        border: 2px solid $dark;
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        &:checked {
+          background-color: $dark;
+          border-color: $dark;
+          &::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 8px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+          }
+        }
+      }
       &:checked {
         background-color: $primary;
         border-color: $primary;
