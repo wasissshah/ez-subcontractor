@@ -132,7 +132,6 @@ $danger: #DC2626;
       object-fit: cover;
       box-shadow: 0px 4px 35px 4px #00000025;
       position: relative;
-      z-index: -1;
     }
     .icon-wrapper {
       position: absolute;
@@ -143,14 +142,14 @@ $danger: #DC2626;
       gap: 12px;
       z-index: 1;
       .icon {
-        border: 1px solid $dark;
+        border: 1px solid $dark !important;
         border-radius: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 45px;
         height: 45px;
-        background-color: white;
+        background-color: white !important;
       }
     }
   }
