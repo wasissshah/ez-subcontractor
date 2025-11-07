@@ -134,10 +134,10 @@ $danger: #DC2626;
         display: none;
       }
       .main-title{
-        color: $dark;
-        position: static;
-        padding:20px;
-        text-align: center;
+        color: $dark !important;
+        position: static !important;
+        padding:20px !important;
+        text-align: center !important;
       }
     }
     .content-wrapper{

@@ -121,10 +121,10 @@
     display: none;
   }
   .hero-sec .image-wrapper .main-title {
-    color: #272727;
-    position: static;
-    padding: 20px;
-    text-align: center;
+    color: #272727 !important;
+    position: static !important;
+    padding: 20px !important;
+    text-align: center !important;
   }
   .hero-sec .content-wrapper {
     width: 100%;
