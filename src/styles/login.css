@@ -128,7 +128,7 @@
   }
   .hero-sec .content-wrapper {
     width: 100%;
-    min-height: 100%;
+    min-height: 100% !important;
   }
 }
 @media (max-width: 768px) {

@@ -50,6 +50,12 @@
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/forget-password/page.js"
     ],
+    "/auth/verfiy-email/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/verfiy-email/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
