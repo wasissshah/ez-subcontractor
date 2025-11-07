@@ -26,6 +26,12 @@
       "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
       "static/chunks/app/affiliate/ad-posted/page.js"
     ],
+    "/affiliate/edit-ad/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
+      "static/chunks/app/affiliate/edit-ad/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
