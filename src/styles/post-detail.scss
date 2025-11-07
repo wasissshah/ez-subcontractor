@@ -204,7 +204,7 @@ $danger: #DC2626;
           &.active {
             color: #6F7818 !important;
             position: relative;
-            background-color: $dark !important;
+            background-color: transparent !important;
             &::after {
               content: '';
               position: absolute;
