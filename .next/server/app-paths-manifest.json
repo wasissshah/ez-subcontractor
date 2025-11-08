@@ -1,7 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/general-contractor/ad-job-post/page": "app/general-contractor/ad-job-post/page.js",
   "/auth/forget-password/page": "app/auth/forget-password/page.js",
   "/auth/login/page": "app/auth/login/page.js",
-  "/auth/verfiy-email/page": "app/auth/verfiy-email/page.js"
+  "/auth/verify-email/page": "app/auth/verify-email/page.js",
+  "/auth/create-password/page": "app/auth/create-password/page.js"
 }

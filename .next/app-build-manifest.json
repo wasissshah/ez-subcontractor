@@ -50,16 +50,17 @@
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/forget-password/page.js"
     ],
-    "/auth/verfiy-email/page": [
+    "/auth/verify-email/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/verfiy-email/page.js"
+      "static/chunks/app/auth/verify-email/page.js"
     ],
-    "/_not-found/page": [
+    "/auth/create-password/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/create-password/page.js"
     ]
   }
 }
