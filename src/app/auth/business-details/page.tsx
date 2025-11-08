@@ -1,0 +1,200 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import '../../../styles/login.css';
+
+export default function BusinessDetails() {
+    const [category, setCategory] = useState('');
+    const [licenseNumber, setLicenseNumber] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [workRadius, setWorkRadius] = useState('');
+    const [error, setError] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const categories = [
+        { id: '1', name: 'Plumbing' },
+        { id: '2', name: 'Electric Work' },
+        { id: '3', name: 'Framing' },
+        { id: '4', name: 'Roofing' },
+    ];
+
+    // Close dropdown if clicked outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+
+        if (!category) {
+            setError('Please select a category');
+            return;
+        }
+        if (!licenseNumber.trim()) {
+            setError('License Number is required');
+            return;
+        }
+        if (!zipCode.trim()) {
+            setError('Zip Code is required');
+            return;
+        }
+        if (!workRadius.trim()) {
+            setError('Work Radius is required');
+            return;
+        }
+
+        console.log({ category, licenseNumber, zipCode, workRadius });
+        localStorage.setItem(
+            'businessDetails',
+            JSON.stringify({ category, licenseNumber, zipCode, workRadius })
+        );
+        alert('Registration Completed!');
+    };
+
+    return (
+        <section className="hero-sec login overflow-hidden">
+            <div className="image-wrapper">
+                <Image
+                    src="/assets/img/left-image.webp"
+                    className="left-image"
+                    alt="Section Image"
+                    width={500}
+                    height={800}
+                />
+                <p className="main-title mb-0">
+                    Developed by:
+                    <span className="text-primary fw-semibold">Design Spartans</span>
+                </p>
+            </div>
+
+            <div className="row">
+                <div className="col-lg-6 offset-lg-6">
+                    <div className="content-wrapper">
+                        <div className="content mx-auto w-100">
+                            <a href="/" className="d-block mb-4">
+                                <Image
+                                    src="/assets/img/icons/logo.webp"
+                                    width={350}
+                                    height={100}
+                                    alt="Login Logo"
+                                    style={{ maxWidth: '350px' }}
+                                    className="img-fluid d-block w-100 mx-auto"
+                                />
+                            </a>
+
+                            <div className="fw-semibold fs-2 mb-4 text-center">Business Details</div>
+
+                            <div className="register-topbar justify-content-start mb-3 d-flex align-items-center gap-2">
+                                <Image
+                                    src="/assets/img/icons/settings.svg"
+                                    width={50}
+                                    height={50}
+                                    alt="Worker Image"
+                                />
+                                <div className="fw-semibold">Subcontractor</div>
+                            </div>
+
+                            <form className="form" onSubmit={handleSubmit}>
+                                {/* Custom Select */}
+                                <div
+                                    className="input-wrapper d-flex flex-column position-relative mb-3"
+                                    ref={dropdownRef}
+                                >
+                                    <label htmlFor="category" className="mb-1 fw-semibold">
+                                        Category *
+                                    </label>
+                                    <div
+                                        className={`custom-select ${dropdownOpen ? 'open' : ''}`}
+                                    >
+                                        <div
+                                            className="select-selected"
+                                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                                        >
+                                            {category
+                                                ? categories.find((c) => c.id === category)?.name
+                                                : 'Select category'}
+                                        </div>
+                                        <i className="bi bi-chevron-down select-arrow"></i>
+                                        <ul className="select-options">
+                                            {categories.map((cat) => (
+                                                <li
+                                                    key={cat.id}
+                                                    data-value={cat.id}
+                                                    onClick={() => {
+                                                        setCategory(cat.id);
+                                                        setDropdownOpen(false);
+                                                    }}
+                                                >
+                                                    {cat.name}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                {/* License Number */}
+                                <div className="input-wrapper d-flex flex-column mb-3">
+                                    <label htmlFor="licenseNumber" className="mb-1 fw-semibold">
+                                        License Number
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="licenseNumber"
+                                        placeholder="123456"
+                                        value={licenseNumber}
+                                        onChange={(e) => setLicenseNumber(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Zip Code */}
+                                <div className="input-wrapper d-flex flex-column mb-3">
+                                    <label htmlFor="zipCode" className="mb-1 fw-semibold">
+                                        Zip Code
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="zipCode"
+                                        placeholder="Enter zip code"
+                                        value={zipCode}
+                                        onChange={(e) => setZipCode(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Work Radius */}
+                                <div className="input-wrapper d-flex flex-column mb-3">
+                                    <label htmlFor="workRadius" className="mb-1 fw-semibold">
+                                        Work Radius
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="workRadius"
+                                        placeholder="Enter work Radius (in miles)"
+                                        value={workRadius}
+                                        onChange={(e) => setWorkRadius(e.target.value)}
+                                    />
+                                </div>
+
+                                {error && <p className="text-danger mb-2">{error}</p>}
+
+                                <input
+                                    type="submit"
+                                    value="Complete Registration"
+                                    className="btn btn-primary w-100 rounded-3 d-block"
+                                />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}

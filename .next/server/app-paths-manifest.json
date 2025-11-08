@@ -1,7 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/auth/login/page": "app/auth/login/page.js",
   "/auth/verify-email/page": "app/auth/verify-email/page.js",
+  "/auth/create-password/page": "app/auth/create-password/page.js",
   "/auth/account-type/page": "app/auth/account-type/page.js",
-  "/auth/create-password/page": "app/auth/create-password/page.js"
+  "/auth/business-details/page": "app/auth/business-details/page.js"
 }

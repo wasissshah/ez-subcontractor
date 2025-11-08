@@ -68,6 +68,12 @@
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/account-type/page.js"
     ],
+    "/auth/business-details/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/business-details/page.js"
+    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
