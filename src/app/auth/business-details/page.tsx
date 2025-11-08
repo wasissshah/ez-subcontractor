@@ -52,11 +52,8 @@ export default function BusinessDetails() {
             return;
         }
 
+        // You can send data to backend here
         console.log({ category, licenseNumber, zipCode, workRadius });
-        localStorage.setItem(
-            'businessDetails',
-            JSON.stringify({ category, licenseNumber, zipCode, workRadius })
-        );
         alert('Registration Completed!');
     };
 
@@ -112,9 +109,7 @@ export default function BusinessDetails() {
                                     <label htmlFor="category" className="mb-1 fw-semibold">
                                         Category *
                                     </label>
-                                    <div
-                                        className={`custom-select ${dropdownOpen ? 'open' : ''}`}
-                                    >
+                                    <div className={`custom-select ${dropdownOpen ? 'open' : ''}`}>
                                         <div
                                             className="select-selected"
                                             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -123,7 +118,28 @@ export default function BusinessDetails() {
                                                 ? categories.find((c) => c.id === category)?.name
                                                 : 'Select category'}
                                         </div>
-                                        <i className="bi bi-chevron-down select-arrow"></i>
+
+                                        {/* Static SVG Arrow */}
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            fill="currentColor"
+                                            className="select-arrow"
+                                            viewBox="0 0 16 16"
+                                            style={{
+                                                position: 'absolute',
+                                                right: '10px',
+                                                top: '50%',
+                                                transform: 'translateY(-50%)',
+                                            }}
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                                            />
+                                        </svg>
+
                                         <ul className="select-options">
                                             {categories.map((cat) => (
                                                 <li
