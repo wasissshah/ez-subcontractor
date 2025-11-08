@@ -61,6 +61,17 @@
       "static/chunks/main-app.js",
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/create-password/page.js"
+    ],
+    "/auth/account-type/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/account-type/page.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

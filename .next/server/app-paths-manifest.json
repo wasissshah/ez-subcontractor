@@ -1,6 +1,7 @@
 {
-  "/auth/forget-password/page": "app/auth/forget-password/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/auth/login/page": "app/auth/login/page.js",
   "/auth/verify-email/page": "app/auth/verify-email/page.js",
+  "/auth/account-type/page": "app/auth/account-type/page.js",
   "/auth/create-password/page": "app/auth/create-password/page.js"
 }
