@@ -32,10 +32,29 @@
       "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
       "static/chunks/app/general-contractor/edit-job-post/page.js"
     ],
-    "/_not-found/page": [
+    "/auth/general-contractor/register/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/general-contractor/register/page.js"
+    ],
+    "/auth/sub-contractor/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/sub-contractor/register/page.js"
+    ],
+    "/auth/affiliate/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/affiliate/register/page.js"
+    ],
+    "/auth/account-type/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/account-type/page.js"
     ]
   }
 }

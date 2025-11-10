@@ -17,7 +17,7 @@ export default function SelectAccountType() {
             icon: '/assets/img/icons/construction-worker.webp',
         },
         {
-            id: 'subcontractor',
+            id: 'sub-contractor',
             title: 'Subcontractor',
             icon: '/assets/img/icons/settings.svg',
         },
@@ -35,11 +35,11 @@ export default function SelectAccountType() {
             return;
         }
 
-        // ✅ Example: store selected type (later for API or routing)
+        // ✅ Save selected account type (optional)
         localStorage.setItem('accountType', selectedType);
 
-        // Redirect to next page
-        router.push('/auth/register'); // example
+        // ✅ Redirect based on selected type
+        router.push(`/auth/${selectedType}/register`);
     };
 
     return (
@@ -79,7 +79,12 @@ export default function SelectAccountType() {
 
                             {/* Account Cards */}
                             {accountTypes.map((acc) => (
-                                <div className="account-card mb-3" key={acc.id}>
+                                <div
+                                    className={`account-card mb-3 ${selectedType === acc.id ? 'active' : ''}`}
+                                    key={acc.id}
+                                    onClick={() => setSelectedType(acc.id)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <div className="d-flex align-items-center gap-2">
                                         <Image src={acc.icon} width={50} height={50} alt={`${acc.title} Icon`} />
                                         <div className="title fw-semibold">{acc.title}</div>
@@ -96,7 +101,7 @@ export default function SelectAccountType() {
                             ))}
 
                             <div className="note-card mb-4">
-                                No credit card required enjoy a free 30-day trial.
+                                No credit card required — enjoy a free 30-day trial.
                             </div>
 
                             {error && <p className="text-danger mb-2">{error}</p>}

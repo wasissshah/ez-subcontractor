@@ -1,7 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/general-contractor/ad-job-post/page": "app/general-contractor/ad-job-post/page.js",
-  "/general-contractor/add-attachment/page": "app/general-contractor/add-attachment/page.js",
-  "/general-contractor/edit-job-post/page": "app/general-contractor/edit-job-post/page.js"
+  "/auth/general-contractor/register/page": "app/auth/general-contractor/register/page.js",
+  "/auth/sub-contractor/register/page": "app/auth/sub-contractor/register/page.js",
+  "/auth/affiliate/register/page": "app/auth/affiliate/register/page.js",
+  "/auth/account-type/page": "app/auth/account-type/page.js"
 }
