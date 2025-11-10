@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, ChangeEvent, DragEvent, MouseEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -10,37 +10,39 @@ import '../../../styles/profile.css';
 import '../../../styles/post-detail.css';
 import 'react-quill/dist/quill.snow.css';
 
-// SSR safe import
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-export default function PostAd() {
+// Define document shape
+interface DocumentItem {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export function AddAttachment() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectOpen, setSelectOpen] = useState(false);
     const [description, setDescription] = useState('');
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-    const [documentDescriptions, setDocumentDescriptions] = useState([]);
-    const fileInputRef = useRef(null);
-    const dropdownRef = useRef(null);
 
-    const initialDocuments = [
-        { name: 'master_crafts_man.pdf', description: '' },
-        { name: 'master_crafts_man.pdf', description: '' },
+    const initialDocuments: DocumentItem[] = [
+        {id: `${Date.now()}-0`, name: 'master_crafts_man.pdf', description: ''},
+        {id: `${Date.now() + 1}-1`, name: 'master_crafts_man.pdf', description: ''},
     ];
+    const [allDocuments, setAllDocuments] = useState<DocumentItem[]>(initialDocuments);
 
-    // merge initial documents with uploaded files
-    const [allDocuments, setAllDocuments] = useState(initialDocuments);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const categories = [
-        { id: '1', name: 'Plumbing' },
-        { id: '2', name: 'Electric Work' },
-        { id: '3', name: 'Framing' },
-        { id: '4', name: 'Roofing' },
+        {id: '1', name: 'Plumbing'},
+        {id: '2', name: 'Electric Work'},
+        {id: '3', name: 'Framing'},
+        {id: '4', name: 'Roofing'},
     ];
 
-    // Close dropdown on outside click
     useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setSelectOpen(false);
             }
         };
@@ -48,39 +50,52 @@ export default function PostAd() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleSelect = (id) => {
+    const handleSelect = (id: string) => {
         setSelectedCategory(id);
         setSelectOpen(false);
     };
 
-    const handleFileUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newDocs = files.map(f => ({ name: f.name, file: f, description: '' }));
+    const makeDoc = (name: string, offset = 0): DocumentItem => ({
+        id: `${Date.now()}-${Math.floor(Math.random() * 100000)}-${offset}`,
+        name: String(name || 'unknown'),
+        description: ''
+    });
+
+    // ✅ FIXED: Typed as ChangeEvent<HTMLInputElement>
+    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files ? Array.from(e.target.files) : [];
+        if (files.length === 0) return;
+
+        const newDocs = files.map((f, i) => makeDoc(f.name, i));
         setAllDocuments(prev => [...prev, ...newDocs]);
+        e.target.value = ''; // reset
     };
 
-    const handleRemoveFile = (index) => {
-        setAllDocuments(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const handleDocumentDescriptionChange = (index, value) => {
-        const updated = [...allDocuments];
-        updated[index].description = value;
-        setAllDocuments(updated);
-    };
-
-    const handleDrop = (e) => {
+    // ✅ FIXED: Typed as DragEvent<HTMLDivElement>
+    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const files = Array.from(e.dataTransfer.files);
-        const newDocs = files.map(f => ({ name: f.name, file: f, description: '' }));
+        const files = e.dataTransfer.files ? Array.from(e.dataTransfer.files) : [];
+        if (files.length === 0) return;
+
+        const newDocs = files.map((f, i) => makeDoc(f.name, i));
         setAllDocuments(prev => [...prev, ...newDocs]);
     };
 
-    const handleDragOver = (e) => e.preventDefault();
+    const handleDragOver = (e: DragEvent<HTMLDivElement>) => e.preventDefault();
+
+    const handleRemoveFile = (id: string) => {
+        setAllDocuments(prev => prev.filter(doc => doc.id !== id));
+    };
+
+    const handleDocumentDescriptionChange = (id: string, value: string) => {
+        setAllDocuments(prev =>
+            prev.map(doc => (doc.id === id ? {...doc, description: value} : doc))
+        );
+    };
 
     return (
         <>
-            <Header />
+            <Header/>
             <div className="sections overflow-hidden">
                 <section className="banner-sec post profile">
                     <div className="container">
@@ -88,7 +103,14 @@ export default function PostAd() {
                             <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                 <div className="icon-wrapper d-flex align-items-center gap-3">
                                     <Link href="#" className="icon">
-                                        <Image src="/assets/img/button-angle.svg" width={10} height={15} alt="Icon" loading="lazy" />
+                                        <Image
+                                            src="/assets/img/button-angle.svg"
+                                            width={10}
+                                            height={15}
+                                            alt="Icon"
+                                            loading="lazy"
+                                            unoptimized
+                                        />
                                     </Link>
                                     <span className="fs-4 fw-semibold">Post an Ad</span>
                                 </div>
@@ -96,17 +118,18 @@ export default function PostAd() {
                         </div>
 
                         <div className="row g-3">
-                            {/* LEFT SIDE */}
                             <div className="col-lg-8">
-                                <form className="mb-4">
-                                    {/* Custom Select */}
-                                    <div className="input-wrapper d-flex flex-column position-relative mb-4" ref={dropdownRef}>
+                                <form className="mb-4" onSubmit={(e) => e.preventDefault()}>
+                                    <div className="input-wrapper d-flex flex-column position-relative mb-4"
+                                         ref={dropdownRef}>
                                         <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
                                         <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>
-                                            <div className="select-selected" onClick={() => setSelectOpen(!selectOpen)}>
-                                                {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name : 'Select category'}
+                                            <div className="select-selected" onClick={() => setSelectOpen(s => !s)}>
+                                                {selectedCategory
+                                                    ? categories.find(c => c.id === selectedCategory)?.name
+                                                    : 'Select category'}
                                             </div>
-                                            {/* SVG Arrow Right */}
+
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="16"
@@ -130,101 +153,169 @@ export default function PostAd() {
 
                                             <ul className="select-options">
                                                 {categories.map(cat => (
-                                                    <li key={cat.id} onClick={() => handleSelect(cat.id)}>{cat.name}</li>
+                                                    <li key={cat.id}
+                                                        onClick={() => handleSelect(cat.id)}>{cat.name}</li>
                                                 ))}
                                             </ul>
                                         </div>
                                     </div>
 
-                                    {/* Input Fields */}
                                     <div className="row g-4">
                                         {[
-                                            { label: "City *", type: "text", placeholder: "New York" },
-                                            { label: "State *", type: "text", placeholder: "NY" },
-                                            { label: "Zip Code *", type: "text", placeholder: "12345" },
-                                            { label: "Estimate Due Date *", type: "date" },
-                                            { label: "Project Start Date *", type: "date" },
-                                            { label: "Project End Date *", type: "date" }
-                                        ].map((field, index) => (
-                                            <div className="col-lg-4" key={index}>
+                                            {label: "City *", type: "text", placeholder: "New York"},
+                                            {label: "State *", type: "text", placeholder: "NY"},
+                                            {label: "Zip Code *", type: "text", placeholder: "12345"},
+                                            {label: "Estimate Due Date *", type: "date"},
+                                            {label: "Project Start Date *", type: "date"},
+                                            {label: "Project End Date *", type: "date"}
+                                        ].map((field, idx) => (
+                                            <div className="col-lg-4" key={idx}>
                                                 <div className="input-wrapper">
                                                     <div className="label mb-1 fw-semibold">{field.label}</div>
-                                                    <input type={field.type} placeholder={field.placeholder || ''} />
+                                                    <input type={field.type} placeholder={field.placeholder || ''}/>
                                                 </div>
                                             </div>
                                         ))}
 
-                                        {/* Description */}
                                         <div className="col-12">
                                             <div className="label mb-1 fw-semibold">Description *</div>
                                             <div className="input-wrapper">
-                                                <ReactQuill theme="snow" value={description} onChange={setDescription} placeholder="Message" />
+                                                <ReactQuill
+                                                    theme="snow"
+                                                    value={description}
+                                                    onChange={setDescription}
+                                                    placeholder="Message"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </form>
 
-                                {/* Documents */}
                                 <div className="documents-wrapper mb-4">
                                     <div className="fs-5 fw-semibold mb-3">Documents Description</div>
-                                    {allDocuments.map((doc, index) => (
-                                        <div className="document-item mb-3" key={index}>
-                                            <div className="d-flex align-items-center gap-3 justify-content-between mb-2">
+
+                                    {allDocuments.map(doc => (
+                                        <div className="document-item mb-3" key={doc.id}>
+                                            <div
+                                                className="d-flex align-items-center gap-3 justify-content-between mb-2">
                                                 <div className="d-flex align-items-center gap-2">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" width={27} height={32} alt="PDF" className="doc-icon" />
+                                                    <img
+                                                        src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg"
+                                                        width={27}
+                                                        height={32}
+                                                        alt="PDF"
+                                                        className="doc-icon"
+                                                    />
                                                     <span className="d-block fs-14 fw-semibold">{doc.name}</span>
                                                 </div>
-                                                <button type="button" className="remove-btn" onClick={() => handleRemoveFile(index)}>x</button>
+                                                <button
+                                                    type="button"
+                                                    className="remove-btn"
+                                                    onClick={() => handleRemoveFile(doc.id)}
+                                                >
+                                                    x
+                                                </button>
                                             </div>
+
                                             <div className="input-wrapper">
-                                                <input type="text" placeholder="Write description" value={doc.description} onChange={(e) => handleDocumentDescriptionChange(index, e.target.value)} />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Write description"
+                                                    value={doc.description}
+                                                    onChange={(e) => handleDocumentDescriptionChange(doc.id, e.target.value)}
+                                                />
                                             </div>
                                         </div>
                                     ))}
                                 </div>
 
-                                <Link href="#" className="btn btn-primary rounded-3 w-100 justify-content-center">Add Project</Link>
+                                <Link href="#" className="btn btn-primary rounded-3 w-100 justify-content-center">Add
+                                    Project</Link>
                             </div>
 
-                            {/* RIGHT SIDE */}
                             <div className="col-lg-4">
                                 <div className="attachment-wrapper">
                                     <div className="fw-semibold mb-3">Attachment</div>
-                                    <div className="attachment-box mb-4" id="dropZone" onDrop={handleDrop} onDragOver={handleDragOver} onClick={() => fileInputRef.current.click()}>
+
+                                    <div
+                                        className="attachment-box mb-4"
+                                        id="dropZone"
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                        onClick={() => fileInputRef.current?.click()}
+                                        role="button"
+                                        tabIndex={0}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') fileInputRef.current?.click();
+                                        }}
+                                    >
                                         <div className="upload-content">
                                             <div className="upload-icon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" style={{ stroke: '#272727' }} width="55" height="55" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v4h16v-4" />
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    style={{stroke: '#272727'}}
+                                                    width="55"
+                                                    height="55"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="1.8"
+                                                        d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v4h16v-4"
+                                                    />
                                                 </svg>
                                             </div>
-                                            <p>Drag and drop files here<br />or click to upload</p>
+                                            <p>Drag and drop files here<br/>or click to upload</p>
                                             <small>Supported: .pdf, .doc, .xml, .jpeg (Max 10MB)</small>
                                         </div>
-                                        <input type="file" id="fileInput" hidden multiple ref={fileInputRef} onChange={handleFileUpload} />
+
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            hidden
+                                            multiple
+                                            ref={fileInputRef}
+                                            onChange={handleFileUpload}
+                                        />
                                     </div>
 
-                                    {/* Document Cards below attachment */}
                                     <div className="documents-wrapper documents-wrapper1">
-                                        {allDocuments.map((doc, index) => (
-                                            <div className="document-item" key={index}>
-                                                <div className="image-box-wrapper">
+                                        {allDocuments.map(doc => (
+                                            <div className="document-item" key={`card-${doc.id}`}>
+                                                <div
+                                                    className="image-box-wrapper d-flex align-items-center justify-content-between">
                                                     <div className="d-flex align-items-center gap-2">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" width={27} height={32} alt="PDF" className="doc-icon" />
-                                                        <span className="d-block fs-12 text-center fw-semibold">{doc.name}</span>
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg"
+                                                            width={27}
+                                                            height={32}
+                                                            alt="PDF"
+                                                            className="doc-icon"
+                                                        />
+                                                        <span
+                                                            className="d-block fs-12 text-center fw-semibold">{doc.name}</span>
                                                     </div>
-                                                    <button type="button" className="remove-btn" onClick={() => handleRemoveFile(index)}>x</button>
+                                                    <button
+                                                        type="button"
+                                                        className="remove-btn"
+                                                        onClick={() => handleRemoveFile(doc.id)}
+                                                    >
+                                                        x
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
-            <Footer />
+            <Footer/>
         </>
     );
 }
