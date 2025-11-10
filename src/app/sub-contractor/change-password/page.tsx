@@ -2,11 +2,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
 export default function ChangePassword() {
+    const pathname = usePathname();
     const [showOld, setShowOld] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -30,6 +32,14 @@ export default function ChangePassword() {
         </svg>
     );
 
+    // Sidebar links
+    const links = [
+        { href: '/sub-contractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+        { href: '/sub-contractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+    ];
+
     return (
         <>
             <Header />
@@ -40,11 +50,11 @@ export default function ChangePassword() {
                             {/* Sidebar */}
                             <div className="col-xl-3">
                                 <div className="sidebar">
-                                    <div className="main-wrapper bg-dark p-0">
+                                    <div className="main-wrapper bg-dark m-0">
                                         <div className="topbar mb-5">
                                             <div className="icon-wrapper">
                                                 <Image
-                                                    src="/assets/img/icons/construction-worker.webp"
+                                                    src="/assets/img/profile-img.webp"
                                                     width={80}
                                                     height={80}
                                                     alt="Worker Icon"
@@ -60,9 +70,7 @@ export default function ChangePassword() {
                                                             alt="Message Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link href="mailto:hello@example.com" className="fs-14 fw-medium text-dark">
-                                                            hello@example.com
-                                                        </Link>
+                                                        <Link href="mailto:hello@example.com" className="fs-14 fw-medium text-dark">hello@example.com</Link>
                                                     </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
@@ -72,41 +80,38 @@ export default function ChangePassword() {
                                                             alt="Call Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link href="tel:+(000) 000-000" className="fs-14 fw-medium text-dark">
-                                                            (000) 000-000
-                                                        </Link>
+                                                        <Link href="tel:+(000) 000-000" className="fs-14 fw-medium text-dark">(000) 000-000</Link>
                                                     </div>
                                                 </div>
                                             </div>
                                             <Image
                                                 src="/assets/img/icons/arrow-dark.svg"
-                                                style={{ objectFit: 'contain' }}
                                                 width={16}
                                                 height={10}
                                                 alt="Arrow"
+                                                style={{ objectFit: 'contain' }}
                                                 loading="lazy"
                                             />
                                         </div>
 
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Link href="#" key={i} className={`custom-btn ${i === 0 ? 'active' : ''}`}>
+                                            {links.map((link) => (
+                                                <Link
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
+                                                >
                                                     <div className="d-flex align-items-center gap-2">
-                                                        <Image
-                                                            src="/assets/img/icons/saved.svg"
-                                                            width={20}
-                                                            height={20}
-                                                            alt="Icon"
-                                                            loading="lazy"
-                                                        />
-                                                        <span className="text-white">Switch Account</span>
+                                                        <Image src={link.icon} width={20} height={20} alt="Icon" loading="lazy" />
+                                                        <span className="text-white">{link.label}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
-                                                        style={{ objectFit: 'contain' }}
                                                         width={15}
                                                         height={9}
-                                                        alt="Icon"
+                                                        alt="Arrow"
+                                                        style={{ objectFit: 'contain' }}
                                                         loading="lazy"
                                                     />
                                                 </Link>
@@ -114,9 +119,10 @@ export default function ChangePassword() {
                                         </div>
                                     </div>
 
+                                    {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
-                                            <Link href="#" className="custom-btn s1 bg-danger" style={{ borderColor: '#DC2626' }}>
+                                            <Link href="#" className="custom-btn bg-danger" style={{ borderColor: '#DC2626' }}>
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
                                                         src="/assets/img/icons/logout.svg"
@@ -129,10 +135,10 @@ export default function ChangePassword() {
                                                 </div>
                                                 <Image
                                                     src="/assets/img/icons/angle-right.svg"
-                                                    style={{ objectFit: 'contain' }}
                                                     width={15}
                                                     height={9}
                                                     alt="Icon"
+                                                    style={{ objectFit: 'contain' }}
                                                     loading="lazy"
                                                 />
                                             </Link>
@@ -166,8 +172,8 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowOld(!showOld)}
                                         >
-                      <EyeIcon active={showOld} />
-                    </span>
+                                            <EyeIcon active={showOld} />
+                                        </span>
                                     </div>
 
                                     {/* New Password */}
@@ -186,8 +192,8 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowNew(!showNew)}
                                         >
-                      <EyeIcon active={showNew} />
-                    </span>
+                                            <EyeIcon active={showNew} />
+                                        </span>
                                     </div>
 
                                     {/* Confirm Password */}
@@ -206,8 +212,8 @@ export default function ChangePassword() {
                                             style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                             onClick={() => setShowConfirm(!showConfirm)}
                                         >
-                      <EyeIcon active={showConfirm} />
-                    </span>
+                                            <EyeIcon active={showConfirm} />
+                                        </span>
                                     </div>
 
                                     <div className="buttons-wrapper d-flex align-items-center gap-4">
@@ -215,6 +221,7 @@ export default function ChangePassword() {
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </section>

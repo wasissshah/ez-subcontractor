@@ -5,12 +5,22 @@ import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
+import { usePathname } from 'next/navigation';
 
 export default function ProfilePage() {
+    const pathname = usePathname();
+
+    // Sidebar links
+    const links = [
+        { href: '/sub-contractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+        { href: '/sub-contractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+    ];
+
     return (
         <>
             <Header />
-
             <div className="sections overflow-hidden">
                 <section className="banner-sec profile position-static">
                     <div className="container">
@@ -75,17 +85,22 @@ export default function ProfilePage() {
                                             />
                                         </div>
 
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            {[1, 2, 3, 4, 5].map((_, i) => (
-                                                <Link href="#" key={i} className="custom-btn">
+                                            {links.map((link) => (
+                                                <Link
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
+                                                >
                                                     <div className="d-flex align-items-center gap-2">
                                                         <Image
-                                                            src="/assets/img/icons/saved.svg"
+                                                            src={link.icon}
                                                             width={20}
                                                             height={20}
                                                             alt="Icon"
                                                         />
-                                                        <span className="text-white">Switch Account</span>
+                                                        <span className="text-white">{link.label}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
@@ -99,6 +114,7 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
+                                    {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
                                             <Link
@@ -306,6 +322,7 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -313,7 +330,6 @@ export default function ProfilePage() {
                     </div>
                 </section>
             </div>
-
             <Footer />
         </>
     );

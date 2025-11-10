@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
 export default function SavedListingPage() {
+    const pathname = usePathname();
     const [expanded, setExpanded] = useState<number[]>([]);
 
     const toggleExpand = (index: number) => {
@@ -23,6 +25,14 @@ export default function SavedListingPage() {
         timeAgo: '23 mins ago',
         description: `Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish. Must bring own equipment and provide material estimate. Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish. Must bring own equipment and provide material estimate.Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish. Must bring own equipment and provide material estimate.`,
     });
+
+    // Sidebar links
+    const links = [
+        { href: '/sub-contractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+        { href: '/sub-contractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+        { href: '/sub-contractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+    ];
 
     return (
         <>
@@ -46,9 +56,7 @@ export default function SavedListingPage() {
                                                     loading="lazy"
                                                 />
                                                 <div className="content-wrapper">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">
-                                                        Joseph Dome
-                                                    </div>
+                                                    <div className="title text-black fs-5 fw-medium mb-2">Joseph Dome</div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/message-dark.svg"
@@ -57,10 +65,7 @@ export default function SavedListingPage() {
                                                             alt="Message Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link
-                                                            href="mailto:hello@example.com"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
+                                                        <Link href="mailto:hello@example.com" className="fs-14 fw-medium text-dark">
                                                             hello@example.com
                                                         </Link>
                                                     </div>
@@ -72,10 +77,7 @@ export default function SavedListingPage() {
                                                             alt="Call Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link
-                                                            href="tel:+(000)000-000"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
+                                                        <Link href="tel:+(000) 000-000" className="fs-14 fw-medium text-dark">
                                                             (000) 000-000
                                                         </Link>
                                                     </div>
@@ -86,52 +88,46 @@ export default function SavedListingPage() {
                                                 width={16}
                                                 height={10}
                                                 alt="Arrow"
-                                                loading="lazy"
                                                 style={{ objectFit: 'contain' }}
+                                                loading="lazy"
                                             />
                                         </div>
 
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            {Array(5)
-                                                .fill('Switch Account')
-                                                .map((text, i) => (
-                                                    <Link href="#" key={i} className={`custom-btn ${i === 0 ? 'active' : ''}`}>
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <Image
-                                                                src="/assets/img/icons/saved.svg"
-                                                                width={20}
-                                                                height={20}
-                                                                alt="Icon"
-                                                                loading="lazy"
-                                                            />
-                                                            <span className="text-white">{text}</span>
-                                                        </div>
-                                                        <Image
-                                                            src="/assets/img/icons/angle-right.svg"
-                                                            width={15}
-                                                            height={9}
-                                                            alt="Icon"
-                                                            loading="lazy"
-                                                            style={{ objectFit: 'contain' }}
-                                                        />
-                                                    </Link>
-                                                ))}
+                                            {links.map((link) => (
+                                                <Link
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
+                                                >
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        <Image src={link.icon} width={20} height={20} alt="Icon" loading="lazy" />
+                                                        <span className="text-white">{link.label}</span>
+                                                    </div>
+                                                    <Image
+                                                        src="/assets/img/icons/angle-right.svg"
+                                                        width={15}
+                                                        height={9}
+                                                        alt="Arrow"
+                                                        style={{ objectFit: 'contain' }}
+                                                        loading="lazy"
+                                                    />
+                                                </Link>
+                                            ))}
                                         </div>
                                     </div>
 
+                                    {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
-                                            <Link
-                                                href="#"
-                                                className="custom-btn s1 bg-danger"
-                                                style={{ borderColor: '#DC2626' }}
-                                            >
+                                            <Link href="#" className="custom-btn bg-danger" style={{ borderColor: '#DC2626' }}>
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
                                                         src="/assets/img/icons/logout.svg"
                                                         width={20}
                                                         height={20}
-                                                        alt="Icon"
+                                                        alt="Logout Icon"
                                                         loading="lazy"
                                                     />
                                                     <span className="text-white">Logout</span>
@@ -140,9 +136,9 @@ export default function SavedListingPage() {
                                                     src="/assets/img/icons/angle-right.svg"
                                                     width={15}
                                                     height={9}
-                                                    alt="Icon"
-                                                    loading="lazy"
+                                                    alt="Arrow"
                                                     style={{ objectFit: 'contain' }}
+                                                    loading="lazy"
                                                 />
                                             </Link>
                                         </div>

@@ -5,8 +5,19 @@ import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
+import { usePathname } from 'next/navigation';
 
 export default function EditProfilePage() {
+    const pathname = usePathname();
+
+    const links = [
+        { href: '/affiliate/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+        { href: '/affiliate/saved-contractors', label: 'Saved Contractors', icon: '/assets/img/icons/saved.svg' },
+        { href: '/affiliate/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+        { href: '/affiliate/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+        { href: '/affiliate/saved-cards', label: 'Saved Cards', icon: '/assets/img/icons/saved.svg' },
+    ];
+
     return (
         <>
             <Header />
@@ -72,17 +83,22 @@ export default function EditProfilePage() {
                                             />
                                         </div>
 
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            {[1, 2, 3, 4, 5].map((_, i) => (
-                                                <Link href="#" key={i} className="custom-btn">
+                                            {links.map((link) => (
+                                                <Link
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className="custom-btn"
+                                                >
                                                     <div className="d-flex align-items-center gap-2">
                                                         <Image
-                                                            src="/assets/img/icons/saved.svg"
+                                                            src={link.icon}
                                                             width={20}
                                                             height={20}
                                                             alt="Icon"
                                                         />
-                                                        <span className="text-white">Switch Account</span>
+                                                        <span className="text-white">{link.label}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
@@ -96,6 +112,7 @@ export default function EditProfilePage() {
                                         </div>
                                     </div>
 
+                                    {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
                                             <Link
