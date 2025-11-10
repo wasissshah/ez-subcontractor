@@ -407,6 +407,10 @@
   transform: rotate(45deg);
 }
 
+.ql-editor {
+  min-height: 220px;
+}
+
 .pricing-sec .price-card .pricing-button .btn.s1 {
   background-color: transparent !important;
   border: 1px solid #272727 !important;

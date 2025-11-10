@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
+      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,65 +14,23 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/affiliate/post-an-ad/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
-      "static/chunks/app/affiliate/post-an-ad/page.js"
-    ],
-    "/affiliate/ad-posted/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
-      "static/chunks/app/affiliate/ad-posted/page.js"
-    ],
-    "/affiliate/edit-ad/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
-      "static/chunks/app/affiliate/edit-ad/page.js"
-    ],
     "/general-contractor/ad-job-post/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-690f84.css",
+      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
       "static/chunks/app/general-contractor/ad-job-post/page.js"
     ],
-    "/auth/login/page": [
+    "/general-contractor/add-attachment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/login/page.js"
+      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
+      "static/chunks/app/general-contractor/add-attachment/page.js"
     ],
-    "/auth/forget-password/page": [
+    "/general-contractor/edit-job-post/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/forget-password/page.js"
-    ],
-    "/auth/verify-email/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/verify-email/page.js"
-    ],
-    "/auth/create-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/create-password/page.js"
-    ],
-    "/auth/account-type/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/account-type/page.js"
-    ],
-    "/auth/business-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/business-details/page.js"
+      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
+      "static/chunks/app/general-contractor/edit-job-post/page.js"
     ]
   }
 }

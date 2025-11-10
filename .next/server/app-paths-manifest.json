@@ -1,6 +1,6 @@
 {
-  "/auth/verify-email/page": "app/auth/verify-email/page.js",
-  "/auth/create-password/page": "app/auth/create-password/page.js",
-  "/auth/account-type/page": "app/auth/account-type/page.js",
-  "/auth/business-details/page": "app/auth/business-details/page.js"
+  "/page": "app/page.js",
+  "/general-contractor/ad-job-post/page": "app/general-contractor/ad-job-post/page.js",
+  "/general-contractor/add-attachment/page": "app/general-contractor/add-attachment/page.js",
+  "/general-contractor/edit-job-post/page": "app/general-contractor/edit-job-post/page.js"
 }
