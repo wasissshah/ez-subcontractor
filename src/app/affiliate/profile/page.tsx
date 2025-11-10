@@ -2,11 +2,23 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
 export default function ProfilePage() {
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const sidebarLinks = [
+        { name: 'Change Password', href: '/affiliate/change-password', icon: '/assets/img/icons/saved.svg' },
+        { name: 'Saved Contractors', href: '/affiliate/saved-contractors', icon: '/assets/img/icons/saved.svg' },
+        { name: 'My Subscription', href: '/affiliate/my-subscription', icon: '/assets/img/icons/saved.svg' },
+        { name: 'Transaction History', href: '/affiliate/transaction-history', icon: '/assets/img/icons/saved.svg' },
+        { name: 'Saved Cards', href: '/affiliate/saved-cards', icon: '/assets/img/icons/saved.svg' },
+    ];
+
     return (
         <>
             <Header />
@@ -75,17 +87,22 @@ export default function ProfilePage() {
                                             />
                                         </div>
 
+                                        {/* Sidebar Buttons */}
                                         <div className="buttons-wrapper">
-                                            {[1, 2, 3, 4, 5].map((_, i) => (
-                                                <Link href="#" key={i} className="custom-btn">
+                                            {sidebarLinks.map((link, i) => (
+                                                <Link
+                                                    key={i}
+                                                    href={link.href}
+                                                    className={`custom-btn d-flex align-items-center justify-content-between ${pathname === link.href ? 'active' : ''}`}
+                                                >
                                                     <div className="d-flex align-items-center gap-2">
                                                         <Image
-                                                            src="/assets/img/icons/saved.svg"
+                                                            src={link.icon}
                                                             width={20}
                                                             height={20}
                                                             alt="Icon"
                                                         />
-                                                        <span className="text-white">Switch Account</span>
+                                                        <span className="text-white">{link.name}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
@@ -135,14 +152,14 @@ export default function ProfilePage() {
                                     {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
+                                            <button onClick={() => router.back()} className="icon bg-transparent border-0">
                                                 <Image
                                                     src="/assets/img/button-angle.svg"
                                                     width={10}
                                                     height={15}
-                                                    alt="Icon"
+                                                    alt="Back Icon"
                                                 />
-                                            </Link>
+                                            </button>
                                             <span className="fs-4 fw-semibold">Profile Detail</span>
                                         </div>
 
@@ -157,8 +174,7 @@ export default function ProfilePage() {
                                             </Link>
                                             <Link
                                                 href="#"
-                                                className="icon"
-                                                style={{ backgroundColor: '#DC2626 !important' }}
+                                                className="icon bg-danger"
                                             >
                                                 <Image
                                                     src="/assets/img/icons/delete.svg"
@@ -170,7 +186,7 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* Profile Review Bar */}
+                                    {/* Right Side Main Content */}
                                     <div className="review-bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-5">
                                         <div className="image-box d-flex align-items-center gap-4">
                                             <Image

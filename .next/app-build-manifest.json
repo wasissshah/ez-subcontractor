@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,47 +14,47 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/general-contractor/ad-job-post/page": [
+    "/affiliate/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
-      "static/chunks/app/general-contractor/ad-job-post/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/profile/page.js"
     ],
-    "/general-contractor/add-attachment/page": [
+    "/affiliate/change-password/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
-      "static/chunks/app/general-contractor/add-attachment/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/change-password/page.js"
     ],
-    "/general-contractor/edit-job-post/page": [
+    "/affiliate/my-subscription/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_cards_css-src_styles_footer_css-s-dd8c2e.css",
-      "static/chunks/app/general-contractor/edit-job-post/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/my-subscription/page.js"
     ],
-    "/auth/general-contractor/register/page": [
+    "/affiliate/transaction-history/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/general-contractor/register/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/transaction-history/page.js"
     ],
-    "/auth/sub-contractor/register/page": [
+    "/affiliate/saved-contractors/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/sub-contractor/register/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/saved-contractors/page.js"
     ],
-    "/auth/affiliate/register/page": [
+    "/affiliate/saved-cards/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/affiliate/register/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/affiliate/saved-cards/page.js"
     ],
-    "/auth/account-type/page": [
+    "/sub-contractor/subscription/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/account-type/page.js"
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_free-trial_css-src_styles_header_cs-400ee5.css",
+      "static/chunks/app/sub-contractor/subscription/page.js"
     ]
   }
 }

@@ -51,7 +51,9 @@ export default function ChangePassword() {
                                                     loading="lazy"
                                                 />
                                                 <div className="content-wrapper">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">Joseph Dome</div>
+                                                    <div className="title text-black fs-5 fw-medium mb-2">
+                                                        Joseph Dome
+                                                    </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/message-dark.svg"
@@ -60,7 +62,10 @@ export default function ChangePassword() {
                                                             alt="Message Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link href="mailto:hello@example.com" className="fs-14 fw-medium text-dark">
+                                                        <Link
+                                                            href="mailto:hello@example.com"
+                                                            className="fs-14 fw-medium text-dark"
+                                                        >
                                                             hello@example.com
                                                         </Link>
                                                     </div>
@@ -72,7 +77,10 @@ export default function ChangePassword() {
                                                             alt="Call Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link href="tel:+(000) 000-000" className="fs-14 fw-medium text-dark">
+                                                        <Link
+                                                            href="tel:+(000) 000-000"
+                                                            className="fs-14 fw-medium text-dark"
+                                                        >
                                                             (000) 000-000
                                                         </Link>
                                                     </div>
@@ -88,35 +96,123 @@ export default function ChangePassword() {
                                             />
                                         </div>
 
+                                        {/* Sidebar Buttons */}
                                         <div className="buttons-wrapper">
-                                            {[...Array(5)].map((_, i) => (
-                                                <Link href="#" key={i} className={`custom-btn ${i === 0 ? 'active' : ''}`}>
-                                                    <div className="d-flex align-items-center gap-2">
-                                                        <Image
-                                                            src="/assets/img/icons/saved.svg"
-                                                            width={20}
-                                                            height={20}
-                                                            alt="Icon"
-                                                            loading="lazy"
-                                                        />
-                                                        <span className="text-white">Switch Account</span>
-                                                    </div>
+                                            <Link href="/affiliate/change-password" className="custom-btn active">
+                                                <div className="d-flex align-items-center gap-2">
                                                     <Image
-                                                        src="/assets/img/icons/angle-right.svg"
-                                                        style={{ objectFit: 'contain' }}
-                                                        width={15}
-                                                        height={9}
+                                                        src="/assets/img/icons/lock.svg"
+                                                        width={20}
+                                                        height={20}
                                                         alt="Icon"
                                                         loading="lazy"
                                                     />
-                                                </Link>
-                                            ))}
+                                                    <span className="text-white">Change Password</span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    style={{ objectFit: 'contain' }}
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Icon"
+                                                    loading="lazy"
+                                                />
+                                            </Link>
+
+                                            <Link href="/affiliate/saved-contractors" className="custom-btn">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <Image
+                                                        src="/assets/img/icons/saved.svg"
+                                                        width={20}
+                                                        height={20}
+                                                        alt="Icon"
+                                                        loading="lazy"
+                                                    />
+                                                    <span className="text-white">Saved Contractors</span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    style={{ objectFit: 'contain' }}
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Icon"
+                                                    loading="lazy"
+                                                />
+                                            </Link>
+
+                                            <Link href="/affiliate/my-subscription" className="custom-btn">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <Image
+                                                        src="/assets/img/icons/saved.svg"
+                                                        width={20}
+                                                        height={20}
+                                                        alt="Icon"
+                                                        loading="lazy"
+                                                    />
+                                                    <span className="text-white">My Subscription</span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    style={{ objectFit: 'contain' }}
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Icon"
+                                                    loading="lazy"
+                                                />
+                                            </Link>
+
+                                            <Link href="/affiliate/transaction-history" className="custom-btn">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <Image
+                                                        src="/assets/img/icons/saved.svg"
+                                                        width={20}
+                                                        height={20}
+                                                        alt="Icon"
+                                                        loading="lazy"
+                                                    />
+                                                    <span className="text-white">Transaction History</span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    style={{ objectFit: 'contain' }}
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Icon"
+                                                    loading="lazy"
+                                                />
+                                            </Link>
+
+                                            <Link href="/affiliate/saved-cards" className="custom-btn">
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <Image
+                                                        src="/assets/img/icons/saved.svg"
+                                                        width={20}
+                                                        height={20}
+                                                        alt="Icon"
+                                                        loading="lazy"
+                                                    />
+                                                    <span className="text-white">Saved Cards</span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    style={{ objectFit: 'contain' }}
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Icon"
+                                                    loading="lazy"
+                                                />
+                                            </Link>
                                         </div>
                                     </div>
 
+                                    {/* Logout Button */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
-                                            <Link href="#" className="custom-btn s1 bg-danger" style={{ borderColor: '#DC2626' }}>
+                                            <Link
+                                                href="#"
+                                                className="custom-btn s1 bg-danger"
+                                                style={{ borderColor: '#DC2626' }}
+                                            >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
                                                         src="/assets/img/icons/logout.svg"
@@ -220,7 +316,11 @@ export default function ChangePassword() {
                                     </div>
 
                                     <div className="buttons-wrapper d-flex align-items-center gap-4">
-                                        <input type="submit" className="btn btn-primary rounded-3 w-100" value="Change Password" />
+                                        <input
+                                            type="submit"
+                                            className="btn btn-primary rounded-3 w-100"
+                                            value="Change Password"
+                                        />
                                     </div>
                                 </div>
                             </div>

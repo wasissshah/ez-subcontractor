@@ -5,7 +5,17 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
+const sidebarLinks = [
+    { href: '/affiliate/change-password', text: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+    { href: '/affiliate/saved-contractors', text: 'Saved Contractors', icon: '/assets/img/icons/saved.svg' },
+    { href: '/affiliate/my-subscription', text: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+    { href: '/affiliate/transaction-history', text: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+    { href: '/affiliate/saved-cards', text: 'Saved Cards', icon: '/assets/img/icons/saved.svg' },
+];
+
 export default function TransactionHistory() {
+    const activePage = '/affiliate/transaction-history'; // Active page highlight
+
     return (
         <>
             <Header />
@@ -24,13 +34,11 @@ export default function TransactionHistory() {
                                                     src="/assets/img/profile-img.webp"
                                                     width={80}
                                                     height={80}
-                                                    alt="Worker Icon"
+                                                    alt="Profile Image"
                                                     loading="lazy"
                                                 />
                                                 <div className="content-wrapper">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">
-                                                        Joseph Dome
-                                                    </div>
+                                                    <div className="title text-black fs-5 fw-medium mb-2">Joseph Dome</div>
 
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
@@ -40,10 +48,7 @@ export default function TransactionHistory() {
                                                             alt="Message Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link
-                                                            href="mailto:hello@example.com"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
+                                                        <Link href="mailto:hello@example.com" className="fs-14 fw-medium text-dark">
                                                             hello@example.com
                                                         </Link>
                                                     </div>
@@ -56,10 +61,7 @@ export default function TransactionHistory() {
                                                             alt="Call Icon"
                                                             loading="lazy"
                                                         />
-                                                        <Link
-                                                            href="tel:+(000) 000-000"
-                                                            className="fs-14 fw-medium text-dark"
-                                                        >
+                                                        <Link href="tel:+(000) 000-000" className="fs-14 fw-medium text-dark">
                                                             (000) 000-000
                                                         </Link>
                                                     </div>
@@ -76,22 +78,17 @@ export default function TransactionHistory() {
                                             />
                                         </div>
 
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            {[...Array(5)].map((_, i) => (
+                                            {sidebarLinks.map((link) => (
                                                 <Link
-                                                    key={i}
-                                                    href="#"
-                                                    className={`custom-btn ${i === 0 ? 'active' : ''}`}
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className={`custom-btn ${activePage === link.href ? 'active' : ''}`}
                                                 >
                                                     <div className="d-flex align-items-center gap-2">
-                                                        <Image
-                                                            src="/assets/img/icons/saved.svg"
-                                                            width={20}
-                                                            height={20}
-                                                            alt="Icon"
-                                                            loading="lazy"
-                                                        />
-                                                        <span className="text-white">Switch Account</span>
+                                                        <Image src={link.icon} width={20} height={20} alt="Icon" loading="lazy" />
+                                                        <span className="text-white">{link.text}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
@@ -106,6 +103,7 @@ export default function TransactionHistory() {
                                         </div>
                                     </div>
 
+                                    {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
                                             <Link
@@ -152,9 +150,7 @@ export default function TransactionHistory() {
                                                     loading="lazy"
                                                 />
                                             </Link>
-                                            <span className="fs-4 fw-semibold">
-                        Transaction History
-                      </span>
+                                            <span className="fs-4 fw-semibold">Transaction History</span>
                                         </div>
 
                                         <div className="form-wrapper mb-0 d-flex align-items-center gap-2">
@@ -220,9 +216,7 @@ export default function TransactionHistory() {
                                     <div className="data-table-pagination">
                                         <div className="rows-per-page">
                                             <div className="custom-select" tabIndex={0}>
-                        <span className="custom-select__label">
-                          Rows per page:
-                        </span>
+                                                <span className="custom-select__label">Rows per page:</span>
                                                 <span className="custom-select__selected-value">14</span>
                                                 <svg
                                                     className="custom-select__icon"
@@ -242,10 +236,7 @@ export default function TransactionHistory() {
                                                     <li className="custom-select__option" data-value="7">
                                                         7
                                                     </li>
-                                                    <li
-                                                        className="custom-select__option custom-select__option--selected"
-                                                        data-value="14"
-                                                    >
+                                                    <li className="custom-select__option custom-select__option--selected" data-value="14">
                                                         14
                                                     </li>
                                                     <li className="custom-select__option" data-value="20">
@@ -259,50 +250,27 @@ export default function TransactionHistory() {
                                         </div>
 
                                         <div className="pagination-controls">
-                                            <button
-                                                className="pagination-button pagination-button--nav"
-                                                aria-label="First page"
-                                                disabled
-                                            >
+                                            <button className="pagination-button pagination-button--nav" aria-label="First page" disabled>
                                                 «
                                             </button>
-                                            <button
-                                                className="pagination-button pagination-button--nav"
-                                                aria-label="Previous page"
-                                                disabled
-                                            >
+                                            <button className="pagination-button pagination-button--nav" aria-label="Previous page" disabled>
                                                 &lt;
                                             </button>
 
-                                            <button
-                                                className="pagination-button pagination-button--page pagination-button--active"
-                                                aria-current="page"
-                                            >
+                                            <button className="pagination-button pagination-button--page pagination-button--active" aria-current="page">
                                                 1
                                             </button>
-                                            <button className="pagination-button pagination-button--page">
-                                                2
-                                            </button>
-                                            <button className="pagination-button pagination-button--page">
-                                                3
-                                            </button>
+                                            <button className="pagination-button pagination-button--page">2</button>
+                                            <button className="pagination-button pagination-button--page">3</button>
 
                                             <span className="pagination-separator">–</span>
 
-                                            <button className="pagination-button pagination-button--page">
-                                                10
-                                            </button>
+                                            <button className="pagination-button pagination-button--page">10</button>
 
-                                            <button
-                                                className="pagination-button pagination-button--nav"
-                                                aria-label="Next page"
-                                            >
+                                            <button className="pagination-button pagination-button--nav" aria-label="Next page">
                                                 &gt;
                                             </button>
-                                            <button
-                                                className="pagination-button pagination-button--nav"
-                                                aria-label="Last page"
-                                            >
+                                            <button className="pagination-button pagination-button--nav" aria-label="Last page">
                                                 »
                                             </button>
                                         </div>
