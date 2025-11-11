@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // ✅ Added for redirect
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from "../../components/Header";
@@ -9,8 +10,10 @@ import '../../../styles/pricing.css';
 import '../../../styles/checkout.css';
 
 export default function CheckoutPage() {
+    const router = useRouter(); // ✅ Router hook for redirect
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Select category");
+    const [selectedPlan, setSelectedPlan] = useState<any>(null);
 
     const categories = [
         { id: 1, name: "Plumbing" },
@@ -24,24 +27,52 @@ export default function CheckoutPage() {
         setIsOpen(false);
     };
 
+    useEffect(() => {
+        const planData = localStorage.getItem('selectedPlan');
+        if (planData) {
+            setSelectedPlan(JSON.parse(planData));
+        }
+    }, []);
+
+    // ✅ Price summary
+    const basePrice = selectedPlan ? parseFloat(selectedPlan.price) : 0;
+    const extraCategories = 2 * 125;
+    const tax = Math.round((basePrice + extraCategories) * 0.08);
+    const total = basePrice + extraCategories + tax;
+
+    const renderNoteCard = () => (
+        <div className="note-card d-flex align-items-start gap-1">
+            <Image
+                src="/assets/img/icons/note.webp"
+                width={24}
+                height={24}
+                alt="Note"
+                loading="lazy"
+                className="d-block"
+            />
+            <div className="content">
+                <span style={{ fontSize: '14px' }} className="d-block fw-semibold mb-1">Note</span>
+                <p style={{ fontSize: '12px' }} className="mb-0">
+                    After your trial ends, you’ll need to subscribe to keep bidding on
+                    projects, chatting with contractors, and accessing premium tools.
+                </p>
+            </div>
+        </div>
+    );
+
+    // ✅ Payment confirm handler
+    const handleConfirmPayment = () => {
+        router.push('/affiliate/success'); // redirect to success page
+    };
+
     return (
         <div className="sections overflow-hidden">
             <Header />
 
             <section className="hero-sec pricing no-before overflow-hidden">
                 <div className="container">
-                    <Link href="/" className="d-block mb-5">
-                        <Image
-                            src="/assets/img/icons/logo.webp"
-                            width={350}
-                            height={100}
-                            alt="Login Logo"
-                            className="img-fluid d-block w-100"
-                            style={{ maxWidth: '350px' }}
-                        />
-                    </Link>
-
                     <div className="row g-4">
+                        {/* LEFT COLUMN */}
                         <div className="col-lg-8">
                             <div className="d-flex flex-column justify-content-center w-100 h-100">
                                 <div className="d-flex align-items-center gap-2 mb-4">
@@ -54,6 +85,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 <div className="form">
+                                    {/* Form Inputs */}
                                     <div className="input-wrapper-s2">
                                         <div className="input-wrapper d-flex flex-column">
                                             <label htmlFor="name" className="mb-1 fw-semibold">Full Name *</label>
@@ -65,25 +97,16 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
 
-                                    {/* ✅ Custom Select Functionality Added */}
+                                    {/* Custom Select */}
                                     <div className="input-wrapper d-flex flex-column position-relative">
                                         <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
-
-                                        <div
-                                            className={`custom-select ${isOpen ? 'open' : ''}`}
-                                            onClick={() => setIsOpen(!isOpen)}
-                                        >
+                                        <div className={`custom-select ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
                                             <div className="select-selected">{selectedCategory}</div>
                                             <i className="bi bi-chevron-down select-arrow"></i>
-
                                             {isOpen && (
                                                 <ul className="select-options">
                                                     {categories.map((cat) => (
-                                                        <li
-                                                            key={cat.id}
-                                                            onClick={() => handleSelect(cat.name)}
-                                                            data-value={cat.id}
-                                                        >
+                                                        <li key={cat.id} onClick={() => handleSelect(cat.name)} data-value={cat.id}>
                                                             {cat.name}
                                                         </li>
                                                     ))}
@@ -91,23 +114,23 @@ export default function CheckoutPage() {
                                             )}
                                         </div>
                                     </div>
-                                    {/* ✅ End Custom Select */}
 
                                     <div className="buttons d-flex align-items-center gap-2 flex-wrap">
                                         <Link href="#" className="btn bg-dark p-2 fs-12 rounded-3">
                                             <span className="text-gray-light">Framing</span>
-                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel Icon" loading="lazy" />
+                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel" loading="lazy" />
                                         </Link>
                                         <Link href="#" className="btn bg-dark p-2 fs-12 rounded-3">
                                             <span className="text-gray-light">Electrical</span>
-                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel Icon" loading="lazy" />
+                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel" loading="lazy" />
                                         </Link>
                                         <Link href="#" className="btn bg-dark p-2 fs-12 rounded-3">
                                             <span className="text-gray-light">Plumbing</span>
-                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel Icon" loading="lazy" />
+                                            <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel" loading="lazy" />
                                         </Link>
                                     </div>
 
+                                    {/* Card Details */}
                                     <div className="input-wrapper-s2">
                                         <div className="input-wrapper d-flex flex-column">
                                             <label htmlFor="name1" className="mb-1 fw-semibold">Card Holder Name *</label>
@@ -141,91 +164,108 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
 
+                                    {/* ORDER SUMMARY */}
                                     <div className="summary-card">
                                         <div className="top d-flex align-items-start gap-2">
                                             <Image src="/assets/img/summary.svg" width={24} height={24} alt="Summary Icon" loading="lazy" />
                                             <div className="content w-100">
                                                 <span style={{ fontSize: '14px' }} className="fw-semibold d-block">Order Summary</span>
 
-                                                <div className="d-flex align-items-center gap-2 flex-wrap justify-content-between w-100 mt-2">
-                                                    <span style={{ fontSize: '14px' }}>Yearly Plan</span>
-                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">$400</span>
+                                                <div className="d-flex align-items-center justify-content-between mt-2">
+                                                    <span style={{ fontSize: '14px' }}>{selectedPlan ? selectedPlan.title + ' Plan' : 'Yearly Plan'}</span>
+                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">${basePrice}</span>
                                                 </div>
 
-                                                <div className="d-flex align-items-center gap-2 flex-wrap justify-content-between w-100 mt-2">
+                                                <div className="d-flex align-items-center justify-content-between mt-2">
                                                     <span style={{ fontSize: '14px' }}>Extra Categories (2 X $125)</span>
-                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">$250</span>
+                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">${extraCategories}</span>
                                                 </div>
 
-                                                <div className="d-flex align-items-center gap-2 flex-wrap justify-content-between w-100 mt-2">
+                                                <div className="d-flex align-items-center justify-content-between mt-2">
                                                     <span style={{ fontSize: '14px' }}>Tax (8%)</span>
-                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">$52</span>
+                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">${tax}</span>
                                                 </div>
 
                                                 <hr className="mt-2 mb-2" />
 
-                                                <div className="d-flex align-items-center gap-2 flex-wrap justify-content-between w-100 mt-2 mb-2">
+                                                <div className="d-flex align-items-center justify-content-between">
                                                     <span style={{ fontSize: '14px' }} className="fw-semibold">Total</span>
-                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">$702</span>
+                                                    <span style={{ fontSize: '14px' }} className="fw-semibold">${total}</span>
                                                 </div>
 
-                                                <p style={{ fontSize: '14px' }} className="mb-0">
+                                                <p style={{ fontSize: '14px' }} className="mb-0 mt-2">
                                                     Note: You’ve selected 3 categories
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
+                                    {/* ✅ Redirect Button */}
                                     <input
                                         value="Confirm Payment"
                                         className="btn btn-primary w-100 rounded-3 d-block"
                                         type="button"
+                                        onClick={handleConfirmPayment}
                                     />
                                 </div>
                             </div>
                         </div>
 
+                        {/* RIGHT COLUMN - Dynamic Pricing Card */}
                         <div className="col-lg-4">
                             <div className="pricing-sec p-0">
                                 <div className="fs-5 fw-semibold mb-3">Selected Plan</div>
                                 <div className="pricing-wrapper">
-                                    <div className="price-card price-card1 free">
-                                        <div className="pricing-header">
-                                            <div className="d-flex align-items-center gap-1 justify-content-between mb-3">
-                                                <span className="title1 mb-0">Yearly</span>
-                                                <div
-                                                    style={{ fontSize: '14px' }}
-                                                    className="custom-btn bg-white rounded-5 shadow p-2"
-                                                >
-                                                    🔥 Popular
+                                    {selectedPlan ? (
+                                        <div className={`price-card ${selectedPlan.isPopular ? 'price-card1' : ''} free`}>
+                                            <div className="pricing-header">
+                                                {selectedPlan.isPopular ? (
+                                                    <div className="d-flex align-items-center justify-content-between mb-3">
+                                                        <span className="title1 mb-0">{selectedPlan.title}</span>
+                                                        <div
+                                                            style={{ fontSize: '14px' }}
+                                                            className="custom-btn bg-white shadow p-2 rounded-pill"
+                                                        >
+                                                            🔥 Popular
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <span className="title1 mb-0">{selectedPlan.title}</span>
+                                                )}
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <span className="price">
+                                                        ${selectedPlan.price}
+                                                    </span>
+                                                    {selectedPlan.saveText && (
+                                                        <Link
+                                                            href="#"
+                                                            className="btn btn-primary rounded-pill p-2 m-0"
+                                                            style={{
+                                                                backgroundColor: selectedPlan.saveColor,
+                                                                color: 'white !important',
+                                                                fontSize: '14px !important',
+                                                                width: 'fit-content',
+                                                            }}
+                                                        >
+                                                            {selectedPlan.saveText}
+                                                        </Link>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <div className="d-flex align-items-center gap-2">
-                                                <span className="price">$<span className="fw-bold">650</span></span>
-                                                <Link
-                                                    href="#"
-                                                    className="btn btn-primary rounded-pill p-2 m-0"
-                                                    style={{
-                                                        backgroundColor: '#10BC17',
-                                                        color: 'white !important',
-                                                        fontSize: '14px !important',
-                                                        width: 'fit-content',
-                                                    }}
-                                                >
-                                                    Save $200
-                                                </Link>
-                                            </div>
-                                        </div>
 
-                                        <div className="pricing-body mb-4">
-                                            <ul className="m-0 p-0 list-with-icon">
-                                                <li>Full access to all job postings within their licensed categories.</li>
-                                                <li>Access to live chat and PDF file exchange with General Contractors</li>
-                                                <li>View contact information for general contractors , phone, text , direct message or email</li>
-                                                <li>Ability to view project timelines, budgets, and requirements in detail.</li>
-                                            </ul>
+                                            <div className="pricing-body mb-4">
+                                                <ul className="m-0 p-0 list-with-icon">
+                                                    {selectedPlan.features.map((f: string, i: number) => (
+                                                        <li key={i}>{f}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            {selectedPlan.id === 2 && renderNoteCard()}
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <p className="text-muted">No plan selected. Please go back to pricing page.</p>
+                                    )}
                                 </div>
                             </div>
                         </div>
