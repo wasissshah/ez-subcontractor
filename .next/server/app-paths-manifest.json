@@ -1,8 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/sub-contractor/change-password/page": "app/sub-contractor/change-password/page.js",
-  "/sub-contractor/my-subscription/page": "app/sub-contractor/my-subscription/page.js",
-  "/sub-contractor/edit-profile/page": "app/sub-contractor/edit-profile/page.js",
-  "/sub-contractor/saved-listing/page": "app/sub-contractor/saved-listing/page.js",
-  "/sub-contractor/transaction-history/page": "app/sub-contractor/transaction-history/page.js"
+  "/sub-contractor/transaction-history/page": "app/sub-contractor/transaction-history/page.js",
+  "/auth/account-type/page": "app/auth/account-type/page.js",
+  "/auth/affiliate/register/page": "app/auth/affiliate/register/page.js",
+  "/affiliate/subscription/page": "app/affiliate/subscription/page.js",
+  "/affiliate/checkout/page": "app/affiliate/checkout/page.js"
 }
