@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
-
 export default function SuccessPage() {
     return (
         <div>
@@ -34,10 +33,10 @@ export default function SuccessPage() {
                                 Subscription Activated
                             </h2>
                             <p className="mb-3 fs-5 text-center fw-semibold">
-                                Your subscription is active you now have full access to all contractor tools and features.
+                                Your subscription is active. You now have full access to all contractor tools and features.
                             </p>
                             <Link
-                                href="#"
+                                href="/affiliate/dashboard"
                                 className="btn btn-primary rounded-3 w-100 justify-content-center"
                             >
                                 Go to Dashboard

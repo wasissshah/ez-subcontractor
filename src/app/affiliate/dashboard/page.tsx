@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Slider from 'react-slick';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -136,8 +137,8 @@ export default function FreeTrialPage() {
                             <div className="col-xl-3">
                                 <span className="d-block mb-3 fw-semibold fs-4">Filters</span>
                                 <span className="d-block mb-2 fw-medium">
-                  Browse or Search Directory
-                </span>
+                                    Browse or Search Directory
+                                </span>
 
                                 <div className="form-wrapper">
                                     <Image
@@ -235,12 +236,12 @@ export default function FreeTrialPage() {
                                                     >
                                                         ProBuilds Express
                                                     </div>
-                                                    <a
-                                                        href="#"
+                                                    <Link
+                                                        href="/affiliate/contractor-details"
                                                         className="btn btn-primary p-2 mx-auto mb-3"
                                                     >
                                                         General Contractor
-                                                    </a>
+                                                    </Link>
 
                                                     <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-2">
                                                         <Image

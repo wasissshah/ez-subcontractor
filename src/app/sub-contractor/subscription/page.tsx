@@ -1,14 +1,11 @@
-// app/pricing/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import Link from 'next/link';
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import '../../../styles/pricing.css';
 
-// ✅ Pricing plan data (Affiliate removed + unique content added)
 const pricingPlans = {
     'sub-contractor': [
         {
@@ -24,62 +21,61 @@ const pricingPlans = {
             hasNote: false,
             isPopular: false,
             showStrike: false,
-            saveText: null,
-            saveColor: null,
         },
         {
             id: 2,
             title: '30-Days Free Trial',
             price: 'Free',
             features: [
-                'Free registration',
-                'See unlimited projects',
-                'Receive email and text alerts when new projects are posted nearby. ',
-                'Set radius to receive Projects',
-                'Contact General contractor through email, text or direct message',
+                'Access to directory of subcontractor and general contractor',
+                'Can advertise on website $50 per week',
             ],
             hasNote: true,
             isPopular: false,
             showStrike: false,
-            saveText: null,
-            saveColor: null,
         },
         {
             id: 3,
             title: 'Monthly',
             price: '50',
             features: [
-                'Full access to all job postings within their licensed categories.',
-                'Access to live chat and PDF file exchange with General Contractors',
-                'View contact information for general contractors , phone, text , direct message or email\n',
-                'Ability to view project timelines, budgets, and requirements in detail. ',
+                'Browsing Access to contractor directory all Contractors.',
+                'Direct message all contractors on website.',
+                'Search contractors on website.',
+                'Access all contractors contact information.',
             ],
-            hasNote: true,
+            hasNote: false,
             isPopular: false,
             showStrike: false,
-            saveText: null,
-            saveColor: null,
         },
         {
             id: 4,
-            title: 'Yearly Plan',
+            title: 'Yearly',
             price: '400',
             features: [
-                'Full access to all job postings within their licensed categories.',
-                'Access to live chat and PDF file exchange with General Contractors',
-                'View contact information for general contractors , phone, text , direct message or email\n',
-                'Ability to view project timelines, budgets, and requirements in detail. ',
+                'Browsing Access to contractor directory all Contractors.',
+                'Direct message all contractors on website.',
+                'Search contractors on website.',
+                '3 weeks of free advertising on site with annual subscription fee.',
+                'Access all contractors contact information.',
             ],
-            hasNote: true,
+            hasNote: false,
             isPopular: true,
             showStrike: true,
-            saveText: 'Save $200',
+            saveText: '30% OFF',
             saveColor: '#DC2626',
         },
     ],
 };
 
 export default function PricingPage() {
+    const router = useRouter();
+
+    const handleSelectPlan = (plan: any, type: string) => {
+        localStorage.setItem('selectedPlan', JSON.stringify({ ...plan, type }));
+        router.push('/sub-contractor/checkout');
+    };
+
     const renderNoteCard = () => (
         <div className="note-card d-flex align-items-start gap-1">
             <Image
@@ -95,25 +91,24 @@ export default function PricingPage() {
           Note
         </span>
                 <p style={{ fontSize: '12px' }} className="mb-0">
-                    After your trial ends, you’ll need to subscribe to keep bidding on projects,
-                    chatting with contractors, and accessing premium tools.
+                    After your trial ends, you’ll need to subscribe to keep bidding on projects, chatting with contractors, and accessing premium tools.
                 </p>
             </div>
         </div>
     );
 
-    const renderPlanCard = (plan: (typeof pricingPlans)['sub-contractor'][0], index: number) => (
-        <div
-            key={plan.id}
-            className={`col-lg-${index === 3 ? '3' : index >= 2 && plan.isPopular ? '4' : '3'} col-md-${plan.isPopular ? '12' : '6'}`}
-        >
+    const renderPlanCard = (plan: any, type: string) => (
+        <div key={plan.id} className="col-lg-3 col-md-6">
             <div className={`price-card ${plan.isPopular ? 'price-card1' : ''} free`}>
                 <div>
                     <div className="pricing-header">
                         {plan.isPopular ? (
-                            <div className="d-flex align-items-center gap-1 justify-content-between mb-3">
+                            <div className="d-flex align-items-center justify-content-between mb-3">
                                 <span className="title1 mb-0">{plan.title}</span>
-                                <div style={{ fontSize: '14px' }} className="custom-btn bg-white shadow p-2 rounded-pill">
+                                <div
+                                    style={{ fontSize: '14px' }}
+                                    className="custom-btn bg-white shadow p-2 rounded-pill"
+                                >
                                     🔥 Popular
                                 </div>
                             </div>
@@ -131,7 +126,7 @@ export default function PricingPage() {
                                     {plan.saveText && (
                                         <button
                                             type="button"
-                                            style={{ backgroundColor: plan.saveColor! }}
+                                            style={{ backgroundColor: plan.saveColor }}
                                             className="custom-btn text-white p-2 rounded-pill"
                                         >
                                             {plan.saveText}
@@ -147,7 +142,7 @@ export default function PricingPage() {
                                 {plan.saveText && (
                                     <button
                                         type="button"
-                                        style={{ backgroundColor: plan.saveColor! }}
+                                        style={{ backgroundColor: plan.saveColor }}
                                         className="custom-btn text-white p-2"
                                     >
                                         {plan.saveText}
@@ -157,19 +152,22 @@ export default function PricingPage() {
                         )}
                     </div>
 
-                    <div className="pricing-body">
+                    <div className="pricing-body mb-3">
                         <ul className="m-0 p-0 list-with-icon">
-                            {plan.features.map((feature, i) => (
+                            {plan.features.map((feature: string, i: number) => (
                                 <li key={i}>{feature}</li>
                             ))}
                         </ul>
                     </div>
                 </div>
 
-                {plan.hasNote && renderNoteCard()}
-
-                <div className="pricing-button">
-                    <button className="btn">Get Started</button>
+                <div className="d-flex align-items-center flex-column">
+                    {plan.id === 2 && renderNoteCard()}
+                    <div className="pricing-button w-100 pt-0">
+                        <button className="btn" onClick={() => handleSelectPlan(plan, 'sub-contractor')}>
+                            Get Started
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -179,7 +177,6 @@ export default function PricingPage() {
         <div>
             <Header />
             <div className="sections overflow-hidden">
-                {/* Hero Section */}
                 <section
                     style={{
                         background: `url('/assets/img/pricing-hero.webp') center /cover no-repeat`,
@@ -191,26 +188,20 @@ export default function PricingPage() {
                             <h1 className="text-primary text-center mb-3">
                                 Choose Your Plan and Start Getting Project Leads Today
                             </h1>
-                            <p className="mb-0 text-white text-center fs-5 fw-medium">
+                            <p className="mb-4 text-white text-center fs-5 fw-medium">
                                 Unlock full access to jobs, messaging, and contractor tools — no hidden fees.
                             </p>
                         </div>
                     </div>
                 </section>
 
-                {/* Pricing Section */}
                 <section className="pricing-sec">
                     <div className="container-fluid">
-                        <div className="tab-content pricing-wrapper" id="pricingTabContent">
-                            {/* ✅ Only Sub Contractor Tab */}
-                            <div
-                                className="tab-pane fade show active pricing-content"
-                                id="sub-contractor"
-                                role="tabpanel"
-                            >
+                        <div className="tab-content pricing-wrapper">
+                            <div className="tab-pane fade show active pricing-content">
                                 <div className="row g-3">
-                                    {pricingPlans['sub-contractor'].map((plan, index) =>
-                                        renderPlanCard(plan, index)
+                                    {pricingPlans['sub-contractor'].map((plan) =>
+                                        renderPlanCard(plan, 'sub-contractor')
                                     )}
                                 </div>
                             </div>
@@ -219,6 +210,7 @@ export default function PricingPage() {
                 </section>
             </div>
             <Footer />
+
             <style jsx>{`
                 .hero-sec {
                     position: relative;

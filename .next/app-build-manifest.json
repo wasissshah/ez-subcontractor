@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_header_css--8422da.css",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -17,19 +17,72 @@
     "/affiliate/subscription/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_header_css--8422da.css",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
       "static/chunks/app/affiliate/subscription/page.js"
     ],
     "/affiliate/checkout/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_header_css--8422da.css",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
       "static/chunks/app/affiliate/checkout/page.js"
     ],
     "/affiliate/success/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/affiliate/success/page.js"
+    ],
+    "/affiliate/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/affiliate/dashboard/page.js"
+    ],
+    "/affiliate/contractor-details/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/affiliate/contractor-details/page.js"
+    ],
+    "/auth/sub-contractor/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/sub-contractor/register/page.js"
+    ],
+    "/sub-contractor/subscription/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/subscription/page.js"
+    ],
+    "/sub-contractor/checkout/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/checkout/page.js"
+    ],
+    "/sub-contractor/success/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/sub-contractor/success/page.js"
+    ],
+    "/sub-contractor/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/dashboard/page.js"
+    ],
+    "/sub-contractor/dashboard-subscribed/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/dashboard-subscribed/page.js"
+    ],
+    "/sub-contractor/job-details/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_checkout_css-src_styles_footer_css-src_styles_free-trial_-fe4f26.css",
+      "static/chunks/app/sub-contractor/job-details/page.js"
     ]
   }
 }
