@@ -32,8 +32,10 @@ export default function ForgotPassword() {
         setMessage('Password reset link has been sent to your email!');
         setEmail('');
 
-        // Example: You can later replace this with real API call
-        // await sendResetLink(email);
+        // ✅ Redirect to verify-email page after success
+        setTimeout(() => {
+            router.push('/auth/verify-email');
+        }, 1500); // 1.5s delay for message display
     };
 
     return (
@@ -96,7 +98,10 @@ export default function ForgotPassword() {
                                     >
                                         Back
                                     </button>
-                                    <button type="submit" className="btn btn-primary rounded-3 justify-content-center w-100">
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary rounded-3 justify-content-center w-100"
+                                    >
                                         Next
                                     </button>
                                 </div>

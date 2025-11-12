@@ -35,11 +35,18 @@ export default function SelectAccountType() {
             return;
         }
 
-        // ✅ Save selected account type (optional)
+        // Save selected account type (already being done)
         localStorage.setItem('accountType', selectedType);
 
-        // ✅ Redirect based on selected type
+        // Redirect based on selected type
         router.push(`/auth/${selectedType}/register`);
+    };
+
+    // Update to save role when selection changes
+    const handleSelection = (typeId) => {
+        setSelectedType(typeId);
+        // Save role to localStorage immediately when selected
+        localStorage.setItem('role', typeId); // or use any key name you prefer
     };
 
     return (
@@ -82,7 +89,7 @@ export default function SelectAccountType() {
                                 <div
                                     className={`account-card mb-3 ${selectedType === acc.id ? 'active' : ''}`}
                                     key={acc.id}
-                                    onClick={() => setSelectedType(acc.id)}
+                                    onClick={() => handleSelection(acc.id)}
                                     style={{ cursor: 'pointer' }}
                                 >
                                     <div className="d-flex align-items-center gap-2">
@@ -95,7 +102,7 @@ export default function SelectAccountType() {
                                         className="account-radio"
                                         value={acc.id}
                                         checked={selectedType === acc.id}
-                                        onChange={() => setSelectedType(acc.id)}
+                                        onChange={() => handleSelection(acc.id)} // Also update on radio change
                                     />
                                 </div>
                             ))}

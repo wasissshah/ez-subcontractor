@@ -2,28 +2,36 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/post-detail.css';
 import '../../../styles/profile.css';
 
 export default function PostAnAd() {
+    const router = useRouter();
+
     // Tabs state
     const [activeTab, setActiveTab] = useState('saved-cards');
 
     // Image upload states
-    const [mainImage, setMainImage] = useState(null);
-    const [smallImage, setSmallImage] = useState(null);
-    const mainFileRef = useRef(null);
-    const smallFileRef = useRef(null);
+    const [mainImage, setMainImage] = useState<string | null>(null);
+    const [smallImage, setSmallImage] = useState<string | null>(null);
+    const mainFileRef = useRef<HTMLInputElement>(null);
+    const smallFileRef = useRef<HTMLInputElement>(null);
 
     // Handle file change
-    const handleFileChange = (e, setImage) => {
-        const file = e.target.files[0];
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setImage: (url: string) => void) => {
+        const file = e.target.files?.[0];
         if (file) {
             const imgUrl = URL.createObjectURL(file);
             setImage(imgUrl);
         }
+    };
+
+    // Handle Post Ad button click
+    const handlePostAd = () => {
+        router.push('/affiliate/ad-posted');
     };
 
     return (
@@ -74,7 +82,7 @@ export default function PostAnAd() {
 
                             <div className="fs-4 fw-semibold mb-3">Payment Details</div>
 
-                            {/* Bootstrap Tabs (React Controlled) */}
+                            {/* Tabs */}
                             <div className="tab mb-4">
                                 <ul className="nav nav-tabs mb-5" role="tablist">
                                     <li className="nav-item" role="presentation">
@@ -176,32 +184,15 @@ export default function PostAnAd() {
                                     {activeTab === 'add-card' && (
                                         <div className="tab-pane fade show active">
                                             <div className="form">
-                                                {[
-                                                    ['Full Name', 'text', 'Jason Doe'],
-                                                    ['Email Address', 'email', 'hello@example.com'],
-                                                    ['Card Holder Name', 'text', 'Enter card holder name'],
-                                                    ['Card Number', 'text', '4242 4242 4242 4242'],
-                                                    ['CVV', 'number', 'Enter CVV'],
-                                                    ['Expiry Date', 'text', '12/25'],
-                                                    ['Zip Code', 'text', 'Enter zip code'],
-                                                    ['Promo Code', 'text', 'Enter promo code'],
-                                                ].map(([label, type, placeholder], i) => (
+                                                {[['Full Name','text','Jason Doe'], ['Email Address','email','hello@example.com'], ['Card Holder Name','text','Enter card holder name'], ['Card Number','text','4242 4242 4242 4242'], ['CVV','number','Enter CVV'], ['Expiry Date','text','12/25'], ['Zip Code','text','Enter zip code'], ['Promo Code','text','Enter promo code']].map(([label,type,placeholder],i)=>(
                                                     <div key={i} className="input-wrapper">
-                                                        <label className="mb-1 fw-semibold">
-                                                            {label}
-                                                            {i < 7 && <span className="required">*</span>}
-                                                        </label>
-                                                        <input type={type} placeholder={placeholder} />
+                                                        <label className="mb-1 fw-semibold">{label}{i<7 && <span className="required">*</span>}</label>
+                                                        <input type={type} placeholder={placeholder}/>
                                                     </div>
                                                 ))}
 
                                                 <div className="radio-wrapper d-flex align-items-center gap-2">
-                                                    <input
-                                                        style={{ width: '24px', height: '24px' }}
-                                                        type="radio"
-                                                        id="saveCard"
-                                                        className="radio"
-                                                    />
+                                                    <input style={{width:'24px',height:'24px'}} type="radio" id="saveCard" className="radio"/>
                                                     <label htmlFor="saveCard" className="fs-14 fw-medium">
                                                         Save card for future transactions
                                                     </label>
@@ -214,18 +205,9 @@ export default function PostAnAd() {
 
                             {/* Note + Summary */}
                             <div className="note-card d-flex align-items-start gap-1 mb-4">
-                                <Image
-                                    src="/assets/img/icons/note.webp"
-                                    width={24}
-                                    height={24}
-                                    alt="Note"
-                                    loading="lazy"
-                                    className="d-block"
-                                />
+                                <Image src="/assets/img/icons/note.webp" width={24} height={24} alt="Note" loading="lazy" className="d-block"/>
                                 <div className="content">
-                  <span style={{ fontSize: '14px' }} className="d-block fw-semibold mb-1">
-                    Note
-                  </span>
+                                    <span className="d-block fw-semibold mb-1" style={{fontSize:'14px'}}>Note</span>
                                     <ul className="m-0 p-0">
                                         <li className="fs-12">You can only post one ad at a time</li>
                                         <li className="fs-12">You can only post one ad at a time</li>
@@ -236,7 +218,7 @@ export default function PostAnAd() {
 
                             <div className="summary-box mb-4">
                                 <div className="icon-box d-flex gap-2">
-                                    <Image src="/assets/img/summary.svg" width={24} height={24} alt="Icon" loading="lazy" />
+                                    <Image src="/assets/img/summary.svg" width={24} height={24} alt="Icon" loading="lazy"/>
                                     <div className="content w-100">
                                         <div className="fs-14 fw-semibold mb-2">Summary</div>
                                         <div className="d-flex align-items-center justify-content-between gap-2 flex-wrap w-100 mb-1">
@@ -247,7 +229,7 @@ export default function PostAnAd() {
                                             <div className="fs-14 text-gray-light fw-medium">Duration (7 Weeks X $50)</div>
                                             <div className="fs-14 fw-semibold">$350.00</div>
                                         </div>
-                                        <hr className="mb-2 mt-2" />
+                                        <hr className="mb-2 mt-2"/>
                                         <div className="d-flex align-items-center justify-content-between gap-2 flex-wrap w-100">
                                             <div className="fs-14 text-gray-light fw-medium">Total</div>
                                             <div className="fs-14 fw-semibold">$350.00</div>
@@ -256,71 +238,37 @@ export default function PostAnAd() {
                                 </div>
                             </div>
 
-                            <button className="btn btn-primary w-100 rounded-3 justify-content-center">
+                            <button className="btn btn-primary w-100 rounded-3 justify-content-center" onClick={handlePostAd}>
                                 Post an Ad
                             </button>
                         </div>
 
                         {/* Right Side Upload Boxes */}
                         <div className="right-side align-lg-end">
-                            {/* Main Image Upload */}
-                            <div
-                                className="image-box"
-                                onClick={() => mainFileRef.current.click()}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                {mainImage ? (
-                                    <Image src={mainImage} alt="Upload" width={760} height={246} />
-                                ) : (
+                            <div className="image-box" onClick={()=>mainFileRef.current?.click()} style={{cursor:'pointer'}}>
+                                {mainImage ? <Image src={mainImage} alt="Upload" width={760} height={246}/> : (
                                     <>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
                                         </svg>
-                                        <p>
-                                            Drag and drop image here
-                                            <br />
-                                            or click to upload
-                                        </p>
+                                        <p>Drag and drop image here<br/>or click to upload</p>
                                         <small>Resolution: 760x246 | 200 MB Max</small>
                                     </>
                                 )}
-                                <input
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    ref={mainFileRef}
-                                    style={{ display: 'none' }}
-                                    onChange={(e) => handleFileChange(e, setMainImage)}
-                                />
+                                <input type="file" accept="image/*,application/pdf" ref={mainFileRef} style={{display:'none'}} onChange={(e)=>handleFileChange(e,setMainImage)}/>
                             </div>
 
-                            {/* Small Image Upload */}
-                            <div
-                                style={{ maxWidth: '371px', cursor: 'pointer' }}
-                                className="image-box small margin-right"
-                                onClick={() => smallFileRef.current.click()}
-                            >
-                                {smallImage ? (
-                                    <Image src={smallImage} alt="Upload" width={371} height={426} />
-                                ) : (
+                            <div className="image-box small margin-right" style={{maxWidth:'371px',cursor:'pointer'}} onClick={()=>smallFileRef.current?.click()}>
+                                {smallImage ? <Image src={smallImage} alt="Upload" width={371} height={426}/> : (
                                     <>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 16v-8m0 0l-3 3m3-3l3 3M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
                                         </svg>
-                                        <p>
-                                            Drag and drop image here
-                                            <br />
-                                            or click to upload
-                                        </p>
+                                        <p>Drag and drop image here<br/>or click to upload</p>
                                         <small>Resolution: 571x426 | 200 MB Max</small>
                                     </>
                                 )}
-                                <input
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    ref={smallFileRef}
-                                    style={{ display: 'none' }}
-                                    onChange={(e) => handleFileChange(e, setSmallImage)}
-                                />
+                                <input type="file" accept="image/*,application/pdf" ref={smallFileRef} style={{display:'none'}} onChange={(e)=>handleFileChange(e,setSmallImage)}/>
                             </div>
                         </div>
                     </div>

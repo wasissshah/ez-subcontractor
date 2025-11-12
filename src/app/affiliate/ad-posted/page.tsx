@@ -2,11 +2,14 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/post-detail.css';
 
 export default function MyAds() {
+    const router = useRouter();
+
     // Dummy ads list
     const [ads, setAds] = useState([
         { id: 1, image: '/assets/img/ad-posting1.webp', size: 'large' },
@@ -15,12 +18,13 @@ export default function MyAds() {
     ]);
 
     // Edit ad
-    const handleEdit = (id) => {
-        alert(`Edit Ad ID: ${id}`);
+    const handleEdit = (id: number) => {
+        // Navigate to affiliate/edit-ad page
+        router.push('/affiliate/edit-ad');
     };
 
     // Delete ad
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         if (confirm('Are you sure you want to delete this ad?')) {
             setAds((prevAds) => prevAds.filter((ad) => ad.id !== id));
         }
@@ -36,7 +40,7 @@ export default function MyAds() {
                         <div className="title fs-4 fw-semibold">My Ads</div>
 
                         <Link
-                            href="/post-an-ad"
+                            href="post-an-ad"
                             style={{ maxWidth: '242px', backgroundColor: '#9a9a9a' }}
                             className="btn bg-gray-light rounded-3 justify-content-center w-100 d-flex align-items-center gap-2"
                         >

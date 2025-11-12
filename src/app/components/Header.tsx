@@ -1,7 +1,7 @@
 // components/Header.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -10,7 +10,14 @@ import '../../styles/header.css';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [userRole, setUserRole] = useState<string | null>(null);
     const pathname = usePathname();
+
+    // Load user role from localStorage on mount
+    useEffect(() => {
+        const role = localStorage.getItem('role') || localStorage.getItem('accountType');
+        setUserRole(role);
+    }, [pathname]); // Added pathname as dependency to re-check on route change
 
     const isActive = (href: string) => {
         if (href === '/') return pathname === '/';
@@ -20,6 +27,208 @@ export default function Header() {
     const toggleMenu = () => {
         setIsMenuOpen((prev) => !prev);
     };
+
+    // Check if current path belongs to a specific role
+    const getRoleForCurrentPath = () => {
+        if (pathname.startsWith('/auth/affiliate') || pathname.startsWith('/affiliate')) {
+            return 'affiliate';
+        } else if (pathname.startsWith('/auth/sub-contractor') || pathname.startsWith('/sub-contractor')) {
+            return 'sub-contractor';
+        } else if (pathname.startsWith('/auth/general-contractor') || pathname.startsWith('/general-contractor')) {
+            return 'general-contractor';
+        }
+        return null; // For default pages
+    };
+
+    // Define navigation based on current path role
+    const getNavigation = () => {
+        const currentPathRole = getRoleForCurrentPath();
+
+        // If current path is for a specific role, show that role's header
+        if (currentPathRole) {
+            switch (currentPathRole) {
+                case 'general-contractor':
+                    return {
+                        menuItems: [
+                            { href: 'dashboard', label: 'Dashboard' },
+                            { href: 'messages', label: 'Messages' },
+                            { href: 'my-projects', label: 'My projects' },
+                        ],
+                        iconsButtons: (
+                            <>
+                                <Link
+                                    href="/notifications"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Notifications"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/notification-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Notifications"
+                                    />
+                                </Link>
+                                <Link
+                                    href="profile"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Profile"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/user-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Profile"
+                                    />
+                                </Link>
+                            </>
+                        )
+                    };
+
+                case 'sub-contractor':
+                    return {
+                        menuItems: [
+                            { href: 'dashboard', label: 'Dashboard' },
+                            { href: 'messages', label: 'Messages' },
+                            { href: 'rating', label: 'Rating' },
+                        ],
+                        iconsButtons: (
+                            <>
+                                <Link
+                                    href="/messages"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Messages"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/notification-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Messages"
+                                    />
+                                </Link>
+                                <Link
+                                    href="profile"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Profile"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/user-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Profile"
+                                    />
+                                </Link>
+                            </>
+                        )
+                    };
+
+                case 'affiliate':
+                    return {
+                        menuItems: [
+                            { href: 'dashboard', label: 'Dashboard' },
+                            { href: 'messages', label: 'Messages' },
+                            { href: 'my-ads', label: 'My Ads' },
+                        ],
+                        iconsButtons: (
+                            <>
+                                <Link
+                                    href="/analytics"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Analytics"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/notification-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Analytics"
+                                    />
+                                </Link>
+                                <Link
+                                    href="profile"
+                                    className="icon-link"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    aria-label="Profile"
+                                >
+                                    <Image
+                                        src="/assets/img/icons/user-dark.svg"
+                                        width={24}
+                                        height={24}
+                                        alt="Profile"
+                                    />
+                                </Link>
+                            </>
+                        )
+                    };
+
+                default:
+                    // Fallback for unknown roles
+                    return {
+                        menuItems: [
+                            { href: '/', label: 'Home' },
+                            { href: '/projects', label: 'Projects' },
+                            { href: '/subscription', label: '30 Days Free Trial' },
+                            { href: '/how-it-works', label: 'How It Works' },
+                            { href: '/blogs', label: 'Blog' },
+                        ],
+                        authButtons: (
+                            <>
+                                <Link
+                                    href="/auth/login"
+                                    className="btn btn-outline-dark rounded-3"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Log In
+                                </Link>
+                                <Link
+                                    href="/auth/register"
+                                    className="btn btn-primary rounded-3"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Sign Up
+                                </Link>
+                            </>
+                        ),
+                        iconsButtons: null,
+                    };
+            }
+        }
+
+        // For all other pages (default pages), show default header
+        return {
+            menuItems: [
+                { href: '/', label: 'Home' },
+                { href: '/projects', label: 'Projects' },
+                { href: '/subscription', label: '30 Days Free Trial' },
+                { href: '/how-it-works', label: 'How It Works' },
+                { href: '/blogs', label: 'Blog' },
+            ],
+            authButtons: (
+                <>
+                    <Link
+                        href="/auth/login"
+                        className="btn btn-outline-dark rounded-3"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        Log In
+                    </Link>
+                    <Link
+                        href="/auth/register"
+                        className="btn btn-primary rounded-3"
+                        onClick={() => setIsMenuOpen(false)}
+                    >
+                        Sign Up
+                    </Link>
+                </>
+            ),
+            iconsButtons: null,
+        };
+    };
+
+    const { menuItems, authButtons, iconsButtons } = getNavigation();
 
     return (
         <header className="header">
@@ -55,67 +264,21 @@ export default function Header() {
                         aria-hidden={!isMenuOpen}
                     >
                         <ul className="menu-links mb-0">
-                            <li>
-                                <Link
-                                    href="/"
-                                    className={isActive('/') ? 'active' : ''}
-                                    onClick={toggleMenu}
-                                >
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/projects"
-                                    className={isActive('/projects') ? 'active' : ''}
-                                    onClick={toggleMenu}
-                                >
-                                    Projects
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/subscription"
-                                    className={isActive('/subscription') ? 'active' : ''}
-                                    onClick={toggleMenu}
-                                >
-                                    30 Days Free Trial
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/how-it-works"
-                                    className={isActive('/how-it-works') ? 'active' : ''}
-                                    onClick={toggleMenu}
-                                >
-                                    How It Works
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/blogs"
-                                    className={isActive('/blogs') ? 'active' : ''}
-                                    onClick={toggleMenu}
-                                >
-                                    Blog
-                                </Link>
-                            </li>
+                            {menuItems.map((item, index) => (
+                                <li key={index}>
+                                    <Link
+                                        href={item.href}
+                                        className={isActive(item.href) ? 'active' : ''}
+                                        onClick={toggleMenu}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                         <div className="buttons d-flex align-items-center flex-wrap gap-3">
-                            <Link
-                                href="/auth/login"
-                                className="btn btn-outline-dark rounded-3"
-                                onClick={toggleMenu}
-                            >
-                                Log In
-                            </Link>
-                            <Link
-                                href="/auth/register"
-                                className="btn btn-primary rounded-3"
-                                onClick={toggleMenu}
-                            >
-                                Sign Up
-                            </Link>
+                            {authButtons}
+                            {iconsButtons}
                         </div>
                     </nav>
                 </div>

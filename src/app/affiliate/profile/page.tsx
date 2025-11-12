@@ -27,7 +27,6 @@ export default function ProfilePage() {
                 <section className="banner-sec profile position-static">
                     <div className="container">
                         <div className="row g-4">
-
                             {/* Sidebar */}
                             <div className="col-xl-3">
                                 <div className="sidebar">
@@ -144,11 +143,9 @@ export default function ProfilePage() {
                                     </div>
                                 </div>
                             </div>
-
                             {/* Right Side */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-
                                     {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
@@ -162,16 +159,21 @@ export default function ProfilePage() {
                                             </button>
                                             <span className="fs-4 fw-semibold">Profile Detail</span>
                                         </div>
-
+                                        {/* Edit & Delete Buttons */}
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
+                                            <button
+                                                onClick={() => router.push('/affiliate/edit-profile')}
+                                                className="icon bg-transparent border-0 p-0"
+                                                title="Edit Profile"
+                                            >
                                                 <Image
                                                     src="/assets/img/icons/edit.svg"
                                                     width={24}
                                                     height={24}
                                                     alt="Edit Icon"
                                                 />
-                                            </Link>
+                                            </button>
+
                                             <Link
                                                 href="#"
                                                 className="icon bg-danger"
@@ -184,6 +186,7 @@ export default function ProfilePage() {
                                                 />
                                             </Link>
                                         </div>
+
                                     </div>
 
                                     {/* Right Side Main Content */}

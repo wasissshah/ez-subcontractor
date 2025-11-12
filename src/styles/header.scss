@@ -31,6 +31,15 @@ $danger: #DC2626;
         display: flex;
         justify-content: end;
       }
+      .icon-link{
+        background-color: #F9F9F9;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 37px;
+        height: 37px;
+      }
     }
     .menu-links {
       background-color: $gray;
@@ -134,6 +143,11 @@ $danger: #DC2626;
           margin-bottom: 20px !important;
           margin: 0;
           transform: translateX(0);
+          li{
+            a{
+              padding: 10px 0 0 0;
+            }
+          }
         }
         .buttons {
           display: flex !important;

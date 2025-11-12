@@ -2,11 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 
 export default function ProfilePage() {
+    const pathname = usePathname();
+
     return (
         <>
             <Header />
@@ -18,9 +21,9 @@ export default function ProfilePage() {
 
                             {/* Sidebar */}
                             <div className="col-xl-3">
-                                <div className="sidebar">
-                                    <div className="main-wrapper bg-dark p-0">
-
+                                <div className="sidebar h-100">
+                                    <div className="main-wrapper bg-dark p-0 h-100 d-flex flex-column justify-content-between">
+                                        {/* Topbar */}
                                         <div className="topbar mb-5 d-flex justify-content-between align-items-start">
                                             <div className="icon-wrapper d-flex align-items-start gap-3">
                                                 <Image
@@ -75,45 +78,20 @@ export default function ProfilePage() {
                                             />
                                         </div>
 
-                                        <div className="buttons-wrapper">
-                                            {[1, 2, 3, 4, 5].map((_, i) => (
-                                                <Link href="#" key={i} className="custom-btn">
-                                                    <div className="d-flex align-items-center gap-2">
-                                                        <Image
-                                                            src="/assets/img/icons/saved.svg"
-                                                            width={20}
-                                                            height={20}
-                                                            alt="Icon"
-                                                        />
-                                                        <span className="text-white">Switch Account</span>
-                                                    </div>
-                                                    <Image
-                                                        src="/assets/img/icons/angle-right.svg"
-                                                        width={15}
-                                                        height={9}
-                                                        alt="Arrow"
-                                                        style={{ objectFit: 'contain' }}
-                                                    />
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="bottom-bar">
+                                        {/* Sidebar Buttons */}
                                         <div className="buttons-wrapper">
                                             <Link
-                                                href="#"
-                                                className="custom-btn bg-danger"
-                                                style={{ borderColor: '#DC2626' }}
+                                                href="/general-contractor/change-password"
+                                                className={`custom-btn ${pathname === '/general-contractor/change-password' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
-                                                        src="/assets/img/icons/logout.svg"
+                                                        src="/assets/img/icons/saved.svg"
                                                         width={20}
                                                         height={20}
-                                                        alt="Logout Icon"
+                                                        alt="Icon"
                                                     />
-                                                    <span className="text-white">Logout</span>
+                                                    <span className="text-white">Change Password</span>
                                                 </div>
                                                 <Image
                                                     src="/assets/img/icons/angle-right.svg"
@@ -124,6 +102,34 @@ export default function ProfilePage() {
                                                 />
                                             </Link>
                                         </div>
+
+                                        {/* Bottom Logout Button */}
+                                        <div className="bottom-bar mt-auto">
+                                            <div className="buttons-wrapper">
+                                                <Link
+                                                    href="#"
+                                                    className="custom-btn bg-danger"
+                                                    style={{ borderColor: '#DC2626' }}
+                                                >
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        <Image
+                                                            src="/assets/img/icons/logout.svg"
+                                                            width={20}
+                                                            height={20}
+                                                            alt="Logout Icon"
+                                                        />
+                                                        <span className="text-white">Logout</span>
+                                                    </div>
+                                                    <Image
+                                                        src="/assets/img/icons/angle-right.svg"
+                                                        width={15}
+                                                        height={9}
+                                                        alt="Arrow"
+                                                        style={{ objectFit: 'contain' }}
+                                                    />
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +137,6 @@ export default function ProfilePage() {
                             {/* Right Side */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-
                                     {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
@@ -147,7 +152,8 @@ export default function ProfilePage() {
                                         </div>
 
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
+                                            {/* Edit Button */}
+                                            <Link href="/general-contractor/edit-profile" className="icon">
                                                 <Image
                                                     src="/assets/img/icons/edit.svg"
                                                     width={24}
@@ -155,6 +161,7 @@ export default function ProfilePage() {
                                                     alt="Edit Icon"
                                                 />
                                             </Link>
+                                            {/* Delete Button */}
                                             <Link
                                                 href="#"
                                                 className="icon"
@@ -199,17 +206,13 @@ export default function ProfilePage() {
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">
-                                                        Company Name
-                                                    </div>
+                                                    <div className="text-gray-light fw-medium mb-2">Company Name</div>
                                                     <div className="fw-semibold fs-18">Jason Tiles Limited</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">
-                                                        Email Address
-                                                    </div>
+                                                    <div className="text-gray-light fw-medium mb-2">Email Address</div>
                                                     <Link
                                                         href="mailto:hello@example.com"
                                                         className="fw-semibold fs-18 text-dark"
@@ -220,9 +223,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">
-                                                        Phone Number
-                                                    </div>
+                                                    <div className="text-gray-light fw-medium mb-2">Phone Number</div>
                                                     <Link
                                                         href="tel:+0000000000"
                                                         className="fw-semibold fs-18 text-dark"

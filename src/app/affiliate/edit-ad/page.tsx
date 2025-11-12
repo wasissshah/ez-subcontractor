@@ -1,13 +1,15 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 import '../../../styles/post-detail.css';
 
 export default function EditAdPage() {
+    const router = useRouter();
+
     // Initial state
     const [orientation, setOrientation] = useState('horizontal');
     const [url, setUrl] = useState('https://google.com');
@@ -37,13 +39,20 @@ export default function EditAdPage() {
         }
     };
 
+    // Handle back button
+    const handleBack = () => {
+        router.push('/affiliate/my-ads'); // yahan redirect page set hai
+    };
+
     if (deleted) {
         return (
             <>
                 <Header />
                 <div className="container text-center py-5">
                     <h3 className="text-danger">This ad has been deleted.</h3>
-                    <Link href="/profile/my-ads" className="btn btn-primary mt-4">Go Back</Link>
+                    <button onClick={handleBack} className="btn btn-primary mt-4">
+                        Go Back
+                    </button>
                 </div>
                 <Footer />
             </>
@@ -61,9 +70,15 @@ export default function EditAdPage() {
                             {/* Header bar */}
                             <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                 <div className="icon-wrapper d-flex align-items-center gap-3">
-                                    <Link href="/profile/my-ads" className="icon">
-                                        <Image src="/assets/img/button-angle.svg" width={10} height={15} alt="Back" loading="lazy" />
-                                    </Link>
+                                    <button onClick={handleBack} className="icon bg-transparent border-0 p-0">
+                                        <Image
+                                            src="/assets/img/button-angle.svg"
+                                            width={10}
+                                            height={15}
+                                            alt="Back"
+                                            loading="lazy"
+                                        />
+                                    </button>
                                     <span className="fs-4 fw-semibold">Edit Ad</span>
                                 </div>
 

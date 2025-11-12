@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import '../../../styles/profile.css';
@@ -14,6 +15,7 @@ import 'react-quill/dist/quill.snow.css';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function PostAd() {
+    const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectOpen, setSelectOpen] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -187,9 +189,13 @@ export default function PostAd() {
                                     )}
                                 </div>
 
-                                <Link href="#" className="btn btn-primary rounded-3 w-100 justify-content-center">
+                                {/* Add Project Button */}
+                                <button
+                                    onClick={() => router.push('/general-contractor/add-attachment')}
+                                    className="btn btn-primary rounded-3 w-100 justify-content-center"
+                                >
                                     Add Project
-                                </Link>
+                                </button>
                             </div>
 
                             {/* RIGHT SIDE */}

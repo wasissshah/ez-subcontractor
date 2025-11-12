@@ -28,6 +28,15 @@
   display: flex;
   justify-content: end;
 }
+.header .header-wrapper nav .icon-link {
+  background-color: #F9F9F9;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37px;
+  height: 37px;
+}
 .header .header-wrapper .menu-links {
   background-color: #F9F9F9 !important;
   padding: 5px;
@@ -119,6 +128,9 @@
     margin-bottom: 20px !important;
     margin: 0;
     transform: translateX(0);
+  }
+  .header .header-wrapper nav .menu-links li a {
+    padding: 10px 0 0 0;
   }
   .header .header-wrapper nav .buttons {
     display: flex !important;

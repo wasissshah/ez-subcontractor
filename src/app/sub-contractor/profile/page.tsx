@@ -155,7 +155,7 @@ export default function ProfilePage() {
                                         </div>
 
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
+                                            <Link href="/sub-contractor/edit-profile" className="icon">
                                                 <Image
                                                     src="/assets/img/icons/edit.svg"
                                                     width={24}

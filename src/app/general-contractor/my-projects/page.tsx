@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/free-trial.css';
 
 export default function DashboardPage() {
-    // tab control state
-    const [activeTab, setActiveTab] = useState("all");
+    const router = useRouter();
 
-    // see more toggle
+    const [activeTab, setActiveTab] = useState("all");
     const [expandedCards, setExpandedCards] = useState<number[]>([]);
 
     const toggleCard = (index: number) => {
@@ -49,247 +48,123 @@ export default function DashboardPage() {
         return [];
     };
 
+    const handleViewDetails = () => {
+        router.push('/general-contractor/job-details');
+    };
+
     return (
         <>
             <Header />
-        <section className="banner-sec trial review">
-            <div className="container">
-                <div className="right-bar">
-                    {/* Header Bar */}
-                    <div className="bar d-flex align-items-center gap-2 justify-content-between flex-wrap mb-4">
-                        <div className="fs-4 fw-semibold">My Projects</div>
-                        <Link href="#" className="btn btn-primary rounded-3">
-                            <Image
-                                src="/assets/img/icons/plus.svg"
-                                width={12}
-                                height={12}
-                                alt="Icon"
-                            />
-                            <span>Add Project</span>
-                        </Link>
-                    </div>
-
-                    {/* Tabs */}
-                    <ul className="nav nav-tabs mb-4" role="tablist">
-                        <li className="nav-item" role="presentation">
-                            <button
-                                className={`nav-link ${activeTab === "all" ? "active" : ""}`}
-                                type="button"
-                                onClick={() => setActiveTab("all")}
-                            >
-                                All
-                            </button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button
-                                className={`nav-link ${activeTab === "hired" ? "active" : ""}`}
-                                type="button"
-                                onClick={() => setActiveTab("hired")}
-                            >
-                                Hired
-                            </button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button
-                                className={`nav-link ${activeTab === "active" ? "active" : ""}`}
-                                type="button"
-                                onClick={() => setActiveTab("active")}
-                            >
-                                Active
-                            </button>
-                        </li>
-                    </ul>
-
-                    {/* Tab Content */}
-                    <div className="tab-content">
-                        <div
-                            className={`tab-pane fade ${activeTab === "all" ? "show active" : ""}`}
-                            id="all"
-                            role="tabpanel"
-                        >
-                            <div className="row g-4">
-                                {getProjects().map((project, index) => (
-                                    <div className="col-lg-6" key={project.id}>
-                                        <div className="project-card call-dark custom-card p-4">
-                                            <div className="bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
-                                                <div className="fs-5 fw-semibold">{project.title}</div>
-                                                <Link
-                                                    href="#"
-                                                    className="btn p-1 ps-3 pe-3"
-                                                    style={{
-                                                        backgroundColor: `${project.statusColor}10`,
-                                                        color: project.statusColor,
-                                                    }}
-                                                >
-                                                    {project.status}
-                                                </Link>
-                                            </div>
-
-                                            <p className="description mb-0">
-                                                {expandedCards.includes(index)
-                                                    ? project.description
-                                                    : project.description.slice(0, 120) + "..."}
-                                            </p>
-                                            <button
-                                                className="see-more-btn mb-3 d-block"
-                                                onClick={() => toggleCard(index)}
-                                            >
-                                                {expandedCards.includes(index) ? "See less" : "See more"}
-                                            </button>
-
-                                            <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
-                                                <Link
-                                                    href="#"
-                                                    className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                >
-                                                    View Details
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-dark text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-danger text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Delete
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+            <section className="banner-sec trial review">
+                <div className="container">
+                    <div className="right-bar">
+                        {/* Header Bar */}
+                        <div className="bar d-flex align-items-center gap-2 justify-content-between flex-wrap mb-4">
+                            <div className="fs-4 fw-semibold">My Projects</div>
                         </div>
 
-                        {/* Hired Tab */}
-                        <div
-                            className={`tab-pane fade ${activeTab === "hired" ? "show active" : ""}`}
-                            id="hired"
-                            role="tabpanel"
-                        >
-                            <div className="row g-4">
-                                {hiredProjects.map((project, index) => (
-                                    <div className="col-lg-6" key={project.id}>
-                                        <div className="project-card call-dark custom-card p-4">
-                                            <div className="bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
-                                                <div className="fs-5 fw-semibold">{project.title}</div>
-                                                <Link
-                                                    href="#"
-                                                    className="btn p-1 ps-3 pe-3"
-                                                    style={{
-                                                        backgroundColor: `${project.statusColor}10`,
-                                                        color: project.statusColor,
-                                                    }}
-                                                >
-                                                    {project.status}
-                                                </Link>
-                                            </div>
+                        {/* Tabs */}
+                        <ul className="nav nav-tabs mb-4" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <button
+                                    className={`nav-link ${activeTab === "all" ? "active" : ""}`}
+                                    type="button"
+                                    onClick={() => setActiveTab("all")}
+                                >
+                                    All
+                                </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <button
+                                    className={`nav-link ${activeTab === "hired" ? "active" : ""}`}
+                                    type="button"
+                                    onClick={() => setActiveTab("hired")}
+                                >
+                                    Hired
+                                </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                                <button
+                                    className={`nav-link ${activeTab === "active" ? "active" : ""}`}
+                                    type="button"
+                                    onClick={() => setActiveTab("active")}
+                                >
+                                    Active
+                                </button>
+                            </li>
+                        </ul>
 
-                                            <p className="description mb-0">
-                                                {expandedCards.includes(index)
-                                                    ? project.description
-                                                    : project.description.slice(0, 120) + "..."}
-                                            </p>
-                                            <button
-                                                className="see-more-btn mb-3 d-block"
-                                                onClick={() => toggleCard(index)}
-                                            >
-                                                {expandedCards.includes(index) ? "See less" : "See more"}
-                                            </button>
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {["all", "hired", "active"].map((tab) => {
+                                const projects =
+                                    tab === "all"
+                                        ? allProjects
+                                        : tab === "hired"
+                                            ? hiredProjects
+                                            : activeProjects;
 
-                                            <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
-                                                <Link
-                                                    href="#"
-                                                    className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                >
-                                                    View Details
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-dark text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-danger text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Delete
-                                                </Link>
-                                            </div>
+                                return (
+                                    <div
+                                        key={tab}
+                                        className={`tab-pane fade ${activeTab === tab ? "show active" : ""}`}
+                                        role="tabpanel"
+                                    >
+                                        <div className="row g-4">
+                                            {projects.map((project, index) => (
+                                                <div className="col-lg-6" key={project.id}>
+                                                    <div className="project-card call-dark custom-card p-4">
+                                                        <div className="bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
+                                                            <div className="fs-5 fw-semibold">{project.title}</div>
+                                                            <div
+                                                                className="btn p-1 ps-3 pe-3"
+                                                                style={{
+                                                                    backgroundColor: `${project.statusColor}10`,
+                                                                    color: project.statusColor,
+                                                                }}
+                                                            >
+                                                                {project.status}
+                                                            </div>
+                                                        </div>
+
+                                                        <p className="description mb-0">
+                                                            {expandedCards.includes(index)
+                                                                ? project.description
+                                                                : project.description.slice(0, 120) + "..."}
+                                                        </p>
+                                                        <button
+                                                            className="see-more-btn mb-3 d-block"
+                                                            onClick={() => toggleCard(index)}
+                                                        >
+                                                            {expandedCards.includes(index) ? "See less" : "See more"}
+                                                        </button>
+
+                                                        <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
+                                                            {/* ✅ View Details */}
+                                                            <button
+                                                                className="btn btn-primary rounded-3 w-100 justify-content-center"
+                                                                onClick={handleViewDetails}
+                                                            >
+                                                                View Details
+                                                            </button>
+                                                            <button className="btn bg-dark text-white rounded-3 w-100 justify-content-center">
+                                                                Edit
+                                                            </button>
+                                                            <button className="btn bg-danger text-white rounded-3 w-100 justify-content-center">
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Active Tab */}
-                        <div
-                            className={`tab-pane fade ${activeTab === "active" ? "show active" : ""}`}
-                            id="active"
-                            role="tabpanel"
-                        >
-                            <div className="row g-4">
-                                {activeProjects.map((project, index) => (
-                                    <div className="col-lg-6" key={project.id}>
-                                        <div className="project-card call-dark custom-card p-4">
-                                            <div className="bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-3">
-                                                <div className="fs-5 fw-semibold">{project.title}</div>
-                                                <Link
-                                                    href="#"
-                                                    className="btn p-1 ps-3 pe-3"
-                                                    style={{
-                                                        backgroundColor: `${project.statusColor}10`,
-                                                        color: project.statusColor,
-                                                    }}
-                                                >
-                                                    {project.status}
-                                                </Link>
-                                            </div>
-
-                                            <p className="description mb-0">
-                                                {expandedCards.includes(index)
-                                                    ? project.description
-                                                    : project.description.slice(0, 120) + "..."}
-                                            </p>
-                                            <button
-                                                className="see-more-btn mb-3 d-block"
-                                                onClick={() => toggleCard(index)}
-                                            >
-                                                {expandedCards.includes(index) ? "See less" : "See more"}
-                                            </button>
-
-                                            <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
-                                                <Link
-                                                    href="#"
-                                                    className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                >
-                                                    View Details
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-dark text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Edit
-                                                </Link>
-                                                <Link
-                                                    href="#"
-                                                    className="btn bg-danger text-white rounded-3 w-100 justify-content-center"
-                                                >
-                                                    Delete
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
             <Footer />
         </>
     );

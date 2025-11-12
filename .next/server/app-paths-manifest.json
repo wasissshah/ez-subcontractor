@@ -1,8 +1,7 @@
 {
-  "/sub-contractor/subscription/page": "app/sub-contractor/subscription/page.js",
-  "/sub-contractor/checkout/page": "app/sub-contractor/checkout/page.js",
-  "/sub-contractor/success/page": "app/sub-contractor/success/page.js",
-  "/sub-contractor/dashboard/page": "app/sub-contractor/dashboard/page.js",
-  "/sub-contractor/dashboard-subscribed/page": "app/sub-contractor/dashboard-subscribed/page.js",
-  "/sub-contractor/job-details/page": "app/sub-contractor/job-details/page.js"
+  "/subscription/page": "app/subscription/page.js",
+  "/general-contractor/job-details/page": "app/general-contractor/job-details/page.js",
+  "/general-contractor/profile/page": "app/general-contractor/profile/page.js",
+  "/general-contractor/change-password/page": "app/general-contractor/change-password/page.js",
+  "/general-contractor/edit-profile/page": "app/general-contractor/edit-profile/page.js"
 }

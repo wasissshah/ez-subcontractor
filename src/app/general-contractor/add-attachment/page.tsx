@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect, ChangeEvent, DragEvent, MouseEvent } from 'react';
+import { useState, useRef, useEffect, ChangeEvent, DragEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
@@ -12,7 +13,6 @@ import 'react-quill/dist/quill.snow.css';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-// Define document shape
 interface DocumentItem {
     id: string;
     name: string;
@@ -20,6 +20,7 @@ interface DocumentItem {
 }
 
 export default function AddAttachment() {
+    const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectOpen, setSelectOpen] = useState(false);
     const [description, setDescription] = useState('');
@@ -40,7 +41,7 @@ export default function AddAttachment() {
         { id: '4', name: 'Roofing' },
     ];
 
-    const handleSelect = (  id: string) => {
+    const handleSelect = (id: string) => {
         setSelectedCategory(id);
         setSelectOpen(false);
     };
@@ -115,11 +116,7 @@ export default function AddAttachment() {
                                         <label htmlFor="category" className="mb-1 fw-semibold">
                                             Category *
                                         </label>
-                                        <div
-                                            className={`custom-select position-relative ${
-                                                selectOpen ? 'open' : ''
-                                            }`}
-                                        >
+                                        <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>
                                             <div
                                                 className="select-selected"
                                                 onClick={() => setSelectOpen((s) => !s)}
@@ -152,10 +149,7 @@ export default function AddAttachment() {
 
                                             <ul className="select-options">
                                                 {categories.map((cat) => (
-                                                    <li
-                                                        key={cat.id}
-                                                        onClick={() => handleSelect(cat.id)}
-                                                    >
+                                                    <li key={cat.id} onClick={() => handleSelect(cat.id)}>
                                                         {cat.name}
                                                     </li>
                                                 ))}
@@ -174,13 +168,8 @@ export default function AddAttachment() {
                                         ].map((field, idx) => (
                                             <div className="col-lg-4" key={idx}>
                                                 <div className="input-wrapper">
-                                                    <div className="label mb-1 fw-semibold">
-                                                        {field.label}
-                                                    </div>
-                                                    <input
-                                                        type={field.type}
-                                                        placeholder={field.placeholder || ''}
-                                                    />
+                                                    <div className="label mb-1 fw-semibold">{field.label}</div>
+                                                    <input type={field.type} placeholder={field.placeholder || ''} />
                                                 </div>
                                             </div>
                                         ))}
@@ -200,9 +189,7 @@ export default function AddAttachment() {
                                 </form>
 
                                 <div className="documents-wrapper mb-4">
-                                    <div className="fs-5 fw-semibold mb-3">
-                                        Documents Description
-                                    </div>
+                                    <div className="fs-5 fw-semibold mb-3">Documents Description</div>
 
                                     {allDocuments.map((doc) => (
                                         <div className="document-item mb-3" key={doc.id}>
@@ -215,9 +202,7 @@ export default function AddAttachment() {
                                                         alt="PDF"
                                                         className="doc-icon"
                                                     />
-                                                    <span className="d-block fs-14 fw-semibold">
-                            {doc.name}
-                          </span>
+                                                    <span className="d-block fs-14 fw-semibold">{doc.name}</span>
                                                 </div>
                                                 <button
                                                     type="button"
@@ -234,10 +219,7 @@ export default function AddAttachment() {
                                                     placeholder="Write description"
                                                     value={doc.description}
                                                     onChange={(e) =>
-                                                        handleDocumentDescriptionChange(
-                                                            doc.id,
-                                                            e.target.value
-                                                        )
+                                                        handleDocumentDescriptionChange(doc.id, e.target.value)
                                                     }
                                                 />
                                             </div>
@@ -245,12 +227,14 @@ export default function AddAttachment() {
                                     ))}
                                 </div>
 
-                                <Link
-                                    href="#"
+                                {/* Updated: Add Project button redirects to edit-job-post */}
+                                <button
+                                    type="button"
                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
+                                    onClick={() => router.push('/general-contractor/edit-job-post')}
                                 >
                                     Add Project
-                                </Link>
+                                </button>
                             </div>
 
                             <div className="col-lg-4">
@@ -305,34 +289,6 @@ export default function AddAttachment() {
                                             ref={fileInputRef}
                                             onChange={handleFileUpload}
                                         />
-                                    </div>
-
-                                    <div className="documents-wrapper documents-wrapper1">
-                                        {allDocuments.map((doc) => (
-                                            <div className="document-item" key={`card-${doc.id}`}>
-                                                <div className="image-box-wrapper d-flex align-items-center justify-content-between">
-                                                    <div className="d-flex align-items-center gap-2">
-                                                        <img
-                                                            src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg"
-                                                            width={27}
-                                                            height={32}
-                                                            alt="PDF"
-                                                            className="doc-icon"
-                                                        />
-                                                        <span className="d-block fs-12 text-center fw-semibold">
-                              {doc.name}
-                            </span>
-                                                    </div>
-                                                    <button
-                                                        type="button"
-                                                        className="remove-btn"
-                                                        onClick={() => handleRemoveFile(doc.id)}
-                                                    >
-                                                        x
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             </div>

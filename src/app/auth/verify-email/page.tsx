@@ -3,35 +3,35 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import '../../../styles/login.css';
 
 export default function VerifyEmail() {
     const [otp, setOtp] = useState(['', '', '', '']);
-    const [timer, setTimer] = useState(59); // 0:59
+    const [timer, setTimer] = useState(59);
     const [error, setError] = useState('');
     const router = useRouter();
 
-    // Timer countdown
+    // ⏱ Timer countdown
     useEffect(() => {
         if (timer === 0) return;
         const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
         return () => clearInterval(interval);
     }, [timer]);
 
-    // Handle OTP input change
+    // 🔢 OTP input change
     const handleChange = (index: number, value: string) => {
-        if (/^\d*$/.test(value)) { // only digits
+        if (/^\d*$/.test(value)) {
             const newOtp = [...otp];
             newOtp[index] = value.slice(-1);
             setOtp(newOtp);
 
-            // auto focus next input
+            // Auto focus next input
             const nextInput = document.getElementById(`otp-${index + 1}`);
             if (value && nextInput) (nextInput as HTMLInputElement).focus();
         }
     };
 
+    // ✅ Submit handler
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
@@ -42,15 +42,15 @@ export default function VerifyEmail() {
         }
 
         const enteredOtp = otp.join('');
-        // ✅ Dummy OTP check
         if (enteredOtp === '4125') {
             alert('OTP verified successfully!');
-            router.push('/auth/reset-password'); // example next page
+            router.push('/auth/create-new-password'); // ✅ Next page
         } else {
-            setError('Invalid OTP, try again.');
+            setError('Invalid OTP, please try again.');
         }
     };
 
+    // 🔁 Resend OTP
     const handleResend = () => {
         setOtp(['', '', '', '']);
         setTimer(59);
@@ -58,7 +58,7 @@ export default function VerifyEmail() {
     };
 
     return (
-        <section className="hero-sec login overflow-hidden">
+        <section className="hero-sec login overflow-hidden position-static">
             <div className="image-wrapper">
                 <Image
                     src="/assets/img/left-image.webp"
@@ -69,14 +69,14 @@ export default function VerifyEmail() {
                 />
                 <p className="main-title mb-0">
                     Developed by:
-                    <span className="text-primary fw-semibold">Design Spartans</span>
+                    <span className="text-primary fw-semibold"> Design Spartans</span>
                 </p>
             </div>
 
             <div className="row">
                 <div className="col-lg-6 offset-lg-6">
                     <div className="content-wrapper">
-                        <div className="content mx-auto justify-content-wrapper">
+                        <div className="content mx-auto w-100">
                             <Image
                                 src="/assets/img/icons/logo.webp"
                                 width={350}
@@ -131,14 +131,14 @@ export default function VerifyEmail() {
                                 </button>
                             </div>
 
-                            {/* Error Message */}
+                            {/* Error */}
                             {error && <p className="text-danger text-center mb-2">{error}</p>}
 
                             {/* Buttons */}
                             <div className="buttons-wrapper d-flex align-items-center gap-4">
                                 <button
                                     type="button"
-                                    onClick={() => router.push('/auth/forgot-password')}
+                                    onClick={() => router.push('/auth/forget-password')} // ✅ Corrected path
                                     className="btn btn-outline-dark rounded-3 justify-content-center w-100"
                                 >
                                     Back
