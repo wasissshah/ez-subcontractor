@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-640984.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -14,267 +14,23 @@
       "static/css/css-node_modules_slick-carousel_slick_slick-theme_css-node_modules_slick-carousel_slick_slick-7a8341.css",
       "static/chunks/app/layout.js"
     ],
-    "/affiliate/subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/subscription/page.js"
-    ],
-    "/affiliate/checkout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/checkout/page.js"
-    ],
-    "/affiliate/success/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/affiliate/success/page.js"
-    ],
-    "/affiliate/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/dashboard/page.js"
-    ],
-    "/affiliate/contractor-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/contractor-details/page.js"
-    ],
     "/auth/sub-contractor/register/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/sub-contractor/register/page.js"
     ],
+    "/auth/sub-contractor/business-details/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/sub-contractor/business-details/page.js"
+    ],
     "/sub-contractor/subscription/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-640984.css",
       "static/chunks/app/sub-contractor/subscription/page.js"
-    ],
-    "/sub-contractor/checkout/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/checkout/page.js"
-    ],
-    "/sub-contractor/success/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/sub-contractor/success/page.js"
-    ],
-    "/sub-contractor/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/dashboard/page.js"
-    ],
-    "/sub-contractor/dashboard-subscribed/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/dashboard-subscribed/page.js"
-    ],
-    "/sub-contractor/job-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/job-details/page.js"
-    ],
-    "/auth/forget-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/forget-password/page.js"
-    ],
-    "/auth/verify-email/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/verify-email/page.js"
-    ],
-    "/auth/create-new-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/create-new-password/page.js"
-    ],
-    "/auth/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/login/page.js"
-    ],
-    "/auth/register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/register/page.js"
-    ],
-    "/auth/account-type/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/account-type/page.js"
-    ],
-    "/auth/general-contractor/register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/general-contractor/register/page.js"
-    ],
-    "/auth/affiliate/register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-src_styles_login_css.css",
-      "static/chunks/app/auth/affiliate/register/page.js"
-    ],
-    "/blogs/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/blogs/page.js"
-    ],
-    "/how-it-works/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/how-it-works/page.js"
-    ],
-    "/projects/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/projects/page.js"
-    ],
-    "/subscription/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/subscription/page.js"
-    ],
-    "/sub-contractor/rating/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/rating/page.js"
-    ],
-    "/sub-contractor/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/profile/page.js"
-    ],
-    "/sub-contractor/edit-profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/sub-contractor/edit-profile/page.js"
-    ],
-    "/affiliate/my-ads/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/my-ads/page.js"
-    ],
-    "/affiliate/post-an-ad/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/post-an-ad/page.js"
-    ],
-    "/affiliate/ad-posted/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/ad-posted/page.js"
-    ],
-    "/affiliate/edit-ad/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/edit-ad/page.js"
-    ],
-    "/affiliate/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/profile/page.js"
-    ],
-    "/affiliate/edit-profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/edit-profile/page.js"
-    ],
-    "/affiliate/saved-cards/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/affiliate/saved-cards/page.js"
-    ],
-    "/general-contractor/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/dashboard/page.js"
-    ],
-    "/general-contractor/ad-job-post/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/ad-job-post/page.js"
-    ],
-    "/general-contractor/add-attachment/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/add-attachment/page.js"
-    ],
-    "/general-contractor/edit-job-post/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/edit-job-post/page.js"
-    ],
-    "/general-contractor/view-more-reviews/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/view-more-reviews/page.js"
-    ],
-    "/general-contractor/my-projects/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/my-projects/page.js"
-    ],
-    "/general-contractor/job-details/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/job-details/page.js"
-    ],
-    "/general-contractor/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/profile/page.js"
-    ],
-    "/general-contractor/change-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/change-password/page.js"
-    ],
-    "/general-contractor/edit-profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/css-node_modules_react-quill_dist_quill_snow_css-src_styles_blog_css-src_styles_cards_css-src-80bd20.css",
-      "static/chunks/app/general-contractor/edit-profile/page.js"
     ]
   }
 }

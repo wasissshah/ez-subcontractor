@@ -65,8 +65,8 @@ export default function RegisterPage() {
         e.preventDefault();
         if (validate()) {
             console.log('Registration data:', formData);
-            // Redirect to subscription page
-            router.push('/sub-contractor/subscription');
+            // Redirect to business details page
+            router.push('/auth/sub-contractor/business-details');
         }
     };
 

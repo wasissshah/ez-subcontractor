@@ -2,9 +2,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import '../../../styles/login.css';
+import { useRouter } from 'next/navigation';
+import '../../../../styles/login.css';
 
 export default function BusinessDetails() {
+    const router = useRouter();
     const [category, setCategory] = useState('');
     const [licenseNumber, setLicenseNumber] = useState('');
     const [zipCode, setZipCode] = useState('');
@@ -52,9 +54,10 @@ export default function BusinessDetails() {
             return;
         }
 
-        // You can send data to backend here
         console.log({ category, licenseNumber, zipCode, workRadius });
-        alert('Registration Completed!');
+
+        // ✅ Redirect to subscription page
+        router.push('/sub-contractor/subscription');
     };
 
     return (
