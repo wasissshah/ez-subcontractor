@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import '../../../styles/login.css';
 
@@ -35,18 +36,13 @@ export default function SelectAccountType() {
             return;
         }
 
-        // Save selected account type (already being done)
         localStorage.setItem('accountType', selectedType);
-
-        // Redirect based on selected type
         router.push(`/auth/${selectedType}/register`);
     };
 
-    // Update to save role when selection changes
     const handleSelection = (typeId) => {
         setSelectedType(typeId);
-        // Save role to localStorage immediately when selected
-        localStorage.setItem('role', typeId); // or use any key name you prefer
+        localStorage.setItem('role', typeId);
     };
 
     return (
@@ -60,8 +56,13 @@ export default function SelectAccountType() {
                     height={800}
                 />
                 <p className="main-title mb-0">
-                    Developed by:
-                    <span className="text-primary fw-semibold">Design Spartans</span>
+                    Developed by:{' '}
+                    <Link
+                        href="https://designspartans.com/"
+                        target="_blank"
+                    >
+                        <span className="text-primary fw-semibold">Design Spartans</span>
+                    </Link>
                 </p>
             </div>
 
@@ -102,7 +103,7 @@ export default function SelectAccountType() {
                                         className="account-radio"
                                         value={acc.id}
                                         checked={selectedType === acc.id}
-                                        onChange={() => handleSelection(acc.id)} // Also update on radio change
+                                        onChange={() => handleSelection(acc.id)}
                                     />
                                 </div>
                             ))}

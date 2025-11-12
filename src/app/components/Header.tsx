@@ -184,7 +184,7 @@ export default function Header() {
                                     Log In
                                 </Link>
                                 <Link
-                                    href="/auth/register"
+                                    href="/auth/account-type"
                                     className="btn btn-primary rounded-3"
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -216,7 +216,7 @@ export default function Header() {
                         Log In
                     </Link>
                     <Link
-                        href="/auth/register"
+                        href="/auth/account-type"
                         className="btn btn-primary rounded-3"
                         onClick={() => setIsMenuOpen(false)}
                     >

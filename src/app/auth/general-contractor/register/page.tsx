@@ -84,7 +84,7 @@ export default function RegisterPage() {
                 />
                 <p className="main-title mb-0">
                     Developed by:
-                    <span className="text-primary fw-semibold"> Design Spartans</span>
+                    <Link href="https://designspartans.com/" target="_blank" className="text-primary fw-semibold"> Design Spartans</Link>
                 </p>
             </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // ✅ Added import
 import { useRouter } from 'next/navigation';
 import '../../../styles/login.css';
 
@@ -68,8 +69,14 @@ export default function VerifyEmail() {
                     height={800}
                 />
                 <p className="main-title mb-0">
-                    Developed by:
-                    <span className="text-primary fw-semibold"> Design Spartans</span>
+                    Developed by:{' '}
+                    <Link
+                        href="https://designspartans.com/"
+                        target="_blank"
+                        className="text-primary fw-semibold"
+                    >
+                        Design Spartans
+                    </Link>
                 </p>
             </div>
 
@@ -120,7 +127,10 @@ export default function VerifyEmail() {
                             </div>
 
                             {/* Resend */}
-                            <div style={{ marginBottom: 20 }} className="detail fw-medium text-center text-gray-light">
+                            <div
+                                style={{ marginBottom: 20 }}
+                                className="detail fw-medium text-center text-gray-light"
+                            >
                                 Didn’t receive a code?{' '}
                                 <button
                                     type="button"
@@ -138,7 +148,7 @@ export default function VerifyEmail() {
                             <div className="buttons-wrapper d-flex align-items-center gap-4">
                                 <button
                                     type="button"
-                                    onClick={() => router.push('/auth/forget-password')} // ✅ Corrected path
+                                    onClick={() => router.push('/auth/forget-password')}
                                     className="btn btn-outline-dark rounded-3 justify-content-center w-100"
                                 >
                                     Back

@@ -23,7 +23,7 @@ export default function HomePage() {
             image: "/assets/img/home-banner-img1.webp",
             title: "Real Subs. Real Work. Real Results.",
             btn1Text: "Post a Project",
-            btn1Link: "/",
+            btn1Link: "/auth/login",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required — enjoy a free 30-day trial."
@@ -33,7 +33,7 @@ export default function HomePage() {
             image: "/assets/img/home-banner-img2.webp",
             title: "Connects Contractors with Trusted, Licensed Subs.",
             btn1Text: "Post a Project",
-            btn1Link: "/signup",
+            btn1Link: "/auth/login",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required — enjoy a free to subscribe"
@@ -43,7 +43,7 @@ export default function HomePage() {
             image: "/assets/img/home-banner-img3.webp",
             title: "Find Trusted Subs quickly, Post Your Project Free",
             btn1Text: "Post a Project",
-            btn1Link: "/",
+            btn1Link: "/auth/login",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required — enjoy a free to subscribe"
@@ -53,7 +53,7 @@ export default function HomePage() {
             image: "/assets/img/home-banner-img4.webp",
             title: "Access Verified Contractor Projects — No Brokers, No Middlemen, Just Real Jobs Daily.",
             btn1Text: "Post a Project",
-            btn1Link: "/",
+            btn1Link: "/auth/login",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required — enjoy a free to subscribe"
@@ -63,7 +63,7 @@ export default function HomePage() {
             image: "/assets/img/home-banner-img5.webp",
             title: "Stop Chasing Leads. Start Bidding Jobs.",
             btn1Text: "Post a Project",
-            btn1Link: "/",
+            btn1Link: "/auth/login",
             btn2Text: "Search a Project",
             btn2Link: "/projects",
             notice: "No credit card required — enjoy a free to subscribe"

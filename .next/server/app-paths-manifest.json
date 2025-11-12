@@ -1,6 +1,7 @@
 {
+  "/auth/verify-email/page": "app/auth/verify-email/page.js",
+  "/auth/forget-password/page": "app/auth/forget-password/page.js",
+  "/auth/login/page": "app/auth/login/page.js",
   "/page": "app/page.js",
-  "/auth/sub-contractor/business-details/page": "app/auth/sub-contractor/business-details/page.js",
-  "/auth/sub-contractor/register/page": "app/auth/sub-contractor/register/page.js",
-  "/sub-contractor/subscription/page": "app/sub-contractor/subscription/page.js"
+  "/auth/account-type/page": "app/auth/account-type/page.js"
 }

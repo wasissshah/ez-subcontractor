@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import '../../../styles/login.css';
+import Link from 'next/link';
 
 export default function CreateNewPassword() {
     const [password, setPassword] = useState('');
@@ -78,7 +79,7 @@ export default function CreateNewPassword() {
                 />
                 <p className="main-title mb-0">
                     Developed by:
-                    <span className="text-primary fw-semibold"> Design Spartans</span>
+                    <Link href="https://designspartans.com/" target="_blank" className="text-primary fw-semibold"> Design Spartans</Link>
                 </p>
             </div>
 
