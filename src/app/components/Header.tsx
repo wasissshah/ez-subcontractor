@@ -214,7 +214,7 @@ export default function Header() {
             <div className="container">
                 <div className="header-wrapper">
                     <Link href="/" className="logo" aria-label="Home">
-                        <Image src="/assets/img/icons/logo.webp" width={234} height={67} alt="Logo" priority />
+                        <Image src="/assets/img/icons/logo.webp" width={234} height={67} alt="Logo" title="Logo" priority />
                     </Link>
 
                     <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} id="hamburger-icon" aria-expanded={isMenuOpen} aria-controls="primary-navigation" onClick={toggleMenu}>
