@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Registration data:', formData);
+        console.log('Form submitted:', formData);
         router.push('/auth/sub-contractor/business-details');
     };
 
