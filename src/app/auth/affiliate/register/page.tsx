@@ -19,47 +19,17 @@ export default function RegisterPage() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
     const [isAgreed, setIsAgreed] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-
-        if (errors[name]) {
-            setErrors((prev) => {
-                const newErrors = { ...prev };
-                delete newErrors[name];
-                return newErrors;
-            });
-        }
-    };
-
-    const validate = () => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required';
-        if (!formData.companyName.trim()) newErrors.companyName = 'Company Name is required';
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid Email';
-        if (!formData.phone.trim()) newErrors.phone = 'Phone Number is required';
-        if (!formData.password) newErrors.password = 'Password is required';
-        else if (formData.password.length < 6) newErrors.password = 'Min 6 characters required';
-        if (formData.password !== formData.confirmPassword)
-            newErrors.confirmPassword = 'Passwords do not match';
-        if (!isAgreed)
-            newErrors.agreement = 'Please accept our Privacy Policy and Terms & Conditions';
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (validate()) {
-            console.log('Registration successful:', formData);
-            router.push('/affiliate/subscription');
-        }
+        console.log('Form submitted:', formData);
+        router.push('/affiliate/subscription');
     };
 
     return (
@@ -73,7 +43,14 @@ export default function RegisterPage() {
                     height={800}
                 />
                 <p className="main-title mb-0">
-                    Developed by: <Link href="https://designspartans.com/" target="_blank" className="text-primary fw-semibold">Design Spartans</Link>
+                    Developed by:{' '}
+                    <Link
+                        href="https://designspartans.com/"
+                        target="_blank"
+                        className="text-primary fw-semibold"
+                    >
+                        Design Spartans
+                    </Link>
                 </p>
             </div>
 
@@ -110,7 +87,7 @@ export default function RegisterPage() {
                             <form className="form" onSubmit={handleSubmit}>
                                 <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="fullName" className="mb-1 fw-semibold">
-                                        Full Name *
+                                        Full Name
                                     </label>
                                     <input
                                         type="text"
@@ -120,12 +97,11 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         placeholder="Jason Doe"
                                     />
-                                    {errors.fullName && <small className="text-danger">{errors.fullName}</small>}
                                 </div>
 
                                 <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="companyName" className="mb-1 fw-semibold">
-                                        Company Name *
+                                        Company Name
                                     </label>
                                     <input
                                         type="text"
@@ -135,12 +111,11 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         placeholder="Jason Tiles Limited"
                                     />
-                                    {errors.companyName && <small className="text-danger">{errors.companyName}</small>}
                                 </div>
 
                                 <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="email" className="mb-1 fw-semibold">
-                                        Email Address *
+                                        Email Address
                                     </label>
                                     <input
                                         type="email"
@@ -150,12 +125,11 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         placeholder="hello@example.com"
                                     />
-                                    {errors.email && <small className="text-danger">{errors.email}</small>}
                                 </div>
 
                                 <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="phone" className="mb-1 fw-semibold">
-                                        Phone Number *
+                                        Phone Number
                                     </label>
                                     <input
                                         id="phone"
@@ -165,12 +139,11 @@ export default function RegisterPage() {
                                         onChange={handleChange}
                                         placeholder="(000) 000-0000"
                                     />
-                                    {errors.phone && <small className="text-danger">{errors.phone}</small>}
                                 </div>
 
                                 <div className="input-wrapper d-flex flex-column position-relative">
                                     <label htmlFor="password" className="mb-1 fw-semibold">
-                                        Password *
+                                        Password
                                     </label>
                                     <input
                                         type={showPassword ? 'text' : 'password'}
@@ -185,14 +158,17 @@ export default function RegisterPage() {
                                         style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
-                    <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                  </span>
-                                    {errors.password && <small className="text-danger">{errors.password}</small>}
+                                        <i
+                                            className={`bi ${
+                                                showPassword ? 'bi-eye' : 'bi-eye-slash'
+                                            }`}
+                                        ></i>
+                                    </span>
                                 </div>
 
                                 <div className="input-wrapper d-flex flex-column position-relative">
                                     <label htmlFor="confirmPassword" className="mb-1 fw-semibold">
-                                        Confirm Password *
+                                        Confirm Password
                                     </label>
                                     <input
                                         type={showConfirmPassword ? 'text' : 'password'}
@@ -207,11 +183,12 @@ export default function RegisterPage() {
                                         style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                     >
-                    <i className={`bi ${showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                  </span>
-                                    {errors.confirmPassword && (
-                                        <small className="text-danger">{errors.confirmPassword}</small>
-                                    )}
+                                        <i
+                                            className={`bi ${
+                                                showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'
+                                            }`}
+                                        ></i>
+                                    </span>
                                 </div>
 
                                 <div className="form-check my-2">
@@ -233,7 +210,6 @@ export default function RegisterPage() {
                                         </Link>
                                         .
                                     </label>
-                                    {errors.agreement && <small className="text-danger">{errors.agreement}</small>}
                                 </div>
 
                                 <input
