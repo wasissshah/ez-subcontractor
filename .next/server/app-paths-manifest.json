@@ -1,8 +1,9 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/subscription/page": "app/subscription/page.js",
-  "/affiliate/profile/page": "app/affiliate/profile/page.js",
-  "/affiliate/my-ads/page": "app/affiliate/my-ads/page.js"
+  "/auth/account-type/page": "app/auth/account-type/page.js",
+  "/auth/affiliate/register/page": "app/auth/affiliate/register/page.js",
+  "/auth/general-contractor/register/page": "app/auth/general-contractor/register/page.js",
+  "/general-contractor/dashboard/page": "app/general-contractor/dashboard/page.js",
+  "/auth/sub-contractor/register/page": "app/auth/sub-contractor/register/page.js",
+  "/auth/sub-contractor/business-details/page": "app/auth/sub-contractor/business-details/page.js",
+  "/affiliate/subscription/page": "app/affiliate/subscription/page.js"
 }
