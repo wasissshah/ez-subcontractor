@@ -217,7 +217,7 @@ export default function Header() {
                         <Image src="/assets/img/icons/logo.webp" width={234} height={67} alt="Logo" title="Logo" priority />
                     </Link>
 
-                    <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} id="hamburger-icon" aria-expanded={isMenuOpen} aria-controls="primary-navigation" onClick={toggleMenu}>
+                    <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} id="hamburger-icon" aria-expanded={isMenuOpen} aria-controls="primary-navigation" aria-label="Open Menu" onClick={toggleMenu}>
                         <span className="line line-1"></span>
                         <span className="line line-2"></span>
                         <span className="line line-3"></span>

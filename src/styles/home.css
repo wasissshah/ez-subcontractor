@@ -329,7 +329,6 @@
   display: block;
 }
 
-/* Media Query */
 @media (max-width: 768px) {
   .banner-sec .content-wrapper .form-wrapper {
     flex-wrap: wrap;
