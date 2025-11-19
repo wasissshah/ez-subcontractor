@@ -2,13 +2,16 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
-import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ProfilePage() {
     const pathname = usePathname();
+    const router = useRouter();
+    const [logoutLoading, setLogoutLoading] = useState(false);
 
     // Sidebar links
     const links = [
@@ -17,6 +20,62 @@ export default function ProfilePage() {
         { href: '/sub-contractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
         { href: '/sub-contractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
     ];
+
+    // Handle logout
+    const handleLogout = async () => {
+        setLogoutLoading(true);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // ✅ Add Authorization if needed
+                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                // ✅ Optional: Send any data if required by backend
+                // body: JSON.stringify({}),
+            });
+
+            // ✅ Always log the full response for debugging
+            const text = await response.text(); // Get raw text first
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                data = { message: text || 'Unknown error' };
+            }
+
+            console.log('Logout Response:', {
+                status: response.status,
+                statusText: response.statusText,
+                data: data
+            });
+
+            if (response.ok) {
+                // ✅ Logout successful
+                console.log('✅ Logout successful:', data);
+
+                // Clear any stored user data
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('token'); // ✅ If you're storing token
+
+                // Redirect to login page
+                router.push('/auth/login');
+            } else {
+                // ❌ Handle logout error
+                const errorMessage = data?.message || data?.error || 'Something went wrong. Please try again.';
+                alert(errorMessage);
+                console.error('Logout failed:', data);
+            }
+        } catch (err) {
+            console.error('Logout error:', err);
+            alert('Something went wrong. Please try again.');
+        } finally {
+            setLogoutLoading(false);
+        }
+    };
 
     return (
         <>
@@ -117,9 +176,10 @@ export default function ProfilePage() {
                                     {/* Logout */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
-                                            <Link
-                                                href="#"
-                                                className="custom-btn bg-danger"
+                                            <button
+                                                onClick={handleLogout}
+                                                disabled={logoutLoading}
+                                                className="custom-btn bg-danger w-100 border-0"
                                                 style={{ borderColor: '#DC2626' }}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
@@ -129,7 +189,9 @@ export default function ProfilePage() {
                                                         height={20}
                                                         alt="Logout Icon"
                                                     />
-                                                    <span className="text-white">Logout</span>
+                                                    <span className="text-white">
+                                                        {logoutLoading ? 'Logging out...' : 'Logout'}
+                                                    </span>
                                                 </div>
                                                 <Image
                                                     src="/assets/img/icons/angle-right.svg"
@@ -138,7 +200,7 @@ export default function ProfilePage() {
                                                     alt="Arrow"
                                                     style={{ objectFit: 'contain' }}
                                                 />
-                                            </Link>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

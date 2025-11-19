@@ -54,7 +54,7 @@ export default function LoginPage() {
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('userEmail', email);
                 }
-                router.push('/dashboard');
+                router.push('/sub-contractor/dashboard');
             } else {
                 // ❌ Login failed
                 setError(data.message || 'Invalid email or password');
