@@ -3,7 +3,7 @@
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-79dcab.css",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-640984.css",
       "static/chunks/app/page.js"
     ],
     "/layout": [
@@ -19,6 +19,42 @@
       "static/chunks/main-app.js",
       "static/css/css-src_styles_login_css.css",
       "static/chunks/app/auth/login/page.js"
+    ],
+    "/auth/account-type/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/account-type/page.js"
+    ],
+    "/auth/general-contractor/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/general-contractor/register/page.js"
+    ],
+    "/auth/sub-contractor/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/sub-contractor/register/page.js"
+    ],
+    "/auth/affiliate/register/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/affiliate/register/page.js"
+    ],
+    "/auth/sub-contractor/business-details/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_login_css.css",
+      "static/chunks/app/auth/sub-contractor/business-details/page.js"
+    ],
+    "/affiliate/subscription/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/css-src_styles_cards_css-src_styles_footer_css-src_styles_header_css-src_styles_home_css-src_-640984.css",
+      "static/chunks/app/affiliate/subscription/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",

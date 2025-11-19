@@ -107,7 +107,7 @@ export default function BusinessDetails() {
                             <form className="form" onSubmit={handleSubmit}>
                                 {/* Custom Select */}
                                 <div
-                                    className="input-wrapper d-flex flex-column position-relative mb-3"
+                                    className="input-wrapper d-flex flex-column position-relative"
                                     ref={dropdownRef}
                                 >
                                     <label htmlFor="category" className="mb-1 fw-semibold">
@@ -162,7 +162,7 @@ export default function BusinessDetails() {
                                 </div>
 
                                 {/* License Number */}
-                                <div className="input-wrapper d-flex flex-column mb-3">
+                                <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="licenseNumber" className="mb-1 fw-semibold">
                                         License Number
                                     </label>
@@ -176,7 +176,7 @@ export default function BusinessDetails() {
                                 </div>
 
                                 {/* Zip Code */}
-                                <div className="input-wrapper d-flex flex-column mb-3">
+                                <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="zipCode" className="mb-1 fw-semibold">
                                         Zip Code
                                     </label>
@@ -190,7 +190,7 @@ export default function BusinessDetails() {
                                 </div>
 
                                 {/* Work Radius */}
-                                <div className="input-wrapper d-flex flex-column mb-3">
+                                <div className="input-wrapper d-flex flex-column">
                                     <label htmlFor="workRadius" className="mb-1 fw-semibold">
                                         Work Radius
                                     </label>
