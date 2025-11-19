@@ -1,8 +1,5 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/auth/sub-contractor/register/page": "app/auth/sub-contractor/register/page.js",
-  "/affiliate/subscription/page": "app/affiliate/subscription/page.js",
   "/page": "app/page.js",
-  "/projects/page": "app/projects/page.js",
-  "/subscription/page": "app/subscription/page.js"
+  "/auth/login/page": "app/auth/login/page.js"
 }

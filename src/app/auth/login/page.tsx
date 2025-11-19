@@ -7,14 +7,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('info@admin.com');
-    const [password, setPassword] = useState('admin');
+    const [email, setEmail] = useState('subcontractor@gmail.com');
+    const [password, setPassword] = useState('Password@1');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
@@ -34,15 +34,34 @@ export default function LoginPage() {
             return;
         }
 
-        // ✅ Dummy login check
-        if (email === 'info@admin.com' && password === 'admin') {
-            if (rememberMe) {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // ✅ Login successful
+                if (rememberMe) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                }
+                router.push('/dashboard');
+            } else {
+                // ❌ Login failed
+                setError(data.message || 'Invalid email or password');
             }
-            router.push('/dashboard');
-        } else {
-            setError('Invalid email or password');
+        } catch (err) {
+            setError('Something went wrong. Please try again.');
+            console.error('Login error:', err);
         }
     };
 
