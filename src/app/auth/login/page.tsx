@@ -155,7 +155,12 @@ export default function LoginPage() {
                                     </Link>
                                 </div>
 
-                                {error && <p className="text-danger mb-3">{error}</p>}
+                                {/* ✅ Animated Error Message */}
+                                {error && (
+                                    <p className="text-danger mb-3 animate-slide-up">
+                                        {error}
+                                    </p>
+                                )}
 
                                 <input
                                     type="submit"

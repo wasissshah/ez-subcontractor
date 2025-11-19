@@ -104,6 +104,22 @@
   flex-wrap: wrap;
 }
 
+/* Slide-up animation from bottom */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Apply animation to error messages */
+.text-danger.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
 /* Media Query */
 @media (min-width: 768px) {
   .input-wrapper-s1 {
