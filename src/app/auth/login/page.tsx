@@ -12,25 +12,30 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // ⬅️ NEW
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true); // ⛔ Disable button
 
-        // ✅ Validation
+        // Validation
         if (!email.trim()) {
             setError('Email is required');
+            setIsLoading(false);
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(email)) {
             setError('Email is invalid');
+            setIsLoading(false);
             return;
         }
 
         if (!password.trim()) {
             setError('Password is required');
+            setIsLoading(false);
             return;
         }
 
@@ -49,19 +54,28 @@ export default function LoginPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // ✅ Login successful
-                if (rememberMe) {
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('userEmail', email);
+                const token = data.data.token;
+                if (!token) {
+                    setError('Authentication succeeded but no token received.');
+                    setIsLoading(false);
+                    return;
                 }
+
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('token', token);
+
                 router.push('/sub-contractor/dashboard');
+
             } else {
-                // ❌ Login failed
                 setError(data.message || 'Invalid email or password');
+                setIsLoading(false); // 🔄 Re-enable button
             }
+
         } catch (err) {
             setError('Something went wrong. Please try again.');
             console.error('Login error:', err);
+            setIsLoading(false); // 🔄 Re-enable button
         }
     };
 
@@ -124,7 +138,6 @@ export default function LoginPage() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
-                                    {/* 👁 Eye Icon */}
                                     <span
                                         className="toggle-password position-absolute"
                                         style={{ right: '10px', top: '38px', cursor: 'pointer' }}
@@ -155,7 +168,6 @@ export default function LoginPage() {
                                     </Link>
                                 </div>
 
-                                {/* ✅ Animated Error Message */}
                                 {error && (
                                     <p className="text-danger mb-3 animate-slide-up">
                                         {error}
@@ -164,8 +176,13 @@ export default function LoginPage() {
 
                                 <input
                                     type="submit"
-                                    value="Login"
+                                    value={isLoading ? "Please wait..." : "Login"}
+                                    disabled={isLoading}
                                     className="btn btn-primary rounded-3 w-100 d-block mb-4"
+                                    style={{
+                                        opacity: isLoading ? 0.6 : 1,
+                                        cursor: isLoading ? "not-allowed" : "pointer",
+                                    }}
                                 />
                             </form>
 

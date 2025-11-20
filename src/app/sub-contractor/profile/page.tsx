@@ -21,57 +21,55 @@ export default function ProfilePage() {
         { href: '/sub-contractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
     ];
 
-    // Handle logout
+    // Handle logout with Bearer token
     const handleLogout = async () => {
         setLogoutLoading(true);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // ✅ Add Authorization if needed
-                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                // ✅ Optional: Send any data if required by backend
-                // body: JSON.stringify({}),
-            });
+            const token = localStorage.getItem('token');
 
-            // ✅ Always log the full response for debugging
-            const text = await response.text(); // Get raw text first
+            if (!token) {
+                alert("No token found. Please login again.");
+                router.push('/auth/login');
+                return;
+            }
+
+            // 🔥 ENSURES TOKEN IS ALWAYS SENT PROPERLY
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`, // << KEY FIX
+                    },
+                }
+            );
+
+            // Some APIs return empty text → avoid crash
+            const text = await response.text();
             let data;
             try {
-                data = JSON.parse(text);
-            } catch (e) {
-                data = { message: text || 'Unknown error' };
+                data = text ? JSON.parse(text) : {};
+            } catch {
+                data = { message: text };
             }
 
-            console.log('Logout Response:', {
-                status: response.status,
-                statusText: response.statusText,
-                data: data
-            });
+            console.log('Logout response:', response.status, data);
 
             if (response.ok) {
-                // ✅ Logout successful
-                console.log('✅ Logout successful:', data);
-
-                // Clear any stored user data
+                // 🔥 Clear auth
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userEmail');
-                localStorage.removeItem('token'); // ✅ If you're storing token
+                localStorage.removeItem('token');
 
-                // Redirect to login page
                 router.push('/auth/login');
             } else {
-                // ❌ Handle logout error
-                const errorMessage = data?.message || data?.error || 'Something went wrong. Please try again.';
-                alert(errorMessage);
-                console.error('Logout failed:', data);
+                alert(data?.message || 'Logout failed');
             }
         } catch (err) {
-            console.error('Logout error:', err);
-            alert('Something went wrong. Please try again.');
+            console.error('Logout Error:', err);
+            alert('Network error. Please try again.');
         } finally {
             setLogoutLoading(false);
         }
@@ -84,12 +82,10 @@ export default function ProfilePage() {
                 <section className="banner-sec profile position-static">
                     <div className="container">
                         <div className="row g-4">
-
                             {/* Sidebar */}
                             <div className="col-xl-3">
                                 <div className="sidebar">
                                     <div className="main-wrapper bg-dark p-0">
-
                                         <div className="topbar mb-5 d-flex justify-content-between align-items-start">
                                             <div className="icon-wrapper d-flex align-items-start gap-3">
                                                 <Image
@@ -102,7 +98,6 @@ export default function ProfilePage() {
                                                     <div className="title text-black fs-5 fw-medium mb-2">
                                                         Joseph Dome
                                                     </div>
-
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/message-dark.svg"
@@ -117,7 +112,6 @@ export default function ProfilePage() {
                                                             hello@example.com
                                                         </Link>
                                                     </div>
-
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/call-dark.svg"
@@ -134,7 +128,6 @@ export default function ProfilePage() {
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <Image
                                                 src="/assets/img/icons/arrow-dark.svg"
                                                 width={16}
@@ -173,7 +166,7 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* Logout */}
+                                    {/* Logout Button */}
                                     <div className="bottom-bar">
                                         <div className="buttons-wrapper">
                                             <button
@@ -209,13 +202,10 @@ export default function ProfilePage() {
                             {/* Right Side */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-
-                                    {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
                                         <div className="icon-wrapper d-flex align-items-center gap-2">
                                             <span className="fs-4 fw-semibold">Profile Details</span>
                                         </div>
-
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
                                             <Link href="/sub-contractor/edit-profile" className="icon">
                                                 <Image
@@ -240,7 +230,6 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* Profile Review Bar */}
                                     <div className="review-bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-5">
                                         <div className="image-box d-flex align-items-center gap-4">
                                             <Image
@@ -256,7 +245,6 @@ export default function ProfilePage() {
                                                 <p className="mb-1 text-gray-light">Whittier, CA 30201</p>
                                             </div>
                                         </div>
-
                                         <div className="right d-flex align-items-center gap-4 flex-wrap">
                                             <div className="rating-icons d-flex align-items-center gap-1 flex-wrap">
                                                 {[1, 2, 3, 4].map((_, i) => (
@@ -283,14 +271,12 @@ export default function ProfilePage() {
                                                     }}
                                                 />
                                             </div>
-
                                             <div className="content">
                                                 <div className="text-black text-center fs-3 fw-bold">4.5/5</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Details Section */}
                                     <div className="review-bar">
                                         <div className="row g-2 mb-4">
                                             <div className="col-xl-3 col-sm-6">
@@ -299,7 +285,6 @@ export default function ProfilePage() {
                                                     <div className="fw-semibold fs-18">Jason Doe</div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">
@@ -308,7 +293,6 @@ export default function ProfilePage() {
                                                     <div className="fw-semibold fs-18">Jason Tiles Limited</div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">
@@ -322,7 +306,6 @@ export default function ProfilePage() {
                                                     </Link>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">
@@ -359,21 +342,18 @@ export default function ProfilePage() {
                                                     <div className="fw-semibold fs-18">New York</div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">State</div>
                                                     <div className="fw-semibold fs-18">NY</div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Zip Code</div>
                                                     <div className="fw-semibold fs-18">10001</div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">
@@ -384,10 +364,8 @@ export default function ProfilePage() {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>

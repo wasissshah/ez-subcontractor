@@ -181,7 +181,7 @@ export default function Header() {
                         authButtons: (
                             <>
                                 <Link href="/auth/login" className="btn btn-outline-dark rounded-3" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-                                <Link href="/auth/account-type" className="btn btn-primary rounded-3" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+                                <Link href="/auth/register" className="btn btn-primary rounded-3" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
                             </>
                         ),
                         iconsButtons: null,
@@ -200,7 +200,7 @@ export default function Header() {
             authButtons: (
                 <>
                     <Link href="/auth/login" className="btn btn-outline-dark rounded-3" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-                    <Link href="/auth/account-type" className="btn btn-primary rounded-3" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+                    <Link href="/auth/register" className="btn btn-primary rounded-3" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
                 </>
             ),
             iconsButtons: null,
