@@ -73,7 +73,7 @@ export default function TransactionsPage() {
                                         <div className="buttons-wrapper flex-grow-1">
                                             <Link
                                                 href="/sub-contractor/change-password"
-                                                className={`custom-btn ${pathname === '/sub-contractor/change-password' ? 'active' : ''}`}
+                                                className={`custom-btn ${pathname === '/subcontractor/change-password' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
@@ -97,7 +97,7 @@ export default function TransactionsPage() {
 
                                             <Link
                                                 href="/sub-contractor/saved-listing"
-                                                className={`custom-btn ${pathname === '/sub-contractor/saved-listing' ? 'active' : ''}`}
+                                                className={`custom-btn ${pathname === '/subcontractor/saved-listing' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
@@ -121,7 +121,7 @@ export default function TransactionsPage() {
 
                                             <Link
                                                 href="/sub-contractor/my-subscription"
-                                                className={`custom-btn ${pathname === '/sub-contractor/my-subscription' ? 'active' : ''}`}
+                                                className={`custom-btn ${pathname === '/subcontractor/my-subscription' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image
@@ -145,7 +145,7 @@ export default function TransactionsPage() {
 
                                             <Link
                                                 href="/sub-contractor/transaction-history"
-                                                className={`custom-btn ${pathname === '/sub-contractor/transaction-history' ? 'active' : ''}`}
+                                                className={`custom-btn ${pathname === '/subcontractor/transaction-history' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image

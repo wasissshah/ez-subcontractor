@@ -97,7 +97,7 @@ export default function SubscribedPage() {
                                         {/* Icon redirect to job-details */}
                                         <div
                                             className="icon"
-                                            onClick={() => router.push('/sub-contractor/job-details')}
+                                            onClick={() => router.push('/subcontractor/job-details')}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <Image src="/assets/img/icons/search-icon1.svg" alt="Go to Job Details" width={14} height={14} />

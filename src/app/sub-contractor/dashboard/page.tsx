@@ -117,7 +117,7 @@ export default function FreeTrialPage() {
                                         {/* Icon redirect to dashboard-subscribed */}
                                         <div
                                             className="icon"
-                                            onClick={() => router.push('/sub-contractor/dashboard-subscribed')}
+                                            onClick={() => router.push('/subcontractor/dashboard-subscribed')}
                                             style={{ cursor: 'pointer' }}
                                         >
                                             <Image

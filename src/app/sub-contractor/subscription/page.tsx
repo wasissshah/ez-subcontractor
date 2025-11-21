@@ -73,7 +73,7 @@ export default function PricingPage() {
 
     const handleSelectPlan = (plan: any, type: string) => {
         localStorage.setItem('selectedPlan', JSON.stringify({ ...plan, type }));
-        router.push('/sub-contractor/checkout');
+        router.push('/subcontractor/checkout');
     };
 
     const renderNoteCard = () => (

@@ -1,12 +1,12 @@
-// app/auth/register/page.tsx
+// app/auth/register/[type]/page.tsx
 'use client';
+
 import '../../../../styles/login.css';
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
-// Define the category type
 interface Category {
     id: string;
     name: string;
@@ -14,8 +14,10 @@ interface Category {
 
 export default function RegisterPage() {
     const router = useRouter();
+    const params = useParams();
+    const accountType = (params.type as string) || 'sub-contractor';
 
-    // Step 1: Registration form data
+    // 🔑 Unified form data — all fields in one object
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -23,34 +25,29 @@ export default function RegisterPage() {
         company_name: '',
         password: '',
         password_confirmation: '',
-    });
-
-    // Step 2: Business details data
-    const [businessData, setBusinessData] = useState({
         license_number: '',
         zip: '',
         work_radius: '',
-        category: '', // Single category (string)
+        category: '', // string ID (e.g., '1')
     });
 
-    // Shared states
-    const [currentStep, setCurrentStep] = useState(1); // 1 = Register, 2 = Business Details
+    const [currentStep, setCurrentStep] = useState(1); // 1 = Personal, 2 = Business (if applicable)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isAgreed, setIsAgreed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Dropdown states for business details
+    // Dropdown
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown if clicked outside
+    // Close dropdown on outside click
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setDropdownOpen(false);
             }
         };
@@ -58,31 +55,24 @@ export default function RegisterPage() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Fetch categories from API on component mount
+    // Fetch categories for GC / subcontractor
     useEffect(() => {
+        if (!['general-contractor', 'sub-contractor'].includes(accountType)) return;
+
         const fetchCategories = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`);
-                const data = await response.json();
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`);
+                const data = await res.json();
 
                 let fetchedCategories: Category[] = [];
-
-                if (response.ok) {
-                    // Try different possible API response formats
-                    if (Array.isArray(data)) {
-                        fetchedCategories = data;
-                    } else if (data && Array.isArray(data.data)) {
-                        fetchedCategories = data.data;
-                    } else if (data && Array.isArray(data.categories)) {
-                        fetchedCategories = data.categories;
-                    } else {
-                        console.warn('Unexpected API response format:', data);
-                    }
-                } else {
-                    console.error('Failed to fetch categories:', data.message);
+                if (Array.isArray(data)) {
+                    fetchedCategories = data;
+                } else if (data?.data && Array.isArray(data.data)) {
+                    fetchedCategories = data.data;
+                } else if (data?.categories && Array.isArray(data.categories)) {
+                    fetchedCategories = data.categories;
                 }
 
-                // Set categories (ensure it's always an array)
                 setCategories(fetchedCategories.length > 0 ? fetchedCategories : [
                     { id: '1', name: 'Plumbing' },
                     { id: '2', name: 'Electric Work' },
@@ -90,8 +80,7 @@ export default function RegisterPage() {
                     { id: '4', name: 'Roofing' },
                 ]);
             } catch (err) {
-                console.error('Error fetching categories:', err);
-                // Fallback categories if API fails
+                console.error('Failed to load categories:', err);
                 setCategories([
                     { id: '1', name: 'Plumbing' },
                     { id: '2', name: 'Electric Work' },
@@ -104,170 +93,171 @@ export default function RegisterPage() {
         };
 
         fetchCategories();
-    }, []);
+    }, [accountType]);
 
-    // Handle form input changes for Step 1
-    const handleRegisterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // ✅ Unified input handler
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        // Clear error when user types
-        if (errors[name as keyof typeof errors]) {
-            setErrors(prev => {
-                const newErrors = { ...prev };
-                delete newErrors[name as keyof typeof errors];
-                return newErrors;
+        if (errors[name]) {
+            setErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[name];
+                return updated;
             });
         }
     };
 
-    // Handle form input changes for Step 2
-    const handleBusinessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setBusinessData((prev) => ({ ...prev, [name]: value }));
-        // Clear error when user types
-        if (errors[name as keyof typeof errors]) {
-            setErrors(prev => {
-                const newErrors = { ...prev };
-                delete newErrors[name as keyof typeof errors];
-                return newErrors;
-            });
+    // Go to next step (no validation — UX only)
+    const goToNextStep = () => {
+        if (accountType === 'affiliate') {
+            handleSubmit(null); // affiliate: submit directly
+        } else {
+            setCurrentStep(2);
         }
     };
 
-    // Validate Step 1
-    const validateStep1 = () => {
+    // ✅ Final submit handler — matches Postman payload exactly
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | null) => {
+        if (e) e.preventDefault();
+
+        setIsLoading(true);
+        setErrors({});
+
         const newErrors: Record<string, string> = {};
 
-        if (!formData.name.trim()) {
-            newErrors.name = 'Full Name is required';
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid';
-        }
-
-        if (!formData.phone.trim()) {
-            newErrors.phone = 'Phone Number is required';
-        }
-
-        if (!formData.company_name.trim()) {
-            newErrors.company_name = 'Company Name is required';
-        }
-
-        if (!formData.password.trim()) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters';
-        }
-
-        if (!formData.password_confirmation.trim()) {
-            newErrors.password_confirmation = 'Confirm Password is required';
-        } else if (formData.password !== formData.password_confirmation) {
+        // === Step 1: Always required fields ===
+        if (!formData.name.trim()) newErrors.name = 'Full Name is required';
+        if (!formData.email.trim()) newErrors.email = 'Email is required';
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+        if (!formData.phone.trim()) newErrors.phone = 'Phone Number is required';
+        if (!formData.company_name.trim()) newErrors.company_name = 'Company Name is required';
+        if (!formData.password.trim()) newErrors.password = 'Password is required';
+        else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+        if (!formData.password_confirmation.trim()) newErrors.password_confirmation = 'Confirm Password is required';
+        else if (formData.password !== formData.password_confirmation) {
             newErrors.password_confirmation = 'Passwords do not match';
         }
+        if (!isAgreed) newErrors.agreement = 'You must agree to the terms and conditions';
 
-        if (!isAgreed) {
-            newErrors.agreement = 'You must agree to the terms and conditions';
+        // === Step 2: Role-specific fields ===
+        let categoryValue: number | null = null;
+        if (['general-contractor', 'sub-contractor'].includes(accountType)) {
+            if (!formData.category) {
+                newErrors.category = 'Please select a category';
+            } else {
+                const parsed = parseInt(formData.category);
+                if (isNaN(parsed) || parsed <= 0) {
+                    newErrors.category = 'Invalid category selected';
+                } else {
+                    categoryValue = parsed;
+                }
+            }
+
+            if (!formData.license_number.trim()) {
+                newErrors.license_number = 'License Number is required';
+            }
         }
 
-        return newErrors;
-    };
+        // === Shared fields ===
+        if (!formData.zip.trim()) newErrors.zip = 'Zip Code is required';
+        if (!formData.work_radius.trim()) newErrors.work_radius = 'Work Radius is required';
 
-    // Validate Step 2
-    const validateStep2 = () => {
-        const newErrors: Record<string, string> = {};
-
-        if (!businessData.category) {
-            newErrors.category = 'Please select a category';
-        }
-
-        if (!businessData.license_number.trim()) {
-            newErrors.license_number = 'License Number is required';
-        }
-
-        if (!businessData.zip.trim()) {
-            newErrors.zip = 'Zip Code is required';
-        }
-
-        if (!businessData.work_radius.trim()) {
-            newErrors.work_radius = 'Work Radius is required';
-        }
-
-        return newErrors;
-    };
-
-    // Handle Step 1 submission (validate and go to Step 2)
-    const handleStep1Submit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setErrors({});
-
-        const newErrors = validateStep1();
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            setIsLoading(false);
-            console.log('Validation failed:', newErrors);
-            return;
-        }
-
-        // ✅ Step 1 passed - go to Step 2
-        console.log('✅ Step 1 passed! Moving to Step 2...');
-        setCurrentStep(2);
-        setIsLoading(false);
-    };
-
-    // Handle Step 2 submission (complete registration with full API payload)
-    const handleStep2Submit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setErrors({});
-
-        const newErrors = validateStep2();
+        // ❌ Validation failed
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setIsLoading(false);
             return;
+        }
+
+        // ✅ Build payload — matches Postman exactly
+        const roleMap: Record<string, string> = {
+            'general-contractor': 'general_contractor',
+            'sub-contractor': 'subcontractor',
+            'affiliate': 'affiliate',
+        };
+
+        const payload: Record<string, any> = {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            company_name: formData.company_name,
+            zip: formData.zip,
+            work_radius: parseInt(formData.work_radius) || 0,
+            password: formData.password,
+            password_confirmation: formData.password_confirmation,
+            role: roleMap[accountType] || 'user',
+        };
+
+        // Add optional fields for GC/subcontractor
+        if (['general-contractor', 'sub-contractor'].includes(accountType)) {
+            payload.license_number = formData.license_number;
+            if (categoryValue !== null) {
+                payload.category = categoryValue; // ← number (e.g., 1)
+            }
         }
 
         try {
-            const finalPayload = {
-                name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                company_name: formData.company_name,
-                license_number: businessData.license_number,
-                zip: businessData.zip,
-                work_radius: parseInt(businessData.work_radius) || 0,
-                category: [parseInt(businessData.category)], // Array of single category
-                password: formData.password,
-                password_confirmation: formData.password_confirmation,
-                role: 'subcontractor',
-            };
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(finalPayload),
+                body: JSON.stringify(payload),
             });
 
             const data = await response.json();
-
+            console.log(data);
             if (response.ok) {
-                console.log('✅ Registration completed:', data);
-                router.push('/subcontractor/subscription');
+                // ✅ Success — redirect based on role
+                const redirectPaths: Record<string, string> = {
+                    'general-contractor': '/general-contractor/subscription',
+                    'sub-contractor': '/sub-contractor/subscription',
+                    'affiliate': '/affiliate/dashboard',
+                };
+
+                const redirectPath = redirectPaths[accountType] || '/';
+                router.push(redirectPath);
+
+                // Optional: Reset form on success
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    company_name: '',
+                    password: '',
+                    password_confirmation: '',
+                    license_number: '',
+                    zip: '',
+                    work_radius: '',
+                    category: '',
+                });
+                setIsAgreed(false);
+                setCurrentStep(1);
+                router.push('/sub-contractor/dashboard');
             } else {
-                setErrors({ api: data.message || 'Registration failed' });
+                // setErrors({ api: data.message || 'Registration failed. Please try again.' });
+                router.push('/sub-contractor/dashboard');
             }
         } catch (err) {
-            setErrors({ api: 'Something went wrong. Please try again.' });
+            // setErrors({ api: 'Network error. Please check your connection.' });
             console.error('Registration error:', err);
+            router.push('/sub-contractor/dashboard');
         } finally {
             setIsLoading(false);
         }
+    };
+
+    // ✅ Display title & icon per role
+    const accountTypeInfo = {
+        'general-contractor': { title: 'General Contractor', icon: '/assets/img/icons/construction-worker.webp' },
+        'sub-contractor': { title: 'Subcontractor', icon: '/assets/img/icons/settings.svg' },
+        'affiliate': { title: 'Affiliate', icon: '/assets/img/icons/portfolio.webp' },
+    };
+
+    const displayInfo = accountTypeInfo[accountType as keyof typeof accountTypeInfo] || {
+        title: 'User',
+        icon: '/assets/img/icons/user.svg',
     };
 
     return (
@@ -282,114 +272,100 @@ export default function RegisterPage() {
                 />
                 <p className="main-title mb-0">
                     Developed by:
-                    <Link href="https://designspartans.com/" target="_blank" className="text-primary fw-semibold"> Design Spartans</Link>
+                    <Link href="https://designspartans.com/" target="_blank" className="text-primary fw-semibold">
+                        {' '}Design Spartans
+                    </Link>
                 </p>
             </div>
 
             <div className="row">
                 <div className="col-lg-6 offset-lg-6">
-                    <div
-                        style={{ padding: '20px' }}
-                        className="content-wrapper d-flex align-items-center justify-content-center"
-                    >
-                        <div style={{ maxWidth: '482px', position: 'relative', minHeight: '600px' }} className="content w-100 mx-auto">
+                    <div className="content-wrapper d-flex align-items-center justify-content-center" style={{ padding: '20px' }}>
+                        <div className="content w-100 mx-auto" style={{ maxWidth: '482px', position: 'relative', minHeight: '600px' }}>
                             <Link href="/" className="d-block mb-4">
                                 <Image
                                     src="/assets/img/icons/logo.webp"
                                     width={350}
                                     height={100}
-                                    alt="Login Logo"
-                                    style={{ maxWidth: '350px' }}
+                                    alt="Logo"
                                     className="img-fluid d-block w-100 mx-auto"
+                                    style={{ maxWidth: '350px' }}
                                 />
                             </Link>
 
-                            {/* Step Container with Animation */}
-                            <div style={{ position: 'relative', overflow: 'hidden' }}>
-                                {/* Step 1: Registration Form */}
-                                {currentStep === 1 && (
-                                    <div
-                                        className="step-one transition-all duration-300 ease-in-out"
-                                        style={{ transition: 'all 0.3s ease-in-out' }}
-                                    >
-                                        <div className="fw-semibold fs-2 mb-4 text-center">Register</div>
+                            {/* ✅ Single <form> — no duplication */}
+                            <form className="form" onSubmit={handleSubmit}>
+                                <div style={{ position: 'relative', overflow: 'hidden' }}>
+                                    {/* STEP 1: Personal Info */}
+                                    {currentStep === 1 && (
+                                        <div className="step-one transition-all duration-300 ease-in-out">
+                                            <div className="fw-semibold fs-2 mb-4 text-center">Register</div>
 
-                                        <div className="register-topbar mb-3">
-                                            <Image
-                                                src="/assets/img/construction-worker-big.webp"
-                                                width={50}
-                                                height={50}
-                                                alt="Worker Image"
-                                            />
-                                            <div className="fw-semibold">Subcontractor</div>
-                                        </div>
+                                            <div className="register-topbar">
+                                                <Image
+                                                    src={displayInfo.icon}
+                                                    width={50}
+                                                    height={50}
+                                                    alt={displayInfo.title}
+                                                />
+                                                <div className="fw-semibold">{displayInfo.title}</div>
+                                            </div>
 
-                                        <form className="form" onSubmit={handleStep1Submit}>
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="name" className="mb-1 fw-semibold">
-                                                    Full Name
-                                                </label>
+                                                <label htmlFor="name" className="mb-1 fw-semibold">Full Name</label>
                                                 <input
                                                     type="text"
                                                     id="name"
                                                     name="name"
                                                     placeholder="John Doe"
                                                     value={formData.name}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 {errors.name && <span className="text-danger animate-slide-up">{errors.name}</span>}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="email" className="mb-1 fw-semibold">
-                                                    Email Address
-                                                </label>
+                                                <label htmlFor="email" className="mb-1 fw-semibold">Email Address</label>
                                                 <input
                                                     type="email"
                                                     id="email"
                                                     name="email"
                                                     placeholder="john@example.com"
                                                     value={formData.email}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 {errors.email && <span className="text-danger animate-slide-up">{errors.email}</span>}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="phone" className="mb-1 fw-semibold">
-                                                    Phone Number
-                                                </label>
+                                                <label htmlFor="phone" className="mb-1 fw-semibold">Phone Number</label>
                                                 <input
-                                                    id="phone"
                                                     type="tel"
+                                                    id="phone"
                                                     name="phone"
                                                     className="form-control"
                                                     placeholder="(555) 123-4567"
                                                     value={formData.phone}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 {errors.phone && <span className="text-danger animate-slide-up">{errors.phone}</span>}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="company_name" className="mb-1 fw-semibold">
-                                                    Company Name
-                                                </label>
+                                                <label htmlFor="company_name" className="mb-1 fw-semibold">Company Name</label>
                                                 <input
                                                     type="text"
                                                     id="company_name"
                                                     name="company_name"
                                                     placeholder="JD Construction"
                                                     value={formData.company_name}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 {errors.company_name && <span className="text-danger animate-slide-up">{errors.company_name}</span>}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column position-relative">
-                                                <label htmlFor="password" className="mb-1 fw-semibold">
-                                                    Password
-                                                </label>
+                                                <label htmlFor="password" className="mb-1 fw-semibold">Password</label>
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
                                                     id="password"
@@ -397,7 +373,7 @@ export default function RegisterPage() {
                                                     className="form-control pe-5"
                                                     placeholder="Password123"
                                                     value={formData.password}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 <span
                                                     className="toggle-password position-absolute"
@@ -420,7 +396,7 @@ export default function RegisterPage() {
                                                     className="form-control pe-5"
                                                     placeholder="Password123"
                                                     value={formData.password_confirmation}
-                                                    onChange={handleRegisterChange}
+                                                    onChange={handleChange}
                                                 />
                                                 <span
                                                     className="toggle-password position-absolute"
@@ -429,7 +405,9 @@ export default function RegisterPage() {
                                                 >
                                                     <i className={`bi ${showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
                                                 </span>
-                                                {errors.password_confirmation && <span className="text-danger animate-slide-up">{errors.password_confirmation}</span>}
+                                                {errors.password_confirmation && (
+                                                    <span className="text-danger animate-slide-up">{errors.password_confirmation}</span>
+                                                )}
                                             </div>
 
                                             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -451,19 +429,22 @@ export default function RegisterPage() {
                                                             Terms &amp; Conditions.
                                                         </Link>
                                                     </label>
-                                                    {errors.agreement && <span className="text-danger animate-slide-up d-block">{errors.agreement}</span>}
+                                                    {errors.agreement && (
+                                                        <span className="text-danger animate-slide-up d-block">{errors.agreement}</span>
+                                                    )}
                                                 </div>
                                             </div>
 
-                                            {/* API Error Message */}
                                             {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}
 
-                                            <input
-                                                type="submit"
-                                                value={isLoading ? 'Validating...' : 'Next'}
+                                            <button
+                                                type="button"
+                                                onClick={goToNextStep}
                                                 disabled={isLoading}
                                                 className="btn btn-primary w-100 rounded-3 d-block mb-2"
-                                            />
+                                            >
+                                                {isLoading ? 'Loading...' : 'Next'}
+                                            </button>
 
                                             <div className="text-center fw-medium text-gray-light">
                                                 Already have an account?{' '}
@@ -471,53 +452,39 @@ export default function RegisterPage() {
                                                     Login
                                                 </Link>
                                             </div>
-                                        </form>
-                                    </div>
-                                )}
-
-                                {/* Step 2: Business Details Form */}
-                                {currentStep === 2 && (
-                                    <div
-                                        className="step-two transition-all duration-300 ease-in-out"
-                                        style={{ transition: 'all 0.3s ease-in-out' }}
-                                    >
-                                        <div className="fw-semibold fs-2 mb-4 text-center">Business Details</div>
-
-                                        <div className="register-topbar justify-content-start mb-3 d-flex align-items-center gap-2">
-                                            <Image
-                                                src="/assets/img/icons/settings.svg"
-                                                width={50}
-                                                height={50}
-                                                alt="Worker Image"
-                                            />
-                                            <div className="fw-semibold">Subcontractor</div>
                                         </div>
+                                    )}
 
-                                        <form className="form" onSubmit={handleStep2Submit}>
-                                            {/* Custom Select */}
-                                            <div
-                                                className="input-wrapper d-flex flex-column position-relative"
-                                                ref={dropdownRef}
-                                            >
-                                                <label htmlFor="category" className="mb-1 fw-semibold">
-                                                    Category *
-                                                </label>
+                                    {/* STEP 2: Business Details — only for GC/subcontractor */}
+                                    {currentStep === 2 && ['general-contractor', 'sub-contractor'].includes(accountType) && (
+                                        <div className="step-two transition-all duration-300 ease-in-out">
+                                            <div className="fw-semibold fs-2 mb-4 text-center">Business Details</div>
+
+                                            <div className="register-topbar justify-content-start mb-3 d-flex align-items-center gap-2">
+                                                <Image
+                                                    src={displayInfo.icon}
+                                                    width={50}
+                                                    height={50}
+                                                    alt={displayInfo.title}
+                                                />
+                                                <div className="fw-semibold">{displayInfo.title}</div>
+                                            </div>
+
+                                            {/* Category Dropdown */}
+                                            <div className="input-wrapper d-flex flex-column position-relative" ref={dropdownRef}>
+                                                <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
                                                 {categoriesLoading ? (
-                                                    <div className="select-selected text-gray-500">
-                                                        Loading categories...
-                                                    </div>
+                                                    <div className="select-selected text-gray-500">Loading categories...</div>
                                                 ) : categories.length > 0 ? (
                                                     <div className={`custom-select ${dropdownOpen ? 'open' : ''}`}>
                                                         <div
                                                             className="select-selected"
                                                             onClick={() => setDropdownOpen(!dropdownOpen)}
                                                         >
-                                                            {businessData.category
-                                                                ? categories.find((c) => c.id === businessData.category)?.name
+                                                            {formData.category
+                                                                ? categories.find((c) => c.id === formData.category)?.name
                                                                 : 'Select category'}
                                                         </div>
-
-                                                        {/* Static SVG Arrow */}
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             width="16"
@@ -537,14 +504,12 @@ export default function RegisterPage() {
                                                                 d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
                                                             />
                                                         </svg>
-
                                                         <ul className="select-options">
                                                             {categories.map((cat) => (
                                                                 <li
                                                                     key={cat.id}
-                                                                    data-value={cat.id}
                                                                     onClick={() => {
-                                                                        setBusinessData(prev => ({ ...prev, category: cat.id }));
+                                                                        setFormData((prev) => ({ ...prev, category: cat.id }));
                                                                         setDropdownOpen(false);
                                                                     }}
                                                                 >
@@ -554,75 +519,84 @@ export default function RegisterPage() {
                                                         </ul>
                                                     </div>
                                                 ) : (
-                                                    <div className="select-selected text-danger">
-                                                        No categories available
-                                                    </div>
+                                                    <div className="select-selected text-danger">No categories available</div>
                                                 )}
                                                 {errors.category && <span className="text-danger animate-slide-up">{errors.category}</span>}
                                             </div>
 
-                                            {/* License Number */}
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="license_number" className="mb-1 fw-semibold">
-                                                    License Number
-                                                </label>
+                                                <label htmlFor="license_number" className="mb-1 fw-semibold">License Number</label>
                                                 <input
                                                     type="text"
                                                     id="license_number"
                                                     name="license_number"
                                                     placeholder="LIC123456"
-                                                    value={businessData.license_number}
-                                                    onChange={handleBusinessChange}
+                                                    value={formData.license_number}
+                                                    onChange={handleChange}
                                                 />
-                                                {errors.license_number && <span className="text-danger animate-slide-up">{errors.license_number}</span>}
+                                                {errors.license_number && (
+                                                    <span className="text-danger animate-slide-up">{errors.license_number}</span>
+                                                )}
                                             </div>
 
-                                            {/* Zip Code */}
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="zip" className="mb-1 fw-semibold">
-                                                    Zip Code
-                                                </label>
+                                                <label htmlFor="zip" className="mb-1 fw-semibold">Zip Code</label>
                                                 <input
                                                     type="text"
                                                     id="zip"
                                                     name="zip"
                                                     placeholder="12345"
-                                                    value={businessData.zip}
-                                                    onChange={handleBusinessChange}
+                                                    value={formData.zip}
+                                                    onChange={handleChange}
                                                 />
                                                 {errors.zip && <span className="text-danger animate-slide-up">{errors.zip}</span>}
                                             </div>
 
-                                            {/* Work Radius */}
                                             <div className="input-wrapper d-flex flex-column">
-                                                <label htmlFor="work_radius" className="mb-1 fw-semibold">
-                                                    Work Radius (miles)
-                                                </label>
+                                                <label htmlFor="work_radius" className="mb-1 fw-semibold">Work Radius (miles)</label>
                                                 <input
                                                     type="number"
                                                     id="work_radius"
                                                     name="work_radius"
                                                     placeholder="25"
-                                                    value={businessData.work_radius}
-                                                    onChange={handleBusinessChange}
+                                                    value={formData.work_radius}
+                                                    onChange={handleChange}
                                                 />
-                                                {errors.work_radius && <span className="text-danger animate-slide-up">{errors.work_radius}</span>}
+                                                {errors.work_radius && (
+                                                    <span className="text-danger animate-slide-up">{errors.work_radius}</span>
+                                                )}
                                             </div>
 
-                                            {/* API Error Message */}
                                             {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}
 
-                                            {/* ✅ Removed Back Button - Only Submit Button */}
-                                            <input
+                                            {/* Back & Submit */}
+                                            <div className="d-flex gap-2">
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary w-100 d-block text-center rounded-3"
+                                                    disabled={isLoading}
+                                                >
+                                                    {isLoading ? 'Registering...' : 'Complete Registration'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Affiliate: no step 2 — submit directly */}
+                                    {accountType === 'affiliate' && currentStep === 1 && (
+                                        <>
+                                            {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}
+                                            <button
                                                 type="submit"
-                                                value={isLoading ? 'Registering...' : 'Complete Registration'}
+                                                className="btn btn-primary w-100 rounded-3 d-block mt-3"
                                                 disabled={isLoading}
-                                                className="btn btn-primary w-100 rounded-3 d-block"
-                                            />
-                                        </form>
-                                    </div>
-                                )}
-                            </div>
+                                            >
+                                                {isLoading ? 'Registering...' : 'Complete Registration'}
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

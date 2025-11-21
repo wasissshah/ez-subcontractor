@@ -231,7 +231,7 @@ export default function AddAttachment() {
                                 <button
                                     type="button"
                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                    onClick={() => router.push('/general-contractor/edit-job-post')}
+                                    onClick={() => router.push('/general_contractor/edit-job-post')}
                                 >
                                     Add Project
                                 </button>

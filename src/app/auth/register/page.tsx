@@ -13,12 +13,12 @@ export default function SelectAccountType() {
 
     const accountTypes = [
         {
-            id: 'general-contractor',
+            id: 'general_contractor',
             title: 'General Contractor',
             icon: '/assets/img/icons/construction-worker.webp',
         },
         {
-            id: 'sub-contractor',
+            id: 'subcontractor',
             title: 'Subcontractor',
             icon: '/assets/img/icons/settings.svg',
         },
@@ -37,7 +37,7 @@ export default function SelectAccountType() {
         }
 
         localStorage.setItem('accountType', selectedType);
-        router.push(`/auth/${selectedType}/register`);
+        router.push(`/auth/register/${selectedType}`);
     };
 
     const handleSelection = (typeId) => {

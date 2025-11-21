@@ -1,4 +1,4 @@
-// app/general-contractor/change-password/page.tsx
+// app/general_contractor/change-password/page.tsx
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
@@ -103,7 +103,7 @@ export default function ChangePassword() {
                                         <div className="buttons-wrapper">
                                             <Link
                                                 href="/general-contractor/change-password"
-                                                className={`custom-btn ${pathname === '/general-contractor/change-password' ? 'active' : ''}`}
+                                                className={`custom-btn ${pathname === '/general_contractor/change-password' ? 'active' : ''}`}
                                             >
                                                 <div className="d-flex align-items-center gap-2">
                                                     <Image

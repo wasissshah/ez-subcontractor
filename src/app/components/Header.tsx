@@ -62,9 +62,9 @@ export default function Header() {
     ];
 
     const getRoleForCurrentPath = () => {
-        if (pathname.startsWith('/auth/affiliate') || pathname.startsWith('/affiliate')) return 'affiliate';
-        if (pathname.startsWith('/auth/sub-contractor') || pathname.startsWith('/sub-contractor')) return 'sub-contractor';
-        if (pathname.startsWith('/auth/general-contractor') || pathname.startsWith('/general-contractor')) return 'general-contractor';
+        if (pathname.startsWith('/auth/register/affiliate') || pathname.startsWith('/affiliate')) return 'affiliate';
+        if (pathname.startsWith('/auth/register/subcontractor') || pathname.startsWith('/subcontractor')) return 'sub-contractor';
+        if (pathname.startsWith('/auth/register/general_contractor') || pathname.startsWith('/general_contractor')) return 'general_contractor';
         return null;
     };
 
@@ -139,7 +139,7 @@ export default function Header() {
             );
 
             switch (currentPathRole) {
-                case 'general-contractor':
+                case 'general_contractor':
                     return {
                         menuItems: [
                             { href: 'dashboard', label: 'Dashboard' },
@@ -223,7 +223,7 @@ export default function Header() {
                         <span className="line line-3"></span>
                     </button>
 
-                    <nav id="primary-navigation" className={isMenuOpen ? 'd-flex flex-column' : 'd-none d-lg-flex'} aria-hidden={!isMenuOpen}>
+                    <nav id="primary-navigation" className={isMenuOpen ? 'd-flex' : 'd-none d-lg-flex'} aria-hidden={!isMenuOpen}>
                         <ul className="menu-links mb-0">
                             {menuItems.map((item, index) => (
                                 <li key={index}>

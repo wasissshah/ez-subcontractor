@@ -29,7 +29,7 @@ export default function RegisterPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         console.log('Form submitted:', formData);
-        router.push('/auth/subcontractor/business-details');
+        router.push('/affiliate/subscription');
     };
 
     return (
@@ -76,12 +76,12 @@ export default function RegisterPage() {
 
                             <div className="register-topbar mb-3">
                                 <Image
-                                    src="/assets/img/icons/settings.svg"
+                                    src="/assets/img/icons/portfolio.webp"
                                     width={50}
                                     height={50}
                                     alt="Worker Image"
                                 />
-                                <div className="fw-semibold">Subcontractor</div>
+                                <div className="fw-semibold">Affiliate</div>
                             </div>
 
                             <form className="form" onSubmit={handleSubmit}>
@@ -93,9 +93,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="fullName"
                                         name="fullName"
-                                        placeholder="Jason Doe"
                                         value={formData.fullName}
                                         onChange={handleChange}
+                                        placeholder="Jason Doe"
                                     />
                                 </div>
 
@@ -107,9 +107,9 @@ export default function RegisterPage() {
                                         type="text"
                                         id="companyName"
                                         name="companyName"
-                                        placeholder="Jason Tiles Limited"
                                         value={formData.companyName}
                                         onChange={handleChange}
+                                        placeholder="Jason Tiles Limited"
                                     />
                                 </div>
 
@@ -121,9 +121,9 @@ export default function RegisterPage() {
                                         type="email"
                                         id="email"
                                         name="email"
-                                        placeholder="hello@example.com"
                                         value={formData.email}
                                         onChange={handleChange}
+                                        placeholder="hello@example.com"
                                     />
                                 </div>
 
@@ -135,10 +135,9 @@ export default function RegisterPage() {
                                         id="phone"
                                         name="phone"
                                         type="tel"
-                                        className="form-control"
-                                        placeholder="(000) 000-0000"
                                         value={formData.phone}
                                         onChange={handleChange}
+                                        placeholder="(000) 000-0000"
                                     />
                                 </div>
 
@@ -150,17 +149,20 @@ export default function RegisterPage() {
                                         type={showPassword ? 'text' : 'password'}
                                         id="password"
                                         name="password"
-                                        className="form-control pe-5"
-                                        placeholder="Enter password"
                                         value={formData.password}
                                         onChange={handleChange}
+                                        placeholder="Enter password"
                                     />
                                     <span
                                         className="toggle-password position-absolute"
                                         style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
-                                        <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+                                        <i
+                                            className={`bi ${
+                                                showPassword ? 'bi-eye' : 'bi-eye-slash'
+                                            }`}
+                                        ></i>
                                     </span>
                                 </div>
 
@@ -172,10 +174,9 @@ export default function RegisterPage() {
                                         type={showConfirmPassword ? 'text' : 'password'}
                                         id="confirmPassword"
                                         name="confirmPassword"
-                                        className="form-control pe-5"
-                                        placeholder="Re enter password"
                                         value={formData.confirmPassword}
                                         onChange={handleChange}
+                                        placeholder="Re-enter password"
                                     />
                                     <span
                                         className="toggle-password position-absolute"
@@ -190,30 +191,25 @@ export default function RegisterPage() {
                                     </span>
                                 </div>
 
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <div className="form-check">
-                                        <input
-                                            className="form-check-input"
-                                            type="checkbox"
-                                            checked={isAgreed}
-                                            onChange={() => setIsAgreed(!isAgreed)}
-                                            id="agreement"
-                                        />
-                                        <label
-                                            className="form-check-label fw-semibold"
-                                            htmlFor="agreement"
-                                        >
-                                            By registering, you confirm that you have reviewed and
-                                            accepted our{' '}
-                                            <Link href="#" className="text-primary">
-                                                Privacy Policy
-                                            </Link>{' '}
-                                            and{' '}
-                                            <Link href="#" className="text-primary">
-                                                Terms &amp; Conditions.
-                                            </Link>
-                                        </label>
-                                    </div>
+                                <div className="form-check my-2">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        checked={isAgreed}
+                                        onChange={(e) => setIsAgreed(e.target.checked)}
+                                        id="agreement"
+                                    />
+                                    <label className="form-check-label fw-semibold" htmlFor="agreement">
+                                        By registering, you accept our{' '}
+                                        <Link href="#" className="text-primary">
+                                            Privacy Policy
+                                        </Link>{' '}
+                                        and{' '}
+                                        <Link href="#" className="text-primary">
+                                            Terms & Conditions
+                                        </Link>
+                                        .
+                                    </label>
                                 </div>
 
                                 <input
@@ -224,7 +220,7 @@ export default function RegisterPage() {
 
                                 <div className="text-center fw-medium text-gray-light">
                                     Already have an account?{' '}
-                                    <Link href="#" className="fw-semibold text-black">
+                                    <Link href="/auth/login" className="fw-semibold text-black">
                                         Login
                                     </Link>
                                 </div>

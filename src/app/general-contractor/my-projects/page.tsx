@@ -49,7 +49,7 @@ export default function DashboardPage() {
     };
 
     const handleViewDetails = () => {
-        router.push('/general-contractor/job-details');
+        router.push('/general_contractor/job-details');
     };
 
     return (

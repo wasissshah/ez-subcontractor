@@ -58,7 +58,7 @@ export default function BusinessDetails() {
         console.log({ category, licenseNumber, zipCode, workRadius });
 
         // ✅ Redirect to subscription page
-        router.push('/sub-contractor/subscription');
+        router.push('/subcontractor/subscription');
     };
 
     return (

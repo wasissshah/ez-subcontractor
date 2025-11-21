@@ -62,7 +62,10 @@
   margin: 0 auto;
   margin-bottom: 10px;
 }
-.hero-sec.login .content-wrapper .content .form {
+.hero-sec.login .content-wrapper .content .form,
+.hero-sec.login .content-wrapper .content .step-one,
+.hero-sec.login .content-wrapper .content .step-two,
+.hero-sec.login .content-wrapper .content .step-three {
   display: grid;
   gap: 20px;
 }

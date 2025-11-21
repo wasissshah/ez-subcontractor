@@ -180,7 +180,7 @@ export default function PostAd() {
                                 <button
                                     type="button"
                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                    onClick={() => router.push('/general-contractor/view-more-reviews')}
+                                    onClick={() => router.push('/general_contractor/view-more-reviews')}
                                 >
                                     Add Project
                                 </button>

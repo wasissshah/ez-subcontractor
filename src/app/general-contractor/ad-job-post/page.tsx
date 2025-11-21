@@ -191,7 +191,7 @@ export default function PostAd() {
 
                                 {/* Add Project Button */}
                                 <button
-                                    onClick={() => router.push('/general-contractor/add-attachment')}
+                                    onClick={() => router.push('/general_contractor/add-attachment')}
                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
                                 >
                                     Add Project

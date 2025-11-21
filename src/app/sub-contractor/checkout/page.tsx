@@ -61,7 +61,7 @@ export default function CheckoutPage() {
 
     // ✅ Handle payment confirm
     const handleConfirmPayment = () => {
-        router.push('/sub-contractor/success');
+        router.push('/subcontractor/success');
     };
 
     if (!selectedPlan) return null; // loading state if plan not yet loaded
