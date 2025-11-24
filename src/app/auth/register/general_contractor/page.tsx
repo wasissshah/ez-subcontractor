@@ -293,13 +293,13 @@ export default function RegisterPage() {
                                         value={formData.password}
                                         onChange={handleChange} // ✅ Fixed
                                     />
-                                    <span
-                                        className="toggle-password position-absolute"
-                                        style={{right: '10px', top: '38px', cursor: 'pointer'}}
-                                        onClick={() => setShowPassword(!showPassword)} // ✅ Fixed
-                                    >
-                                                <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                                            </span>
+                                    {/*<span*/}
+                                    {/*    className="toggle-password position-absolute"*/}
+                                    {/*    style={{right: '10px', top: '38px', cursor: 'pointer'}}*/}
+                                    {/*    onClick={() => setShowPassword(!showPassword)} // ✅ Fixed*/}
+                                    {/*>*/}
+                                    {/*            <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>*/}
+                                    {/*        </span>*/}
                                     {errors.password && (
                                         <span className="text-danger animate-slide-up">{errors.password}</span>
                                     )}
@@ -317,13 +317,13 @@ export default function RegisterPage() {
                                         value={formData.password_confirmation}
                                         onChange={handleChange} // ✅ Fixed
                                     />
-                                    <span
-                                        className="toggle-password position-absolute"
-                                        style={{right: '10px', top: '38px', cursor: 'pointer'}}
-                                        onclick={() => setShowConfirmPassword(!showConfirmPassword)} // ✅ Fixed
-                                    >
-                                                <i className={`bi ${showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                                            </span>
+                                    {/*<span*/}
+                                    {/*    className="toggle-password position-absolute"*/}
+                                    {/*    style={{right: '10px', top: '38px', cursor: 'pointer'}}*/}
+                                    {/*    onclick={() => setShowConfirmPassword(!showConfirmPassword)} // ✅ Fixed*/}
+                                    {/*>*/}
+                                    {/*            <i className={`bi ${showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>*/}
+                                    {/*        </span>*/}
                                     {errors.password_confirmation && (
                                         <span
                                             className="text-danger animate-slide-up">{errors.password_confirmation}</span>
