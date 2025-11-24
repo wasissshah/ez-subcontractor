@@ -65,7 +65,10 @@ export default function LoginPage() {
                 localStorage.setItem('userEmail', email);
                 localStorage.setItem('token', token);
 
-                router.push('/sub-contractor/dashboard');
+                console.log(data);
+                console.log(data.data.user.role);
+
+                // router.push('/sub-contractor/dashboard');
 
             } else {
                 setError(data.message || 'Invalid email or password');
