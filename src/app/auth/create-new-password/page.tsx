@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import '../../../styles/login.css';
@@ -15,7 +15,26 @@ export default function CreateNewPassword() {
     const [success, setSuccess] = useState('');
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // 🔑 Load email & otp from localStorage
+    const [email, setEmail] = useState<string | null>(null);
+    const [otp, setOtp] = useState<string | null>(null);
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem('forgotPasswordEmail');
+        const savedOtp = localStorage.getItem('verifiedOtp'); // We'll set this in VerifyEmail
+
+        // if (!savedEmail || !savedOtp) {
+        //     router.push('/auth/forget-password');
+        //     return;
+        // }
+
+
+
+        setEmail(savedEmail);
+        setOtp(savedOtp);
+    }, [router]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess('');
@@ -33,12 +52,53 @@ export default function CreateNewPassword() {
             return;
         }
 
-        setSuccess('Password changed successfully!');
-        setPassword('');
-        setConfirmPassword('');
+        if (!email || !otp) {
+            setError('Session expired. Please start again.');
+            return;
+        }
 
-        // ✅ Redirect to login after success
-        setTimeout(() => router.push('/auth/login'), 1500);
+        try {
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('otp', otp);
+            formData.append('new_password', password);
+            formData.append('confirmation_password', password);
+
+            console.log(email);
+            console.log(otp);
+            console.log(password);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // ✅ Success: cleanup and redirect
+                // localStorage.removeItem('forgotPasswordEmail');
+                // localStorage.removeItem('verifiedOtp');
+                setSuccess('Password changed successfully!');
+
+                // setTimeout(() => {
+                //     router.push('/auth/login');
+                // }, 1500);
+            } else {
+                let errorMessage = 'Failed to reset password. Please try again.';
+                if (typeof data.message === 'string') {
+                    errorMessage = data.message;
+                } else if (Array.isArray(data.message)) {
+                    errorMessage = data.message[0];
+                }
+                setError(errorMessage);
+            }
+        } catch (err) {
+            setError('Network error. Please check your connection.');
+        }
     };
 
     const EyeIcon = ({ open }: { open: boolean }) => (
@@ -102,7 +162,7 @@ export default function CreateNewPassword() {
 
                             <form className="form" onSubmit={handleSubmit}>
                                 {/* New Password */}
-                                <div className="input-wrapper d-flex flex-column position-relative mb-3">
+                                <div className="input-wrapper d-flex flex-column position-relative">
                                     <label htmlFor="password" className="mb-1 fw-semibold">
                                         New Password *
                                     </label>
@@ -124,7 +184,7 @@ export default function CreateNewPassword() {
                                 </div>
 
                                 {/* Confirm Password */}
-                                <div className="input-wrapper d-flex flex-column position-relative mb-3">
+                                <div className="input-wrapper d-flex flex-column position-relative">
                                     <label htmlFor="confirm_password" className="mb-1 fw-semibold">
                                         Confirm Password *
                                     </label>

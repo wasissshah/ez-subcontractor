@@ -47,9 +47,12 @@
   font-weight: 600;
   color: #000000;
   margin-bottom: 15px;
+  border: none;
+  border: 1px solid #124944;
+  text-align: center;
 }
 .hero-sec.login .content-wrapper .content .numbers .number.active {
-  border: 1px solid #000000;
+  border: none;
 }
 .hero-sec.login .content-wrapper .content .timer-button {
   display: flex;
@@ -62,10 +65,7 @@
   margin: 0 auto;
   margin-bottom: 10px;
 }
-.hero-sec.login .content-wrapper .content .form,
-.hero-sec.login .content-wrapper .content .step-one,
-.hero-sec.login .content-wrapper .content .step-two,
-.hero-sec.login .content-wrapper .content .step-three {
+.hero-sec.login .content-wrapper .content .form {
   display: grid;
   gap: 20px;
 }

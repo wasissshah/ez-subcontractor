@@ -12,12 +12,12 @@ export default function ForgotPassword() {
     const [message, setMessage] = useState('');
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setMessage('');
 
-        // ✅ Validation
+        // ✅ Client-side validation
         if (!email.trim()) {
             setError('Email is required');
             return;
@@ -28,14 +28,40 @@ export default function ForgotPassword() {
             return;
         }
 
-        // ✅ Dummy Success Simulation
-        setMessage('Password reset link has been sent to your email!');
-        setEmail('');
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/forgot-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
 
-        // ✅ Redirect to verify-email page after success
-        setTimeout(() => {
-            router.push('/auth/verify-email');
-        }, 1500); // 1.5s delay for message display
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                // ✅ Success: show message and redirect after delay
+                setMessage('Password reset link has been sent to your email!');
+                setEmail('');
+
+                localStorage.setItem('forgotPasswordEmail', email);
+                setTimeout(() => {
+                    router.push('/auth/verify-email');
+                }, 1500);
+            } else {
+                // ❌ Handle backend error (NestJS format)
+                let errorMessage = 'Something went wrong. Please try again.';
+                if (Array.isArray(data.message)) {
+                    errorMessage = data.message[0];
+                } else if (typeof data.message === 'string') {
+                    errorMessage = data.message;
+                }
+                setError(errorMessage);
+            }
+        } catch (err) {
+            setError('Network error. Please check your internet connection.');
+        }
     };
 
     return (

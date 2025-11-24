@@ -53,8 +53,11 @@ $danger: #DC2626;
           font-weight: 600;
           color: #000000;
           margin-bottom: 15px;
+          border: none;
+          border: 1px solid #124944;
+          text-align: center;
           &.active{
-            border: 1px solid #000000;
+            border: none;
           }
         }
       }

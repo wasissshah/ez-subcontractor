@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // ✅ Added import
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import '../../../styles/login.css';
 
@@ -10,32 +10,47 @@ export default function VerifyEmail() {
     const [otp, setOtp] = useState(['', '', '', '']);
     const [timer, setTimer] = useState(59);
     const [error, setError] = useState('');
+    const [email, setEmail] = useState<string | null>(null);
     const router = useRouter();
 
-    // ⏱ Timer countdown
+    // 🔑 Load email from localStorage + start timer
     useEffect(() => {
-        if (timer === 0) return;
-        const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
-        return () => clearInterval(interval);
-    }, [timer]);
+        const savedEmail = localStorage.getItem('forgotPasswordEmail');
+        console.log(savedEmail);
+        if (!savedEmail) {
+            router.push('/auth/forgot-password');
+            return;
+        }
+        setEmail(savedEmail);
 
-    // 🔢 OTP input change
+        const interval = setInterval(() => {
+            setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [router]);
+
+    // 🔢 Handle OTP input
     const handleChange = (index: number, value: string) => {
         if (/^\d*$/.test(value)) {
             const newOtp = [...otp];
             newOtp[index] = value.slice(-1);
             setOtp(newOtp);
 
-            // Auto focus next input
-            const nextInput = document.getElementById(`otp-${index + 1}`);
-            if (value && nextInput) (nextInput as HTMLInputElement).focus();
+            if (value && index < 3) {
+                const nextInput = document.getElementById(`otp-${index + 1}`);
+                if (nextInput) (nextInput as HTMLInputElement).focus();
+            }
         }
     };
 
-    // ✅ Submit handler
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    // ✅ Verify OTP
+    const handleSubmit = async () => {
         setError('');
+
+        if (!email) {
+            setError('Email not found. Please try again.');
+            return;
+        }
 
         if (otp.some((d) => d === '')) {
             setError('Please enter all OTP digits');
@@ -43,19 +58,69 @@ export default function VerifyEmail() {
         }
 
         const enteredOtp = otp.join('');
-        if (enteredOtp === '4125') {
-            alert('OTP verified successfully!');
-            router.push('/auth/create-new-password'); // ✅ Next page
-        } else {
-            setError('Invalid OTP, please try again.');
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/verify-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp: enteredOtp }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('verifiedOtp', enteredOtp); // cleanup
+                router.push('/auth/create-new-password');
+            } else {
+                let errorMessage = 'Invalid OTP, please try again.';
+                if (typeof data.message === 'string') {
+                    errorMessage = data.message;
+                } else if (Array.isArray(data.message)) {
+                    errorMessage = data.message[0];
+                }
+                setError(errorMessage);
+            }
+        } catch (err) {
+            setError('Network error. Please check your internet connection.');
         }
     };
 
-    // 🔁 Resend OTP
-    const handleResend = () => {
-        setOtp(['', '', '', '']);
-        setTimer(59);
-        alert('OTP resent!');
+    // 🔁 Resend OTP via API (no redirect)
+    const handleResend = async () => {
+        if (!email) {
+            setError('Email not found. Please go back and try again.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/forgot-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setTimer(59);
+                setOtp(['', '', '', '']);
+                setError('');
+            } else {
+                let errorMessage = 'Failed to resend OTP. Please try again.';
+                if (typeof data.message === 'string') {
+                    errorMessage = data.message;
+                } else if (Array.isArray(data.message)) {
+                    errorMessage = data.message[0];
+                }
+                setError(errorMessage);
+            }
+        } catch (err) {
+            setError('Network error. Please try again.');
+        }
     };
 
     return (
@@ -108,6 +173,7 @@ export default function VerifyEmail() {
                                         className={`number ${digit ? 'active' : ''}`}
                                         value={digit}
                                         onChange={(e) => handleChange(index, e.target.value)}
+                                        inputMode="numeric"
                                     />
                                 ))}
                             </div>
@@ -126,35 +192,38 @@ export default function VerifyEmail() {
                                 </div>
                             </div>
 
-                            {/* Resend */}
-                            <div
-                                style={{ marginBottom: 20 }}
-                                className="detail fw-medium text-center text-gray-light"
-                            >
-                                Didn’t receive a code?{' '}
-                                <button
-                                    type="button"
-                                    onClick={handleResend}
-                                    className="fw-semibold text-black border-0 bg-transparent"
+                            {/* Resend OTP — Only when timer is 0 */}
+                            {timer === 0 && (
+                                <div
+                                    style={{ marginBottom: 20 }}
+                                    className="detail fw-medium text-center text-gray-light"
                                 >
-                                    Resend
-                                </button>
-                            </div>
+                                    Didn’t receive a code?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={handleResend}
+                                        className="fw-semibold text-primary border-0 bg-transparent"
+                                        style={{ textDecoration: 'underline' }}
+                                    >
+                                        Resend
+                                    </button>
+                                </div>
+                            )}
 
-                            {/* Error */}
+                            {/* Error Message */}
                             {error && <p className="text-danger text-center mb-2">{error}</p>}
 
-                            {/* Buttons */}
+                            {/* Action Buttons */}
                             <div className="buttons-wrapper d-flex align-items-center gap-4">
                                 <button
                                     type="button"
-                                    onClick={() => router.push('/auth/forget-password')}
+                                    onClick={() => router.push('/auth/forgot-password')}
                                     className="btn btn-outline-dark rounded-3 justify-content-center w-100"
                                 >
                                     Back
                                 </button>
                                 <button
-                                    type="submit"
+                                    type="button"
                                     onClick={handleSubmit}
                                     className="btn btn-primary rounded-3 justify-content-center w-100"
                                 >
