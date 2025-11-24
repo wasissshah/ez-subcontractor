@@ -76,10 +76,9 @@ export default function LoginPage() {
             }
 
         } catch (err) {
-            // setError('Something went wrong. Please try again.');
+            setError('Something went wrong. Please try again.');
             console.error('Login error:', err);
             setIsLoading(false); // 🔄 Re-enable button
-            router.push('/sub-contractor/dashboard');
         }
     };
 
