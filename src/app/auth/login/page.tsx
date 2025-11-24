@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('subcontractor@yopmail.com');
-    const [password, setPassword] = useState('NewPassword123!');
+    const [email, setEmail] = useState('admin_s@gmail.com');
+    const [password, setPassword] = useState('Password123');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
@@ -64,11 +64,27 @@ export default function LoginPage() {
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
                 localStorage.setItem('token', token);
+                localStorage.setItem('role', data.data.user.role);
+
+                const role = data.data.user.role;
 
                 console.log(data);
                 console.log(data.data.user.role);
 
-                // router.push('/sub-contractor/dashboard');
+
+
+
+                if (role === 'general_contractor') {
+                    router.push('/general-contractor/dashboard');
+                }
+                if (role === 'subcontractor') {
+                    router.push('/subcontractor/subscription');
+                }
+                if (role === 'affiliate') {
+                    router.push('/affiliate/subscription');
+                }
+
+                setIsLoading(false);
 
             } else {
                 setError(data.message || 'Invalid email or password');

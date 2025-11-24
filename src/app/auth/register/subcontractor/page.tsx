@@ -212,7 +212,7 @@ export default function RegisterPage() {
                 // ✅ Success — redirect based on role
                 const redirectPaths: Record<string, string> = {
                     'general-contractor': '/general-contractor/subscription',
-                    'sub-contractor': '/sub-contractor/subscription',
+                    'sub-contractor': '/subcontractor/subscription',
                     'affiliate': '/affiliate/dashboard',
                 };
 
@@ -234,15 +234,15 @@ export default function RegisterPage() {
                 });
                 setIsAgreed(false);
                 setCurrentStep(1);
-                router.push('/sub-contractor/dashboard');
+                router.push('/subcontractor/dashboard');
             } else {
                 // setErrors({ api: data.message || 'Registration failed. Please try again.' });
-                router.push('/sub-contractor/dashboard');
+                router.push('/subcontractor/dashboard');
             }
         } catch (err) {
             // setErrors({ api: 'Network error. Please check your connection.' });
             console.error('Registration error:', err);
-            router.push('/sub-contractor/dashboard');
+            router.push('/subcontractor/dashboard');
         } finally {
             setIsLoading(false);
         }

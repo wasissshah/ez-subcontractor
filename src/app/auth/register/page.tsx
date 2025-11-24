@@ -35,14 +35,13 @@ export default function SelectAccountType() {
             setError('Please select an account type');
             return;
         }
-
-        localStorage.setItem('accountType', selectedType);
         router.push(`/auth/register/${selectedType}`);
     };
 
     const handleSelection = (typeId) => {
         setSelectedType(typeId);
         localStorage.setItem('role', typeId);
+        console.log(typeId);
     };
 
     return (
