@@ -13,10 +13,8 @@ export default function VerifyEmail() {
     const [email, setEmail] = useState<string | null>(null);
     const router = useRouter();
 
-    // 🔑 Load email from localStorage + start timer
     useEffect(() => {
         const savedEmail = localStorage.getItem('forgotPasswordEmail');
-        console.log(savedEmail);
         if (!savedEmail) {
             router.push('/auth/forgot-password');
             return;
@@ -29,7 +27,6 @@ export default function VerifyEmail() {
         return () => clearInterval(interval);
     }, [router]);
 
-    // 🔢 Handle OTP input
     const handleChange = (index: number, value: string) => {
         if (/^\d*$/.test(value)) {
             const newOtp = [...otp];
@@ -43,7 +40,6 @@ export default function VerifyEmail() {
         }
     };
 
-    // ✅ Verify OTP
     const handleSubmit = async () => {
         setError('');
 
@@ -71,7 +67,7 @@ export default function VerifyEmail() {
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('verifiedOtp', enteredOtp); // cleanup
+                localStorage.setItem('verifiedOtp', enteredOtp);
                 router.push('/auth/create-new-password');
             } else {
                 let errorMessage = 'Invalid OTP, please try again.';
@@ -87,7 +83,6 @@ export default function VerifyEmail() {
         }
     };
 
-    // 🔁 Resend OTP via API (no redirect)
     const handleResend = async () => {
         if (!email) {
             setError('Email not found. Please go back and try again.');
@@ -122,6 +117,9 @@ export default function VerifyEmail() {
             setError('Network error. Please try again.');
         }
     };
+
+    // ✅ Check if all OTP boxes are filled
+    const isOtpComplete = otp.every(digit => digit !== '');
 
     return (
         <section className="hero-sec login overflow-hidden position-static">
@@ -162,7 +160,6 @@ export default function VerifyEmail() {
                                 Verify Email
                             </div>
 
-                            {/* OTP Inputs */}
                             <div className="numbers mb-3 d-flex justify-content-center gap-3">
                                 {otp.map((digit, index) => (
                                     <input
@@ -178,7 +175,6 @@ export default function VerifyEmail() {
                                 ))}
                             </div>
 
-                            {/* Timer */}
                             <div className="timer-button d-flex align-items-center justify-content-center mb-2">
                                 <Image
                                     src="/assets/img/icons/timer.svg"
@@ -192,7 +188,6 @@ export default function VerifyEmail() {
                                 </div>
                             </div>
 
-                            {/* Resend OTP — Only when timer is 0 */}
                             {timer === 0 && (
                                 <div
                                     style={{ marginBottom: 20 }}
@@ -210,10 +205,8 @@ export default function VerifyEmail() {
                                 </div>
                             )}
 
-                            {/* Error Message */}
                             {error && <p className="text-danger text-center mb-2">{error}</p>}
 
-                            {/* Action Buttons */}
                             <div className="buttons-wrapper d-flex align-items-center gap-4">
                                 <button
                                     type="button"
@@ -226,6 +219,12 @@ export default function VerifyEmail() {
                                     type="button"
                                     onClick={handleSubmit}
                                     className="btn btn-primary rounded-3 justify-content-center w-100"
+                                    // ✅ Disable until all OTP boxes are filled
+                                    disabled={!isOtpComplete}
+                                    style={{
+                                        opacity: !isOtpComplete ? 0.6 : 1,
+                                        cursor: !isOtpComplete ? 'not-allowed' : 'pointer',
+                                    }}
                                 >
                                     Next
                                 </button>

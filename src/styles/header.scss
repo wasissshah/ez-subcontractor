@@ -141,7 +141,6 @@ $danger: #DC2626;
 }
 .notification-list {
   padding: 10px 0;
-
   .date-group-heading {
     font-size: 1rem;
     font-weight: 500;
@@ -150,7 +149,6 @@ $danger: #DC2626;
     margin-top: 10px;
     margin-bottom: 0;
   }
-
   .notification-item {
     padding: 15px 20px;
     cursor: pointer;
@@ -222,7 +220,25 @@ $danger: #DC2626;
     background-color: $primary;
   }
 }
-
+.header-dashboard{
+  .header-wrapper{
+    #primary-navigation{
+      justify-content: space-between;
+      flex: 2 1;
+      .menu-links{
+        li{
+          a.active{
+            background-color: #272727 !important;
+            color: white;
+          }
+        }
+      }
+      .buttons{
+        flex: unset;
+      }
+    }
+  }
+}
 
 
 /*Media Query */
@@ -230,6 +246,15 @@ $danger: #DC2626;
   .header {
     .hamburger {
       display: none;
+    }
+  }
+  .header-dashboard{
+    .header-wrapper{
+      #primary-navigation{
+        .menu-links{
+          transform: translateX(70px);
+        }
+      }
     }
   }
 }

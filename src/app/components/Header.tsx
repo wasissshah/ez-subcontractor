@@ -209,8 +209,11 @@ export default function Header() {
 
     const { menuItems, authButtons, iconsButtons } = getNavigation();
 
+    // 🔽 Sirf yeh line change hui hai — ek conditional class add ki gayi hai
+    const headerClass = getRoleForCurrentPath() ? 'header header-dashboard' : 'header header-public';
+
     return (
-        <header className="header">
+        <header className={headerClass}>
             <div className="container">
                 <div className="header-wrapper">
                     <Link href="/" className="logo" aria-label="Home">

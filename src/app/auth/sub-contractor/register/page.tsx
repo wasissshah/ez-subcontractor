@@ -85,7 +85,7 @@ export default function RegisterPage() {
                             </div>
 
                             <form className="form" onSubmit={handleSubmit}>
-                                <div className="input-wrapper d-flex flex-column">
+                                <div className="input-wrapper d-flex flex-column mb-3">
                                     <label htmlFor="fullName" className="mb-1 fw-semibold">
                                         Full Name
                                     </label>
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                                     />
                                 </div>
 
-                                <div className="input-wrapper d-flex flex-column">
+                                <div className="input-wrapper d-flex flex-column mb-3">
                                     <label htmlFor="companyName" className="mb-1 fw-semibold">
                                         Company Name
                                     </label>
@@ -113,7 +113,7 @@ export default function RegisterPage() {
                                     />
                                 </div>
 
-                                <div className="input-wrapper d-flex flex-column">
+                                <div className="input-wrapper d-flex flex-column mb-3">
                                     <label htmlFor="email" className="mb-1 fw-semibold">
                                         Email Address
                                     </label>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                                     />
                                 </div>
 
-                                <div className="input-wrapper d-flex flex-column">
+                                <div className="input-wrapper d-flex flex-column mb-3">
                                     <label htmlFor="phone" className="mb-1 fw-semibold">
                                         Phone Number
                                     </label>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                                     />
                                 </div>
 
-                                <div className="input-wrapper d-flex flex-column position-relative">
+                                <div className="input-wrapper d-flex flex-column position-relative mb-3">
                                     <label htmlFor="password" className="mb-1 fw-semibold">
                                         Password
                                     </label>
@@ -164,7 +164,7 @@ export default function RegisterPage() {
                                     </span>
                                 </div>
 
-                                <div className="input-wrapper d-flex flex-column position-relative">
+                                <div className="input-wrapper d-flex flex-column position-relative mb-3">
                                     <label htmlFor="confirmPassword" className="mb-1 fw-semibold">
                                         Confirm Password
                                     </label>

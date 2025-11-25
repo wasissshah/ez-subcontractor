@@ -1,4 +1,3 @@
-// app/auth/register/[type]/page.tsx
 'use client';
 
 import '../../../../styles/login.css';
@@ -17,7 +16,6 @@ export default function RegisterPage() {
     const params = useParams();
     const accountType = (params.type as string) || 'sub-contractor';
 
-    // 🔑 Unified form data — all fields in one object
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -28,23 +26,24 @@ export default function RegisterPage() {
         license_number: '',
         zip: '',
         work_radius: '',
-        category: '', // string ID (e.g., '1')
+        category: '',
     });
+    console.log(formData);
 
-    const [currentStep, setCurrentStep] = useState(1); // 1 = Personal, 2 = Business (if applicable)
+    const [currentStep, setCurrentStep] = useState(1); // 1 = Personal, 2 = Business
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isAgreed, setIsAgreed] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Dropdown
+    // Category dropdown
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown on outside click
+    // Close dropdown outside click
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -55,7 +54,7 @@ export default function RegisterPage() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Fetch categories for GC / subcontractor
+    // Fetch categories (for GC / subcontractor)
     useEffect(() => {
         if (!['general-contractor', 'sub-contractor'].includes(accountType)) return;
 
@@ -95,7 +94,7 @@ export default function RegisterPage() {
         fetchCategories();
     }, [accountType]);
 
-    // ✅ Unified input handler
+    // 🔁 Input handler
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -108,25 +107,22 @@ export default function RegisterPage() {
         }
     };
 
-    // Go to next step (no validation — UX only)
+    // ➡️ Go to business step (UI only — no API)
     const goToNextStep = () => {
-        if (accountType === 'affiliate') {
-            handleSubmit(null); // affiliate: submit directly
-        } else {
-            setCurrentStep(2);
-        }
+        if (accountType === 'affiliate') return; // affiliate has no Step 2
+        setCurrentStep(2);
     };
 
-    // ✅ Final submit handler — matches Postman payload exactly
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | null) => {
-        if (e) e.preventDefault();
+    // ✅ Final Submit — API + Token + Redirect
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
         setIsLoading(true);
         setErrors({});
 
         const newErrors: Record<string, string> = {};
 
-        // === Step 1: Always required fields ===
+        // === Validation: Step 1 ===
         if (!formData.name.trim()) newErrors.name = 'Full Name is required';
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
@@ -140,37 +136,30 @@ export default function RegisterPage() {
         }
         if (!isAgreed) newErrors.agreement = 'You must agree to the terms and conditions';
 
-        // === Step 2: Role-specific fields ===
+        // === Validation: Step 2 (if applicable) ===
         let categoryValue: number | null = null;
         if (['general-contractor', 'sub-contractor'].includes(accountType)) {
-            if (!formData.category) {
-                newErrors.category = 'Please select a category';
-            } else {
+            if (!formData.category) newErrors.category = 'Please select a category';
+            else {
                 const parsed = parseInt(formData.category);
-                if (isNaN(parsed) || parsed <= 0) {
-                    newErrors.category = 'Invalid category selected';
-                } else {
-                    categoryValue = parsed;
-                }
+                if (isNaN(parsed) || parsed <= 0) newErrors.category = 'Invalid category';
+                else categoryValue = parsed;
             }
 
-            if (!formData.license_number.trim()) {
-                newErrors.license_number = 'License Number is required';
-            }
+            if (!formData.license_number.trim()) newErrors.license_number = 'License Number is required';
         }
 
         // === Shared fields ===
         if (!formData.zip.trim()) newErrors.zip = 'Zip Code is required';
         if (!formData.work_radius.trim()) newErrors.work_radius = 'Work Radius is required';
 
-        // ❌ Validation failed
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setIsLoading(false);
             return;
         }
 
-        // ✅ Build payload — matches Postman exactly
+        // ✅ Build payload
         const roleMap: Record<string, string> = {
             'general-contractor': 'general_contractor',
             'sub-contractor': 'subcontractor',
@@ -189,66 +178,45 @@ export default function RegisterPage() {
             role: roleMap[accountType] || 'user',
         };
 
-        // Add optional fields for GC/subcontractor
         if (['general-contractor', 'sub-contractor'].includes(accountType)) {
             payload.license_number = formData.license_number;
-            if (categoryValue !== null) {
-                payload.category = categoryValue; // ← number (e.g., 1)
-            }
+            if (categoryValue !== null) payload.category = categoryValue;
         }
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/register`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
 
             const data = await response.json();
-            console.log(data);
+
             if (response.ok) {
-                // ✅ Success — redirect based on role
+                // 🔑 Optional: Store token if API returns it (e.g., data.data.token)
+                // Example:
+                // if (data.data?.token) localStorage.setItem('token', data.data.token);
+
+                // ✅ Redirect based on role
                 const redirectPaths: Record<string, string> = {
                     'general-contractor': '/general-contractor/subscription',
                     'sub-contractor': '/subcontractor/subscription',
                     'affiliate': '/affiliate/dashboard',
                 };
-
-                const redirectPath = redirectPaths[accountType] || '/';
-                router.push(redirectPath);
-
-                // Optional: Reset form on success
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    company_name: '',
-                    password: '',
-                    password_confirmation: '',
-                    license_number: '',
-                    zip: '',
-                    work_radius: '',
-                    category: '',
-                });
-                setIsAgreed(false);
-                setCurrentStep(1);
-                router.push('/subcontractor/dashboard');
+                const path = redirectPaths[accountType] || '/';
+                router.push(path);
             } else {
-                // setErrors({ api: data.message || 'Registration failed. Please try again.' });
-                router.push('/subcontractor/dashboard');
+                setErrors({ api: data.message || 'Registration failed. Please try again.' });
             }
         } catch (err) {
-            // setErrors({ api: 'Network error. Please check your connection.' });
-            console.error('Registration error:', err);
-            router.push('/subcontractor/dashboard');
+            console.error('Network error:', err);
+            setErrors({ api: 'Network error. Please check your connection.' });
         } finally {
             setIsLoading(false);
         }
     };
 
-    // ✅ Display title & icon per role
+    // UI Info per role
     const accountTypeInfo = {
         'general-contractor': { title: 'General Contractor', icon: '/assets/img/icons/construction-worker.webp' },
         'sub-contractor': { title: 'Subcontractor', icon: '/assets/img/icons/settings.svg' },
@@ -293,12 +261,11 @@ export default function RegisterPage() {
                                 />
                             </Link>
 
-                            {/* ✅ Single <form> — no duplication */}
                             <form className="form" onSubmit={handleSubmit}>
-                                <div style={{ position: 'relative', overflow: 'hidden' }}>
+                                <div style={{ position: 'relative', overflow: 'hidden', transition: 'height 0.3s' }}>
                                     {/* STEP 1: Personal Info */}
                                     {currentStep === 1 && (
-                                        <div className="step-one transition-all duration-300 ease-in-out">
+                                        <div className="step-one animate__animated animate__fadeIn">
                                             <div className="fw-semibold fs-2 mb-4 text-center">Register</div>
 
                                             <div className="register-topbar">
@@ -311,7 +278,7 @@ export default function RegisterPage() {
                                                 <div className="fw-semibold">{displayInfo.title}</div>
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="name" className="mb-1 fw-semibold">Full Name</label>
                                                 <input
                                                     type="text"
@@ -320,11 +287,12 @@ export default function RegisterPage() {
                                                     placeholder="John Doe"
                                                     value={formData.name}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.name && <span className="text-danger animate-slide-up">{errors.name}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="email" className="mb-1 fw-semibold">Email Address</label>
                                                 <input
                                                     type="email"
@@ -333,11 +301,12 @@ export default function RegisterPage() {
                                                     placeholder="john@example.com"
                                                     value={formData.email}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.email && <span className="text-danger animate-slide-up">{errors.email}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="phone" className="mb-1 fw-semibold">Phone Number</label>
                                                 <input
                                                     type="tel"
@@ -351,7 +320,7 @@ export default function RegisterPage() {
                                                 {errors.phone && <span className="text-danger animate-slide-up">{errors.phone}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="company_name" className="mb-1 fw-semibold">Company Name</label>
                                                 <input
                                                     type="text"
@@ -360,11 +329,12 @@ export default function RegisterPage() {
                                                     placeholder="JD Construction"
                                                     value={formData.company_name}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.company_name && <span className="text-danger animate-slide-up">{errors.company_name}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column position-relative">
+                                            <div className="input-wrapper d-flex flex-column position-relative mb-3">
                                                 <label htmlFor="password" className="mb-1 fw-semibold">Password</label>
                                                 <input
                                                     type={showPassword ? 'text' : 'password'}
@@ -385,7 +355,7 @@ export default function RegisterPage() {
                                                 {errors.password && <span className="text-danger animate-slide-up">{errors.password}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column position-relative">
+                                            <div className="input-wrapper d-flex flex-column position-relative mb-3">
                                                 <label htmlFor="password_confirmation" className="mb-1 fw-semibold">
                                                     Confirm Password
                                                 </label>
@@ -421,11 +391,11 @@ export default function RegisterPage() {
                                                     />
                                                     <label className="form-check-label fw-semibold" htmlFor="agreement">
                                                         By registering, you confirm that you have reviewed and accepted our{' '}
-                                                        <Link href="#" className="text-primary">
+                                                        <Link href="/privacy" className="text-primary">
                                                             Privacy Policy
                                                         </Link>{' '}
                                                         and{' '}
-                                                        <Link href="#" className="text-primary">
+                                                        <Link href="/terms" className="text-primary">
                                                             Terms &amp; Conditions.
                                                         </Link>
                                                     </label>
@@ -443,7 +413,7 @@ export default function RegisterPage() {
                                                 disabled={isLoading}
                                                 className="btn btn-primary w-100 rounded-3 d-block mb-2"
                                             >
-                                                {isLoading ? 'Loading...' : 'Next'}
+                                                Next
                                             </button>
 
                                             <div className="text-center fw-medium text-gray-light">
@@ -455,9 +425,9 @@ export default function RegisterPage() {
                                         </div>
                                     )}
 
-                                    {/* STEP 2: Business Details — only for GC/subcontractor */}
+                                    {/* STEP 2: Business Details (for GC/subcontractor) */}
                                     {currentStep === 2 && ['general-contractor', 'sub-contractor'].includes(accountType) && (
-                                        <div className="step-two transition-all duration-300 ease-in-out">
+                                        <div className="step-two animate__animated animate__fadeIn">
                                             <div className="fw-semibold fs-2 mb-4 text-center">Business Details</div>
 
                                             <div className="register-topbar justify-content-start mb-3 d-flex align-items-center gap-2">
@@ -471,14 +441,14 @@ export default function RegisterPage() {
                                             </div>
 
                                             {/* Category Dropdown */}
-                                            <div className="input-wrapper d-flex flex-column position-relative" ref={dropdownRef}>
+                                            <div className="input-wrapper d-flex flex-column position-relative mb-3" ref={dropdownRef}>
                                                 <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
                                                 {categoriesLoading ? (
-                                                    <div className="select-selected text-gray-500">Loading categories...</div>
+                                                    <div className="form-control">Loading categories...</div>
                                                 ) : categories.length > 0 ? (
                                                     <div className={`custom-select ${dropdownOpen ? 'open' : ''}`}>
                                                         <div
-                                                            className="select-selected"
+                                                            className="select-selected form-control"
                                                             onClick={() => setDropdownOpen(!dropdownOpen)}
                                                         >
                                                             {formData.category
@@ -494,15 +464,13 @@ export default function RegisterPage() {
                                                             viewBox="0 0 16 16"
                                                             style={{
                                                                 position: 'absolute',
-                                                                right: '10px',
+                                                                right: '12px',
                                                                 top: '50%',
                                                                 transform: 'translateY(-50%)',
+                                                                pointerEvents: 'none',
                                                             }}
                                                         >
-                                                            <path
-                                                                fillRule="evenodd"
-                                                                d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                                                            />
+                                                            <path fillRule="evenodd" d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
                                                         </svg>
                                                         <ul className="select-options">
                                                             {categories.map((cat) => (
@@ -519,12 +487,12 @@ export default function RegisterPage() {
                                                         </ul>
                                                     </div>
                                                 ) : (
-                                                    <div className="select-selected text-danger">No categories available</div>
+                                                    <div className="form-control text-danger">No categories available</div>
                                                 )}
                                                 {errors.category && <span className="text-danger animate-slide-up">{errors.category}</span>}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="license_number" className="mb-1 fw-semibold">License Number</label>
                                                 <input
                                                     type="text"
@@ -533,13 +501,14 @@ export default function RegisterPage() {
                                                     placeholder="LIC123456"
                                                     value={formData.license_number}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.license_number && (
                                                     <span className="text-danger animate-slide-up">{errors.license_number}</span>
                                                 )}
                                             </div>
 
-                                            <div className="input-wrapper d-flex flex-column">
+                                            <div className="input-wrapper d-flex flex-column mb-3">
                                                 <label htmlFor="zip" className="mb-1 fw-semibold">Zip Code</label>
                                                 <input
                                                     type="text"
@@ -548,6 +517,7 @@ export default function RegisterPage() {
                                                     placeholder="12345"
                                                     value={formData.zip}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.zip && <span className="text-danger animate-slide-up">{errors.zip}</span>}
                                             </div>
@@ -561,6 +531,7 @@ export default function RegisterPage() {
                                                     placeholder="25"
                                                     value={formData.work_radius}
                                                     onChange={handleChange}
+                                                    className="form-control"
                                                 />
                                                 {errors.work_radius && (
                                                     <span className="text-danger animate-slide-up">{errors.work_radius}</span>
@@ -570,10 +541,11 @@ export default function RegisterPage() {
                                             {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}
 
                                             {/* Back & Submit */}
-                                            <div className="d-flex gap-2">
+                                            <div className="d-flex gap-2 mt-3">
+
                                                 <button
                                                     type="submit"
-                                                    className="btn btn-primary w-100 d-block text-center rounded-3"
+                                                    className="btn btn-primary justify-content-center rounded-3 w-100"
                                                     disabled={isLoading}
                                                 >
                                                     {isLoading ? 'Registering...' : 'Complete Registration'}
@@ -582,7 +554,7 @@ export default function RegisterPage() {
                                         </div>
                                     )}
 
-                                    {/* Affiliate: no step 2 — submit directly */}
+                                    {/* Affiliate: no step 2 */}
                                     {accountType === 'affiliate' && currentStep === 1 && (
                                         <>
                                             {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}

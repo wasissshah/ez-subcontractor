@@ -10,21 +10,32 @@ export default function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
+    // ✅ Helper: Check if email is valid
+    const isEmailValid = (email: string) => {
+        return /\S+@\S+\.\S+/.test(email.trim());
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
+        if (isLoading) return;
+
         e.preventDefault();
         setError('');
         setMessage('');
+        setIsLoading(true);
 
-        // ✅ Client-side validation
+        // Validation already ensured by button disable, but keep for safety
         if (!email.trim()) {
             setError('Email is required');
+            setIsLoading(false);
             return;
         }
 
-        if (!/\S+@\S+\.\S+/.test(email)) {
+        if (!isEmailValid(email)) {
             setError('Please enter a valid email address');
+            setIsLoading(false);
             return;
         }
 
@@ -38,19 +49,15 @@ export default function ForgotPassword() {
             });
 
             const data = await response.json();
-            console.log(data);
 
             if (response.ok) {
-                // ✅ Success: show message and redirect after delay
                 setMessage('Password reset link has been sent to your email!');
                 setEmail('');
-
                 localStorage.setItem('forgotPasswordEmail', email);
                 setTimeout(() => {
                     router.push('/auth/verify-email');
                 }, 1500);
             } else {
-                // ❌ Handle backend error (NestJS format)
                 let errorMessage = 'Something went wrong. Please try again.';
                 if (Array.isArray(data.message)) {
                     errorMessage = data.message[0];
@@ -61,6 +68,8 @@ export default function ForgotPassword() {
             }
         } catch (err) {
             setError('Network error. Please check your internet connection.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -120,8 +129,14 @@ export default function ForgotPassword() {
                                     <button
                                         type="submit"
                                         className="btn btn-primary rounded-3 justify-content-center w-100"
+                                        // ✅ Disable until email is valid AND not loading
+                                        disabled={isLoading || !isEmailValid(email)}
+                                        style={{
+                                            opacity: (isLoading || !isEmailValid(email)) ? 0.6 : 1,
+                                            cursor: (isLoading || !isEmailValid(email)) ? 'not-allowed' : 'pointer',
+                                        }}
                                     >
-                                        Next
+                                        {isLoading ? 'Please wait...' : 'Next'}
                                     </button>
                                 </div>
                             </form>

@@ -210,10 +210,25 @@
   background-color: #C9DA2B !important;
 }
 
+.header-dashboard .header-wrapper #primary-navigation {
+  justify-content: space-between;
+  flex: 2 1;
+}
+.header-dashboard .header-wrapper #primary-navigation .menu-links li a.active {
+  background-color: #272727 !important;
+  color: white;
+}
+.header-dashboard .header-wrapper #primary-navigation .buttons {
+  flex: unset;
+}
+
 /*Media Query */
 @media (min-width: 1200px) {
   .header .hamburger {
     display: none;
+  }
+  .header-dashboard .header-wrapper #primary-navigation .menu-links {
+    transform: translateX(70px);
   }
 }
 @media (max-width: 1200px) {

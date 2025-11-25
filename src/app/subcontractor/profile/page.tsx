@@ -6,14 +6,29 @@ import { usePathname, useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface ProfileData {
+    fullName: string;
+    email: string;
+    phone: string;
+    companyName: string;
+    role: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    workRadius: number;
+    categories: string[];
+}
 
 export default function ProfilePage() {
     const pathname = usePathname();
     const router = useRouter();
     const [logoutLoading, setLogoutLoading] = useState(false);
+    const [profile, setProfile] = useState<ProfileData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Sidebar links
     const links = [
         { href: '/subcontractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
         { href: '/subcontractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
@@ -21,7 +36,56 @@ export default function ProfilePage() {
         { href: '/subcontractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
     ];
 
-    // Handle logout with Bearer token
+    // 🔁 Fetch profile after confirming token on client
+    useEffect(() => {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+        if (!token) {
+            setLoading(false);
+            router.push('/auth/login');
+            return;
+        }
+
+        const fetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok) {
+                    setProfile({
+                        fullName: data.data.name || 'N/A',
+                        email: data.data.email || 'N/A',
+                        phone: data.data.phone || 'N/A',
+                        companyName: data.data.company_name || 'N/A',
+                        role: data.data.role || 'N/A',
+                        city: data.data.city || 'N/A',
+                        state: data.data.state || 'N/A',
+                        zipCode: data.data.zipCode || 'N/A',
+                        workRadius: data.data.workRadius || 0,
+                        categories: data.data.categories || [],
+                    });
+                } else {
+                    setError(data.message || 'Failed to load profile');
+                }
+            } catch (err) {
+                console.error('Profile fetch error:', err);
+                setError('Network error. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [router]);
+
     const handleLogout = async () => {
         setLogoutLoading(true);
 
@@ -29,24 +93,21 @@ export default function ProfilePage() {
             const token = localStorage.getItem('token');
 
             if (!token) {
-                alert("No token found. Please login again.");
                 router.push('/auth/login');
                 return;
             }
 
-            // 🔥 ENSURES TOKEN IS ALWAYS SENT PROPERLY
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`,
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`, // << KEY FIX
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
 
-            // Some APIs return empty text → avoid crash
             const text = await response.text();
             let data;
             try {
@@ -55,14 +116,10 @@ export default function ProfilePage() {
                 data = { message: text };
             }
 
-            console.log('Logout response:', response.status, data);
-
             if (response.ok) {
-                // 🔥 Clear auth
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('token');
-
                 router.push('/auth/login');
             } else {
                 alert(data?.message || 'Logout failed');
@@ -74,6 +131,62 @@ export default function ProfilePage() {
             setLogoutLoading(false);
         }
     };
+
+    // 🌀 Loading State
+    if (loading) {
+        return (
+            <>
+                <Header />
+                <div className="sections overflow-hidden">
+                    <section className="banner-sec profile position-static">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 text-center py-5">
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
+    // ❌ Error State (only shows if token exists but profile fails to load)
+    if (error) {
+        return (
+            <>
+                <Header />
+                <div className="sections overflow-hidden">
+                    <section className="banner-sec profile position-static">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 text-center py-5">
+                                    <p className="text-danger">{error}</p>
+                                    <button
+                                        className="btn btn-primary mt-3"
+                                        onClick={() => window.location.reload()}
+                                    >
+                                        Retry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
+    // 🔒 Note: Agar token na tha, toh upar `useEffect` mein hi redirect ho chuka hoga.
+    // Is liye yahan `profile` null hone ka chance kam hai, lekin safe rakhne ke liye:
+    if (!profile) {
+        return null; // ya redirect ho chuka hoga
+    }
 
     return (
         <>
@@ -96,7 +209,7 @@ export default function ProfilePage() {
                                                 />
                                                 <div className="content-wrapper">
                                                     <div className="title text-black fs-5 fw-medium mb-2">
-                                                        Joseph Dome
+                                                        {profile.fullName}
                                                     </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
@@ -106,10 +219,10 @@ export default function ProfilePage() {
                                                             alt="Message Icon"
                                                         />
                                                         <Link
-                                                            href="mailto:hello@example.com"
+                                                            href={`mailto:${profile.email}`}
                                                             className="fs-14 fw-medium text-dark"
                                                         >
-                                                            hello@example.com
+                                                            {profile.email}
                                                         </Link>
                                                     </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
@@ -120,10 +233,10 @@ export default function ProfilePage() {
                                                             alt="Call Icon"
                                                         />
                                                         <Link
-                                                            href="tel:+000000000"
+                                                            href={`tel:${profile.phone}`}
                                                             className="fs-14 fw-medium text-dark"
                                                         >
-                                                            (000) 000-000
+                                                            {profile.phone}
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -240,9 +353,11 @@ export default function ProfilePage() {
                                                 alt="Worker Image"
                                             />
                                             <div className="content">
-                                                <div className="title fw-semibold fs-4 mb-2">Jason Doe</div>
-                                                <p className="mb-1 text-gray-light">Subcontractor</p>
-                                                <p className="mb-1 text-gray-light">Whittier, CA 30201</p>
+                                                <div className="title fw-semibold fs-4 mb-2">{profile.fullName}</div>
+                                                <p className="mb-1 text-gray-light">{profile.role}</p>
+                                                <p className="mb-1 text-gray-light">
+                                                    {profile.city}, {profile.state} {profile.zipCode}
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="right d-flex align-items-center gap-4 flex-wrap">
@@ -282,7 +397,7 @@ export default function ProfilePage() {
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Full Name</div>
-                                                    <div className="fw-semibold fs-18">Jason Doe</div>
+                                                    <div className="fw-semibold fs-18">{profile.fullName}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
@@ -290,7 +405,7 @@ export default function ProfilePage() {
                                                     <div className="text-gray-light fw-medium mb-2">
                                                         Company Name
                                                     </div>
-                                                    <div className="fw-semibold fs-18">Jason Tiles Limited</div>
+                                                    <div className="fw-semibold fs-18">{profile.companyName}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
@@ -299,10 +414,10 @@ export default function ProfilePage() {
                                                         Email Address
                                                     </div>
                                                     <Link
-                                                        href="mailto:hello@example.com"
+                                                        href={`mailto:${profile.email}`}
                                                         className="fw-semibold fs-18 text-dark"
                                                     >
-                                                        hello@example.com
+                                                        {profile.email}
                                                     </Link>
                                                 </div>
                                             </div>
@@ -312,10 +427,10 @@ export default function ProfilePage() {
                                                         Phone Number
                                                     </div>
                                                     <Link
-                                                        href="tel:+0000000000"
+                                                        href={`tel:${profile.phone}`}
                                                         className="fw-semibold fs-18 text-dark"
                                                     >
-                                                        (000) 000-0000
+                                                        {profile.phone}
                                                     </Link>
                                                 </div>
                                             </div>
@@ -323,7 +438,7 @@ export default function ProfilePage() {
 
                                         <div className="text-gray-light fw-medium mb-2">Categories</div>
                                         <div className="d-flex align-items-center gap-2 flex-wrap mb-4">
-                                            {['Framing', 'Electrical', 'Plumbing'].map((cat, i) => (
+                                            {profile.categories.map((cat, i) => (
                                                 <Link
                                                     href="#"
                                                     key={i}
@@ -339,19 +454,19 @@ export default function ProfilePage() {
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">City</div>
-                                                    <div className="fw-semibold fs-18">New York</div>
+                                                    <div className="fw-semibold fs-18">{profile.city}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">State</div>
-                                                    <div className="fw-semibold fs-18">NY</div>
+                                                    <div className="fw-semibold fs-18">{profile.state}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Zip Code</div>
-                                                    <div className="fw-semibold fs-18">10001</div>
+                                                    <div className="fw-semibold fs-18">{profile.zipCode}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
@@ -359,7 +474,7 @@ export default function ProfilePage() {
                                                     <div className="text-gray-light fw-medium mb-2">
                                                         Work Radius
                                                     </div>
-                                                    <div className="fw-semibold fs-18">123 miles</div>
+                                                    <div className="fw-semibold fs-18">{profile.workRadius} miles</div>
                                                 </div>
                                             </div>
                                         </div>

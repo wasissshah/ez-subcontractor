@@ -15,20 +15,12 @@ export default function CreateNewPassword() {
     const [success, setSuccess] = useState('');
     const router = useRouter();
 
-    // 🔑 Load email & otp from localStorage
     const [email, setEmail] = useState<string | null>(null);
     const [otp, setOtp] = useState<string | null>(null);
 
     useEffect(() => {
         const savedEmail = localStorage.getItem('forgotPasswordEmail');
-        const savedOtp = localStorage.getItem('verifiedOtp'); // We'll set this in VerifyEmail
-
-        // if (!savedEmail || !savedOtp) {
-        //     router.push('/auth/forget-password');
-        //     return;
-        // }
-
-
+        const savedOtp = localStorage.getItem('verifiedOtp');
 
         setEmail(savedEmail);
         setOtp(savedOtp);
@@ -73,16 +65,15 @@ export default function CreateNewPassword() {
             });
 
             const data = await response.json();
-            console.log(data);
 
             if (response.ok) {
                 localStorage.removeItem('forgotPasswordEmail');
                 localStorage.removeItem('verifiedOtp');
                 setSuccess('Password changed successfully!');
 
-                // setTimeout(() => {
-                //     router.push('/auth/login');
-                // }, 1500);
+                setTimeout(() => {
+                    router.push('/auth/login');
+                }, 1500);
             } else {
                 let errorMessage = 'Failed to reset password. Please try again.';
                 if (typeof data.message === 'string') {
@@ -96,6 +87,9 @@ export default function CreateNewPassword() {
             setError('Network error. Please check your connection.');
         }
     };
+
+    // ✅ Check if button should be enabled
+    const isFormValid = password.trim() !== '' && confirmPassword.trim() !== '' && password === confirmPassword;
 
     const EyeIcon = ({ open }: { open: boolean }) => (
         <svg
@@ -205,11 +199,16 @@ export default function CreateNewPassword() {
                                 {error && <p className="text-danger mb-2">{error}</p>}
                                 {success && <p className="text-success mb-2">{success}</p>}
 
-                                {/* Submit Button */}
+                                {/* Submit Button — ✅ Updated */}
                                 <div className="buttons-wrapper d-flex align-items-center gap-4">
                                     <button
                                         type="submit"
                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
+                                        disabled={!isFormValid}
+                                        style={{
+                                            opacity: !isFormValid ? 0.6 : 1,
+                                            cursor: !isFormValid ? 'not-allowed' : 'pointer',
+                                        }}
                                     >
                                         Change Password
                                     </button>
