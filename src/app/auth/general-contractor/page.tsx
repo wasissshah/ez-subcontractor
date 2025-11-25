@@ -1,7 +1,7 @@
 // app/auth/register/[type]/page.tsx
 'use client';
 
-import '../../../../styles/login.css';
+import '../../../styles/login.css';
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -113,7 +113,6 @@ export default function RegisterPage() {
             'sub-contractor': 'subcontractor',
             'affiliate': 'affiliate',
         };
-        const role = localStorage.getItem('role');
 
         const payload: Record<string, any> = {
             name: formData.name,
@@ -126,7 +125,6 @@ export default function RegisterPage() {
             zip: formData.zip || '46000',
             work_radius: parseInt(formData.work_radius) || 0,
             category: 1,
-            role: role
         };
 
 
@@ -135,36 +133,22 @@ export default function RegisterPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
                 },
                 body: JSON.stringify(payload),
             });
 
             let data = await response.json();
 
-            console.log(data);
-            if (response.ok) {
-                // 🔑 Extract token & user
-                const token = data.data.token;
-
-                console.log(token);
-
-                if (token) {
-                    if (role === 'general_contractor') {
-                        router.push('/general-contractor/dashboard');
-                    }
-                    if (role === 'subcontractor') {
-                        router.push('/subcontractor/subscription');
-                    }
-                    if (role === 'affiliate') {
-                        router.push('/affiliate/subscription');
-                    }
-                } else {
-                    setErrors({ api: 'Registration succeeded, but no token received.' });
-                }
-            } else {
-                // ❌ Handle error (your existing logic)
-            }
+            console.log(data)
+            // if (response.ok) {
+            //     console.log(data);
+            // } else {
+            //     const text = await response.text();
+            //     console.error('Non-JSON response:', text); // 👈 This will show you what’s really coming back
+            //     setErrors({ api: 'Server returned unexpected response. Please try again.' });
+            //     setIsLoading(false);
+            //     return;
+            // }
         } catch (err) {
             setErrors({ api: 'Network error. Please check your connection.' });
             console.error(err);

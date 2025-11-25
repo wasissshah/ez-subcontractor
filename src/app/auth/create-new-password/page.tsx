@@ -58,30 +58,26 @@ export default function CreateNewPassword() {
         }
 
         try {
-            const formData = new FormData();
-            formData.append('email', email);
-            formData.append('otp', otp);
-            formData.append('new_password', password);
-            formData.append('confirmation_password', password);
-
-            console.log(email);
-            console.log(otp);
-            console.log(password);
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: formData,
+                body: JSON.stringify({
+                    email: email,
+                    otp: otp,
+                    new_password: password,
+                    password_confirmation: password
+                }),
             });
 
             const data = await response.json();
+            console.log(data);
 
             if (response.ok) {
-                // ✅ Success: cleanup and redirect
-                // localStorage.removeItem('forgotPasswordEmail');
-                // localStorage.removeItem('verifiedOtp');
+                localStorage.removeItem('forgotPasswordEmail');
+                localStorage.removeItem('verifiedOtp');
                 setSuccess('Password changed successfully!');
 
                 // setTimeout(() => {
@@ -215,7 +211,7 @@ export default function CreateNewPassword() {
                                         type="submit"
                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
                                     >
-                                        Go to Login
+                                        Change Password
                                     </button>
                                 </div>
                             </form>
