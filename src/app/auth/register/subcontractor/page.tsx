@@ -30,6 +30,7 @@ export default function RegisterPage() {
     });
     console.log(formData);
 
+
     const [currentStep, setCurrentStep] = useState(1); // 1 = Personal, 2 = Business
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -62,6 +63,26 @@ export default function RegisterPage() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const EyeIcon = ({ active }: { active: boolean }) => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={`eye-icon ${active ? 'active' : ''}`}
+        >
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+            <line className="slash" x1="2" y1="2" x2="22" y2="22"></line>
+        </svg>
+    );
+
+
     // Fetch categories (for GC / subcontractor)
     useEffect(() => {
         if (!['general-contractor', 'sub-contractor'].includes(accountType)) return;
@@ -71,23 +92,33 @@ export default function RegisterPage() {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`);
                 const data = await res.json();
 
+                console.log('✅ Specializations API Response:', data); // ✅ Clear logging
+
                 let fetchedCategories: Category[] = [];
-                if (Array.isArray(data)) {
-                    fetchedCategories = data;
-                } else if (data?.data && Array.isArray(data.data)) {
-                    fetchedCategories = data.data;
-                } else if (data?.categories && Array.isArray(data.categories)) {
-                    fetchedCategories = data.categories;
+
+                // ✅ Handle YOUR actual API structure: data.data.specializations
+                if (data?.data?.specializations && Array.isArray(data.data.specializations)) {
+                    fetchedCategories = data.data.specializations.map((item: any) => ({
+                        id: String(item.id), // Ensure string (your UI uses string IDs like '1')
+                        name: item.name,
+                    }));
+                } else {
+                    console.warn('⚠️ Unexpected specialization response format:', data);
                 }
 
-                setCategories(fetchedCategories.length > 0 ? fetchedCategories : [
-                    { id: '1', name: 'Plumbing' },
-                    { id: '2', name: 'Electric Work' },
-                    { id: '3', name: 'Framing' },
-                    { id: '4', name: 'Roofing' },
-                ]);
+                // Fallback if API returns empty or fails
+                if (fetchedCategories.length === 0) {
+                    fetchedCategories = [
+                        { id: '1', name: 'Plumbing' },
+                        { id: '2', name: 'Electric Work' },
+                        { id: '3', name: 'Framing' },
+                        { id: '4', name: 'Roofing' },
+                    ];
+                }
+
+                setCategories(fetchedCategories);
             } catch (err) {
-                console.error('Failed to load categories:', err);
+                console.error('❌ Failed to load categories:', err);
                 setCategories([
                     { id: '1', name: 'Plumbing' },
                     { id: '2', name: 'Electric Work' },
@@ -292,7 +323,7 @@ export default function RegisterPage() {
                                         <div className="step-one animate__animated animate__fadeIn">
                                             <div className="fw-semibold fs-2 mb-4 text-center">Register</div>
 
-                                            <div className="register-topbar">
+                                            <div className="register-topbar mb-4">
                                                 <Image
                                                     src={displayInfo.icon}
                                                     width={50}
@@ -370,15 +401,19 @@ export default function RegisterPage() {
                                                     placeholder="Password123"
                                                     value={formData.password}
                                                     onChange={handleChange}
+                                                    disabled={isLoading}
                                                 />
                                                 <span
                                                     className="toggle-password position-absolute"
-                                                    style={{ right: '10px', top: '38px', cursor: 'pointer' }}
+                                                    style={{right: '10px', top: '38px', cursor: 'pointer'}}
                                                     onClick={() => setShowPassword(!showPassword)}
                                                 >
-                                                    <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                                                </span>
-                                                {errors.password && <span className="text-danger animate-slide-up">{errors.password}</span>}
+                                                    <EyeIcon active={showPassword}/>
+                                                        </span>
+                                                        {errors.password && (
+                                                        <span
+                                                        className="text-danger animate-slide-up">{errors.password}</span>
+                                                        )}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column position-relative mb-3">
@@ -399,8 +434,8 @@ export default function RegisterPage() {
                                                     style={{ right: '10px', top: '38px', cursor: 'pointer' }}
                                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                                 >
-                                                    <i className={`bi ${showConfirmPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-                                                </span>
+                                                <EyeIcon active={showConfirmPassword} />
+                                            </span>
                                                 {errors.password_confirmation && (
                                                     <span className="text-danger animate-slide-up">{errors.password_confirmation}</span>
                                                 )}
@@ -529,9 +564,6 @@ export default function RegisterPage() {
                                                     onChange={handleChange}
                                                     className="form-control"
                                                 />
-                                                {errors.license_number && (
-                                                    <span className="text-danger animate-slide-up">{errors.license_number}</span>
-                                                )}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column mb-3">
@@ -545,7 +577,6 @@ export default function RegisterPage() {
                                                     onChange={handleChange}
                                                     className="form-control"
                                                 />
-                                                {errors.zip && <span className="text-danger animate-slide-up">{errors.zip}</span>}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column">
@@ -559,9 +590,6 @@ export default function RegisterPage() {
                                                     onChange={handleChange}
                                                     className="form-control"
                                                 />
-                                                {errors.work_radius && (
-                                                    <span className="text-danger animate-slide-up">{errors.work_radius}</span>
-                                                )}
                                             </div>
 
                                             {errors.api && <p className="text-danger animate-slide-up mb-3">{errors.api}</p>}

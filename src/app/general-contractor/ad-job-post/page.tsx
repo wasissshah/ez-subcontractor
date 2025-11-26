@@ -23,6 +23,14 @@ export default function PostAd() {
     const fileInputRef = useRef(null);
     const dropdownRef = useRef(null);
 
+    // 🆕 Form ke input fields ke liye state
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zip, setZip] = useState('');
+    const [estimateDueDate, setEstimateDueDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     const categories = [
         { id: '1', name: 'Plumbing' },
         { id: '2', name: 'Electric Work' },
@@ -54,6 +62,96 @@ export default function PostAd() {
 
     const handleDragOver = (e) => e.preventDefault();
 
+    // 🆕 API Call aur Validation ke liye function
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // 🔒 Basic validation
+        if (!selectedCategory) {
+            alert('Please select a category.');
+            return;
+        }
+        if (!city.trim() || !state.trim() || !zip.trim()) {
+            alert('City, State, and Zip Code are required.');
+            return;
+        }
+        if (!estimateDueDate || !startDate || !endDate) {
+            alert('All dates are required.');
+            return;
+        }
+        if (!description.trim()) {
+            alert('Description is required.');
+            return;
+        }
+
+        try {
+            // 1. Token get karo (local storage se)
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Authentication token not found. Please login again.');
+                return;
+            }
+
+            // 2. FormData object banayein
+            const formData = new FormData();
+
+            // 3. Sab data add karo (Postman screenshot ke hisaab se)
+            formData.append('title', 'New Project');
+            formData.append('description', description);
+            formData.append('category_id', selectedCategory); // Selected category ID
+            formData.append('city', city);
+            formData.append('state', state);
+            formData.append('zip', zip);
+            formData.append('estimate_due_date', estimateDueDate);
+            formData.append('start_date', startDate);
+            formData.append('end_date', endDate);
+            formData.append('status', 'pending');
+            formData.append('attachments[0][file]', '<select file> (blueprint.pdf)');
+            formData.append('attachments[0][description]', 'Blueprint');
+            formData.append('attachments[1][file]', '<select file> (site.pdf)');
+            formData.append('attachments[1][description]', 'Site photo');
+
+
+
+            // 4. Attachments add karo
+            // uploadedFiles.forEach((file, index) => {
+            //     formData.append(`attachments[${index}][file]`, file);
+            //     formData.append(`attachments[${index}][description]`, file.name); // File name as description
+            // });
+
+
+            // 5. API call karo — Postman ke screenshot ke hisaab se headers aur auth
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}common/projects/create`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json', // Explicitly add Accept header
+                    'Content-Type': 'multipart/form-data',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            console.log(data+'abc');
+
+            // 6. Response check karo
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Project created successfully:', result);
+                router.push('/general_contractor/add-attachment');
+            } else {
+                const errorData = await response.json();
+                const errorMsg = errorData.message || 'Failed to create project.';
+                console.error('❌ API Error Response:', errorData);
+                alert(`Error: ${errorMsg}`);
+            }
+
+        } catch (error) {
+            console.error('💥 Network or unexpected error:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    };
+
     return (
         <>
             <Header />
@@ -80,7 +178,8 @@ export default function PostAd() {
                         <div className="row g-3">
                             {/* LEFT SIDE */}
                             <div className="col-lg-8">
-                                <form className="mb-4">
+                                {/* ✅ Only onSubmit — no onClick on button */}
+                                <form onSubmit={handleSubmit} className="mb-4">
                                     {/* Custom Select */}
                                     <div
                                         className="input-wrapper d-flex flex-column position-relative mb-4"
@@ -135,17 +234,23 @@ export default function PostAd() {
                                     {/* Input Fields */}
                                     <div className="row g-4">
                                         {[
-                                            { label: "City *", type: "text", placeholder: "New York" },
-                                            { label: "State *", type: "text", placeholder: "NY" },
-                                            { label: "Zip Code *", type: "text", placeholder: "12345" },
-                                            { label: "Estimate Due Date *", type: "date" },
-                                            { label: "Project Start Date *", type: "date" },
-                                            { label: "Project End Date *", type: "date" }
+                                            { label: "City *", type: "text", placeholder: "New York", value: city, onChange: setCity },
+                                            { label: "State *", type: "text", placeholder: "NY", value: state, onChange: setState },
+                                            { label: "Zip Code *", type: "text", placeholder: "12345", value: zip, onChange: setZip },
+                                            { label: "Estimate Due Date *", type: "date", value: estimateDueDate, onChange: setEstimateDueDate },
+                                            { label: "Project Start Date *", type: "date", value: startDate, onChange: setStartDate },
+                                            { label: "Project End Date *", type: "date", value: endDate, onChange: setEndDate }
                                         ].map((field, index) => (
                                             <div className="col-lg-4" key={index}>
                                                 <div className="input-wrapper">
                                                     <div className="label mb-1 fw-semibold">{field.label}</div>
-                                                    <input type={field.type} placeholder={field.placeholder || ''} />
+                                                    <input
+                                                        type={field.type}
+                                                        placeholder={field.placeholder || ''}
+                                                        value={field.value}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        required
+                                                    />
                                                 </div>
                                             </div>
                                         ))}
@@ -163,6 +268,14 @@ export default function PostAd() {
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* ✅ Submit Button — sirf type="submit" */}
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary rounded-3 w-100 justify-content-center"
+                                    >
+                                        Add Project
+                                    </button>
                                 </form>
 
                                 {/* Documents */}
@@ -188,14 +301,6 @@ export default function PostAd() {
                                         ))
                                     )}
                                 </div>
-
-                                {/* Add Project Button */}
-                                <button
-                                    onClick={() => router.push('/general_contractor/add-attachment')}
-                                    className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                >
-                                    Add Project
-                                </button>
                             </div>
 
                             {/* RIGHT SIDE */}
