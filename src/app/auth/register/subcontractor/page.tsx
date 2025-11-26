@@ -43,6 +43,14 @@ export default function RegisterPage() {
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    const formatUSPhone = (digits: string): string => {
+        const d = digits.replace(/\D/g, '').slice(0, 10);   // ≤10 digits only
+        if (d.length === 0) return '';
+        if (d.length < 4) return `(${d}`;
+        if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+        return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
+    };
+
     // Close dropdown outside click
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -94,15 +102,24 @@ export default function RegisterPage() {
         fetchCategories();
     }, [accountType]);
 
-    // 🔁 Input handler
+    // ✅ Unified input handler — now with correct typing and error clearing
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        let sanitized = value;
+
+        /* ----  PHONE FIELD  ---- */
+        if (name === 'phone') {
+            sanitized = formatUSPhone(value);          // digits + auto-format
+        }
+
+        setFormData(prev => ({ ...prev, [name]: sanitized }));
+
+        /* clear field error while typing */
         if (errors[name]) {
-            setErrors((prev) => {
-                const updated = { ...prev };
-                delete updated[name];
-                return updated;
+            setErrors(prev => {
+                const { [name]: _, ...rest } = prev;
+                return rest;
             });
         }
     };
@@ -166,16 +183,20 @@ export default function RegisterPage() {
             'affiliate': 'affiliate',
         };
 
+        const role = localStorage.getItem('role');
+
         const payload: Record<string, any> = {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
             company_name: formData.company_name,
-            zip: formData.zip,
-            work_radius: parseInt(formData.work_radius) || 0,
             password: formData.password,
             password_confirmation: formData.password_confirmation,
-            role: roleMap[accountType] || 'user',
+            license_number: formData.license_number,
+            zip: formData.zip || '46000',
+            work_radius: parseInt(formData.work_radius) || 0,
+            category: 1,
+            role: role
         };
 
         if (['general-contractor', 'sub-contractor'].includes(accountType)) {
@@ -186,7 +207,10 @@ export default function RegisterPage() {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/register`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
                 body: JSON.stringify(payload),
             });
 
@@ -316,8 +340,11 @@ export default function RegisterPage() {
                                                     placeholder="(555) 123-4567"
                                                     value={formData.phone}
                                                     onChange={handleChange}
+                                                    maxlength={14}          // (123) 456-7890 → 14 chars
                                                 />
-                                                {errors.phone && <span className="text-danger animate-slide-up">{errors.phone}</span>}
+                                                {errors.phone && (
+                                                    <span className="text-danger animate-slide-up">{errors.phone}</span>
+                                                )}
                                             </div>
 
                                             <div className="input-wrapper d-flex flex-column mb-3">

@@ -205,9 +205,7 @@ export default function LoginPage() {
                                     }}
                                 />
                             </form>
-
-                            <div className="fw-semibold text-center mb-3">Or Login With</div>
-
+                            
                             <div className="text-center fw-medium text-gray-light">
                                 Don’t have an account?{' '}
                                 <Link href="/auth/register" className="fw-semibold text-black">

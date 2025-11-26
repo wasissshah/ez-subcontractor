@@ -31,6 +31,7 @@ export default function ProfilePage() {
 
     const links = [
         { href: '/subcontractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+        { href: '/subcontractor/edit-profile', label: 'Edit Profile', icon: '/assets/img/icons/lock.svg' },
         { href: '/subcontractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
         { href: '/subcontractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
         { href: '/subcontractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
@@ -155,7 +156,6 @@ export default function ProfilePage() {
         );
     }
 
-    // ❌ Error State (only shows if token exists but profile fails to load)
     if (error) {
         return (
             <>
@@ -181,11 +181,8 @@ export default function ProfilePage() {
             </>
         );
     }
-
-    // 🔒 Note: Agar token na tha, toh upar `useEffect` mein hi redirect ho chuka hoga.
-    // Is liye yahan `profile` null hone ka chance kam hai, lekin safe rakhne ke liye:
     if (!profile) {
-        return null; // ya redirect ho chuka hoga
+        return null;
     }
 
     return (

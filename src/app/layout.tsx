@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
         setLoading(true);
         setFadeOut(false);
 
-        const minLoaderTime = 2000; // minimum 2 sec
+        const minLoaderTime = 0; // minimum 2 sec
 
         const timer = setTimeout(() => {
             setFadeOut(true); // start fade-out
@@ -32,8 +32,9 @@ export default function RootLayout({ children }) {
         <html lang="en">
         <head></head>
         <body>
-        {loading && <Loader fadeOut={fadeOut} />}
-        {!loading && children}
+        {/*{loading && <Loader fadeOut={fadeOut} />}*/}
+        {/*{!loading && children}*/}
+        {children}
         </body>
         </html>
     );

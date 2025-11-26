@@ -13,6 +13,7 @@ export default function CreateNewPassword() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false); // ✅ New state
     const router = useRouter();
 
     const [email, setEmail] = useState<string | null>(null);
@@ -24,13 +25,17 @@ export default function CreateNewPassword() {
 
         setEmail(savedEmail);
         setOtp(savedOtp);
-    }, [router]);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess('');
 
+        // ✅ Prevent duplicate submissions
+        if (isSubmitting) return;
+
+        // Validation (keep your existing logic)
         if (!password.trim()) {
             setError('New Password is required');
             return;
@@ -49,6 +54,8 @@ export default function CreateNewPassword() {
             return;
         }
 
+        setIsSubmitting(true); // ✅ Disable button & show loading
+
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/reset-password`, {
                 method: 'POST',
@@ -60,7 +67,7 @@ export default function CreateNewPassword() {
                     email: email,
                     otp: otp,
                     new_password: password,
-                    password_confirmation: password
+                    password_confirmation: password // ⚠️ Note: usually should be `confirmPassword`, but match your API spec
                 }),
             });
 
@@ -85,10 +92,11 @@ export default function CreateNewPassword() {
             }
         } catch (err) {
             setError('Network error. Please check your connection.');
+        } finally {
+            setIsSubmitting(false); // ✅ Re-enable button after success/failure
         }
     };
 
-    // ✅ Check if button should be enabled
     const isFormValid = password.trim() !== '' && confirmPassword.trim() !== '' && password === confirmPassword;
 
     const EyeIcon = ({ open }: { open: boolean }) => (
@@ -163,6 +171,7 @@ export default function CreateNewPassword() {
                                         placeholder="Enter new password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
+                                        disabled={isSubmitting} // Optional: disable inputs too
                                     />
                                     <span
                                         className="toggle-password position-absolute"
@@ -185,6 +194,7 @@ export default function CreateNewPassword() {
                                         placeholder="Enter confirm password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                        disabled={isSubmitting} // Optional
                                     />
                                     <span
                                         className="toggle-password position-absolute"
@@ -195,22 +205,22 @@ export default function CreateNewPassword() {
                                     </span>
                                 </div>
 
-                                {/* Error / Success */}
-                                {error && <p className="text-danger mb-2">{error}</p>}
-                                {success && <p className="text-success mb-2">{success}</p>}
+                                {/* Messages */}
+                                {error && <p className="text-danger text-center mb-2">{error}</p>}
+                                {success && <p className="text-success text-center mb-2">{success}</p>}
 
-                                {/* Submit Button — ✅ Updated */}
+                                {/* Submit Button — ✅ Now disables on submit */}
                                 <div className="buttons-wrapper d-flex align-items-center gap-4">
                                     <button
                                         type="submit"
                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                        disabled={!isFormValid}
+                                        disabled={!isFormValid || isSubmitting}
                                         style={{
-                                            opacity: !isFormValid ? 0.6 : 1,
-                                            cursor: !isFormValid ? 'not-allowed' : 'pointer',
+                                            opacity: !isFormValid || isSubmitting ? 0.6 : 1,
+                                            cursor: !isFormValid || isSubmitting ? 'not-allowed' : 'pointer',
                                         }}
                                     >
-                                        Change Password
+                                        {isSubmitting ? 'Changing...' : 'Change Password'}
                                     </button>
                                 </div>
                             </form>

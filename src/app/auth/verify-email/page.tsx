@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -11,8 +11,10 @@ export default function VerifyEmail() {
     const [timer, setTimer] = useState(59);
     const [error, setError] = useState('');
     const [email, setEmail] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
 
+    // ✅ Initialize email & timer on mount
     useEffect(() => {
         const savedEmail = localStorage.getItem('forgotPasswordEmail');
         if (!savedEmail) {
@@ -27,12 +29,14 @@ export default function VerifyEmail() {
         return () => clearInterval(interval);
     }, [router]);
 
+    // ✅ Handle input changes (no auto-submit here — we use useEffect instead)
     const handleChange = (index: number, value: string) => {
         if (/^\d*$/.test(value)) {
             const newOtp = [...otp];
             newOtp[index] = value.slice(-1);
             setOtp(newOtp);
 
+            // Focus next input
             if (value && index < 3) {
                 const nextInput = document.getElementById(`otp-${index + 1}`);
                 if (nextInput) (nextInput as HTMLInputElement).focus();
@@ -40,16 +44,31 @@ export default function VerifyEmail() {
         }
     };
 
+    // ✅ Auto-submit when OTP is complete (reliable — no race condition!)
+    useEffect(() => {
+        if (otp.every(d => d !== '') && !isSubmitting) {
+            const submitTimer = setTimeout(() => {
+                void handleSubmit();
+            }, 30); // Small debounce for safety
+            return () => clearTimeout(submitTimer);
+        }
+    }, [otp, isSubmitting]);
+
+    // ✅ Submit handler (guarded against double calls)
     const handleSubmit = async () => {
+        if (isSubmitting) return;
         setError('');
+        setIsSubmitting(true);
 
         if (!email) {
             setError('Email not found. Please try again.');
+            setIsSubmitting(false);
             return;
         }
 
         if (otp.some((d) => d === '')) {
             setError('Please enter all OTP digits');
+            setIsSubmitting(false);
             return;
         }
 
@@ -80,6 +99,8 @@ export default function VerifyEmail() {
             }
         } catch (err) {
             setError('Network error. Please check your internet connection.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -104,6 +125,11 @@ export default function VerifyEmail() {
                 setTimer(59);
                 setOtp(['', '', '', '']);
                 setError('');
+                // Refocus first input
+                setTimeout(() => {
+                    const firstInput = document.getElementById('otp-0');
+                    if (firstInput) (firstInput as HTMLInputElement).focus();
+                }, 50);
             } else {
                 let errorMessage = 'Failed to resend OTP. Please try again.';
                 if (typeof data.message === 'string') {
@@ -118,8 +144,7 @@ export default function VerifyEmail() {
         }
     };
 
-    // ✅ Check if all OTP boxes are filled
-    const isOtpComplete = otp.every(digit => digit !== '');
+    const isOtpComplete = otp.every(d => d !== '');
 
     return (
         <section className="hero-sec login overflow-hidden position-static">
@@ -171,6 +196,8 @@ export default function VerifyEmail() {
                                         value={digit}
                                         onChange={(e) => handleChange(index, e.target.value)}
                                         inputMode="numeric"
+                                        disabled={isSubmitting}
+                                        autoComplete="off"
                                     />
                                 ))}
                             </div>
@@ -199,6 +226,7 @@ export default function VerifyEmail() {
                                         onClick={handleResend}
                                         className="fw-semibold text-primary border-0 bg-transparent"
                                         style={{ textDecoration: 'underline' }}
+                                        disabled={isSubmitting}
                                     >
                                         Resend
                                     </button>
@@ -212,6 +240,7 @@ export default function VerifyEmail() {
                                     type="button"
                                     onClick={() => router.push('/auth/forgot-password')}
                                     className="btn btn-outline-dark rounded-3 justify-content-center w-100"
+                                    disabled={isSubmitting}
                                 >
                                     Back
                                 </button>
@@ -219,14 +248,13 @@ export default function VerifyEmail() {
                                     type="button"
                                     onClick={handleSubmit}
                                     className="btn btn-primary rounded-3 justify-content-center w-100"
-                                    // ✅ Disable until all OTP boxes are filled
-                                    disabled={!isOtpComplete}
+                                    disabled={!isOtpComplete || isSubmitting}
                                     style={{
-                                        opacity: !isOtpComplete ? 0.6 : 1,
-                                        cursor: !isOtpComplete ? 'not-allowed' : 'pointer',
+                                        opacity: !isOtpComplete || isSubmitting ? 0.6 : 1,
+                                        cursor: !isOtpComplete || isSubmitting ? 'not-allowed' : 'pointer',
                                     }}
                                 >
-                                    Next
+                                    {isSubmitting ? 'Verifying...' : 'Next'}
                                 </button>
                             </div>
                         </div>

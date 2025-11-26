@@ -18,6 +18,7 @@ export default function Header() {
     useEffect(() => {
         const role = localStorage.getItem('role') || localStorage.getItem('accountType');
         setUserRole(role);
+        console.log('Detected role:', role);
     }, [pathname]);
 
     // Close notification dropdown when clicking outside
@@ -36,9 +37,11 @@ export default function Header() {
         }
     }, []);
 
+    // ✅ FIXED: isActive now works for role-prefixed paths like /general-contractor/dashboard
     const isActive = (href: string) => {
         if (href === '/') return pathname === '/';
-        return pathname.startsWith(href);
+        // Match e.g. '/general-contractor/dashboard' with href='dashboard'
+        return pathname.endsWith(`/${href}`);
     };
 
     const toggleMenu = () => {
@@ -53,18 +56,16 @@ export default function Header() {
         }
     };
 
-    // Static data for demonstration (Only first Success is highlighted)
+    // Static notifications for demo
     const notifications = [
         { type: 'Success', detail: 'You have accessed the app at 07:00 AM', time: '1 hr ago', dateGroup: 'Today', isHighlight: true },
         { type: 'New Project Alert', detail: 'New project alert! A contractor has posted a new opportunity that matches your trade. Tap to view details.', time: '1 hr ago', dateGroup: 'Today', isHighlight: false },
-        { type: 'Success', detail: 'You have accessed the app at 07:00 AM', time: '14:12', dateGroup: 'Yesterday', isHighlight: false },
-        { type: 'New Project Alert', detail: 'New project alert! A contractor has posted a new opportunity that matches your trade. Tap to view details.', time: '12:32', dateGroup: 'Yesterday', isHighlight: false },
     ];
 
     const getRoleForCurrentPath = () => {
         if (pathname.startsWith('/auth/register/affiliate') || pathname.startsWith('/affiliate')) return 'affiliate';
-        if (pathname.startsWith('/auth/register/subcontractor') || pathname.startsWith('/subcontractor')) return 'sub-contractor';
-        if (pathname.startsWith('/auth/register/general_contractor') || pathname.startsWith('/general_contractor')) return 'general_contractor';
+        if (pathname.startsWith('/auth/register/subcontractor') || pathname.startsWith('/subcontractor')) return 'subcontractor';
+        if (pathname.startsWith('/auth/register/general-contractor') || pathname.startsWith('/general-contractor')) return 'general_contractor';
         return null;
     };
 
@@ -124,7 +125,6 @@ export default function Header() {
         </div>
     ), [isMenuOpen, isNotificationOpen]);
 
-
     const getNavigation = () => {
         const currentPathRole = getRoleForCurrentPath();
 
@@ -149,7 +149,7 @@ export default function Header() {
                         iconsButtons: commonIconsButtons
                     };
 
-                case 'sub-contractor':
+                case 'subcontractor':
                     return {
                         menuItems: [
                             { href: 'dashboard', label: 'Dashboard' },
@@ -209,7 +209,6 @@ export default function Header() {
 
     const { menuItems, authButtons, iconsButtons } = getNavigation();
 
-    // 🔽 Sirf yeh line change hui hai — ek conditional class add ki gayi hai
     const headerClass = getRoleForCurrentPath() ? 'header header-dashboard' : 'header header-public';
 
     return (
@@ -217,20 +216,44 @@ export default function Header() {
             <div className="container">
                 <div className="header-wrapper">
                     <Link href="/" className="logo" aria-label="Home">
-                        <Image src="/assets/img/icons/logo.webp" width={234} height={67} alt="Logo" title="Logo" priority />
+                        <Image
+                            src="/assets/img/icons/logo.webp"
+                            width={234}
+                            height={67}
+                            alt="Logo"
+                            title="Logo"
+                            priority
+                        />
                     </Link>
 
-                    <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} id="hamburger-icon" aria-expanded={isMenuOpen} aria-controls="primary-navigation" aria-label="Open Menu" onClick={toggleMenu}>
+                    <button
+                        className={`hamburger ${isMenuOpen ? 'open' : ''}`}
+                        id="hamburger-icon"
+                        aria-expanded={isMenuOpen}
+                        aria-controls="primary-navigation"
+                        aria-label="Open Menu"
+                        onClick={toggleMenu}
+                    >
                         <span className="line line-1"></span>
                         <span className="line line-2"></span>
                         <span className="line line-3"></span>
                     </button>
 
-                    <nav id="primary-navigation" className={isMenuOpen ? 'd-flex' : 'd-none d-lg-flex'} aria-hidden={!isMenuOpen}>
+                    <nav
+                        id="primary-navigation"
+                        className={isMenuOpen ? 'd-flex' : 'd-none d-lg-flex'}
+                        aria-hidden={!isMenuOpen}
+                    >
                         <ul className="menu-links mb-0">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
-                                    <Link href={item.href} className={isActive(item.href) ? 'active' : ''} onClick={toggleMenu}>{item.label}</Link>
+                                    <Link
+                                        href={item.href}
+                                        className={isActive(item.href) ? 'active' : ''}
+                                        onClick={toggleMenu}
+                                    >
+                                        {item.label}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

@@ -2,28 +2,197 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
+import { useState, useEffect } from 'react';
+
+interface ProfileData {
+    fullName: string;
+    email: string;
+    phone: string;
+    companyName: string;
+    role: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    workRadius: number;
+    categories: string[];
+}
 
 export default function ProfilePage() {
     const pathname = usePathname();
+    const router = useRouter();
+    const [logoutLoading, setLogoutLoading] = useState(false);
+    const [profile, setProfile] = useState<ProfileData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const links = [
+        { href: '/general-contractor/edit-profile', label: 'Edit Profile', icon: '/assets/img/icons/lock.svg' },
+        { href: '/general-contractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
+    ];
+
+    // 🔁 Fetch profile after confirming token on client
+    useEffect(() => {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+        if (!token) {
+            setLoading(false);
+            router.push('/auth/login');
+            return;
+        }
+
+        const fetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+                console.log(data);
+
+                if (response.ok) {
+                    setProfile({
+                        fullName: data.data.name || 'N/A',
+                        email: data.data.email || 'N/A',
+                        phone: data.data.phone || 'N/A',
+                        companyName: data.data.company_name || 'N/A',
+                        role: data.data.role || 'N/A',
+                        city: data.data.city || 'N/A',
+                        state: data.data.state || 'N/A',
+                        zipCode: data.data.zipCode || 'N/A',
+                        workRadius: data.data.workRadius || 0,
+                        categories: data.data.categories || [],
+                    });
+                } else {
+                    setError(data.message || 'Failed to load profile');
+                }
+            } catch (err) {
+                console.error('Profile fetch error:', err);
+                setError('Network error. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [router]);
+
+    const handleLogout = async () => {
+        setLogoutLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                router.push('/auth/login');
+                return;
+            }
+
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const text = await response.text();
+            let data;
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch {
+                data = { message: text };
+            }
+
+            if (response.ok) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('token');
+                router.push('/auth/login');
+            } else {
+                alert(data?.message || 'Logout failed');
+            }
+        } catch (err) {
+            console.error('Logout Error:', err);
+            alert('Network error. Please try again.');
+        } finally {
+            setLogoutLoading(false);
+        }
+    };
+
+    // 🌀 Loading State
+    if (loading) {
+        return (
+            <>
+                <Header />
+                <div className="sections overflow-hidden">
+                    <section className="banner-sec profile position-static">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 text-center py-5">
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Header />
+                <div className="sections overflow-hidden">
+                    <section className="banner-sec profile position-static">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 text-center py-5">
+                                    <p className="text-danger">{error}</p>
+                                    <button
+                                        className="btn btn-primary mt-3"
+                                        onClick={() => window.location.reload()}
+                                    >
+                                        Retry
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+    if (!profile) {
+        return null;
+    }
 
     return (
         <>
             <Header />
-
             <div className="sections overflow-hidden">
                 <section className="banner-sec profile position-static">
                     <div className="container">
                         <div className="row g-4">
-
                             {/* Sidebar */}
                             <div className="col-xl-3">
-                                <div className="sidebar h-100">
-                                    <div className="main-wrapper bg-dark p-0 h-100 d-flex flex-column justify-content-between">
-                                        {/* Topbar */}
+                                <div className="sidebar">
+                                    <div className="main-wrapper bg-dark p-0">
                                         <div className="topbar mb-5 d-flex justify-content-between align-items-start">
                                             <div className="icon-wrapper d-flex align-items-start gap-3">
                                                 <Image
@@ -34,9 +203,8 @@ export default function ProfilePage() {
                                                 />
                                                 <div className="content-wrapper">
                                                     <div className="title text-black fs-5 fw-medium mb-2">
-                                                        Joseph Dome
+                                                        {profile.fullName}
                                                     </div>
-
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/message-dark.svg"
@@ -45,13 +213,12 @@ export default function ProfilePage() {
                                                             alt="Message Icon"
                                                         />
                                                         <Link
-                                                            href="mailto:hello@example.com"
+                                                            href={`mailto:${profile.email}`}
                                                             className="fs-14 fw-medium text-dark"
                                                         >
-                                                            hello@example.com
+                                                            {profile.email}
                                                         </Link>
                                                     </div>
-
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
                                                             src="/assets/img/icons/call-dark.svg"
@@ -60,15 +227,14 @@ export default function ProfilePage() {
                                                             alt="Call Icon"
                                                         />
                                                         <Link
-                                                            href="tel:+000000000"
+                                                            href={`tel:${profile.phone}`}
                                                             className="fs-14 fw-medium text-dark"
                                                         >
-                                                            (000) 000-000
+                                                            {profile.phone}
                                                         </Link>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <Image
                                                 src="/assets/img/icons/arrow-dark.svg"
                                                 width={16}
@@ -78,47 +244,22 @@ export default function ProfilePage() {
                                             />
                                         </div>
 
-                                        {/* Sidebar Buttons */}
+                                        {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
-                                            <Link
-                                                href="/general-contractor/change-password"
-                                                className={`custom-btn ${pathname === '/general_contractor/change-password' ? 'active' : ''}`}
-                                            >
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <Image
-                                                        src="/assets/img/icons/saved.svg"
-                                                        width={20}
-                                                        height={20}
-                                                        alt="Icon"
-                                                    />
-                                                    <span className="text-white">Change Password</span>
-                                                </div>
-                                                <Image
-                                                    src="/assets/img/icons/angle-right.svg"
-                                                    width={15}
-                                                    height={9}
-                                                    alt="Arrow"
-                                                    style={{ objectFit: 'contain' }}
-                                                />
-                                            </Link>
-                                        </div>
-
-                                        {/* Bottom Logout Button */}
-                                        <div className="bottom-bar mt-auto">
-                                            <div className="buttons-wrapper">
+                                            {links.map((link) => (
                                                 <Link
-                                                    href="#"
-                                                    className="custom-btn bg-danger"
-                                                    style={{ borderColor: '#DC2626' }}
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
                                                 >
                                                     <div className="d-flex align-items-center gap-2">
                                                         <Image
-                                                            src="/assets/img/icons/logout.svg"
+                                                            src={link.icon}
                                                             width={20}
                                                             height={20}
-                                                            alt="Logout Icon"
+                                                            alt="Icon"
                                                         />
-                                                        <span className="text-white">Logout</span>
+                                                        <span className="text-white">{link.label}</span>
                                                     </div>
                                                     <Image
                                                         src="/assets/img/icons/angle-right.svg"
@@ -128,7 +269,38 @@ export default function ProfilePage() {
                                                         style={{ objectFit: 'contain' }}
                                                     />
                                                 </Link>
-                                            </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Logout Button */}
+                                    <div className="bottom-bar">
+                                        <div className="buttons-wrapper">
+                                            <button
+                                                onClick={handleLogout}
+                                                disabled={logoutLoading}
+                                                className="custom-btn bg-danger w-100 border-0"
+                                                style={{ borderColor: '#DC2626' }}
+                                            >
+                                                <div className="d-flex align-items-center gap-2">
+                                                    <Image
+                                                        src="/assets/img/icons/logout.svg"
+                                                        width={20}
+                                                        height={20}
+                                                        alt="Logout Icon"
+                                                    />
+                                                    <span className="text-white">
+                                                        {logoutLoading ? 'Logging out...' : 'Logout'}
+                                                    </span>
+                                                </div>
+                                                <Image
+                                                    src="/assets/img/icons/angle-right.svg"
+                                                    width={15}
+                                                    height={9}
+                                                    alt="Arrow"
+                                                    style={{ objectFit: 'contain' }}
+                                                />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -137,22 +309,11 @@ export default function ProfilePage() {
                             {/* Right Side */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-                                    {/* Topbar */}
                                     <div className="d-flex align-items-center gap-3 justify-content-between flex-wrap mb-5">
-                                        <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            <Link href="#" className="icon">
-                                                <Image
-                                                    src="/assets/img/button-angle.svg"
-                                                    width={10}
-                                                    height={15}
-                                                    alt="Icon"
-                                                />
-                                            </Link>
-                                            <span className="fs-4 fw-semibold">Profile Detail</span>
+                                        <div className="icon-wrapper d-flex align-items-center gap-2">
+                                            <span className="fs-4 fw-semibold">Profile Details</span>
                                         </div>
-
                                         <div className="icon-wrapper d-flex align-items-center gap-3">
-                                            {/* Edit Button */}
                                             <Link href="/general-contractor/edit-profile" className="icon">
                                                 <Image
                                                     src="/assets/img/icons/edit.svg"
@@ -161,7 +322,6 @@ export default function ProfilePage() {
                                                     alt="Edit Icon"
                                                 />
                                             </Link>
-                                            {/* Delete Button */}
                                             <Link
                                                 href="#"
                                                 className="icon"
@@ -177,7 +337,6 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
 
-                                    {/* Profile Review Bar */}
                                     <div className="review-bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-5">
                                         <div className="image-box d-flex align-items-center gap-4">
                                             <Image
@@ -188,66 +347,65 @@ export default function ProfilePage() {
                                                 alt="Worker Image"
                                             />
                                             <div className="content">
-                                                <div className="title fw-semibold fs-4 mb-2">Jason Doe</div>
-                                                <p className="mb-1 text-gray-light">Subcontractor</p>
-                                                <p className="mb-1 text-gray-light">Whittier, CA 30201</p>
+                                                <div className="title fw-semibold fs-4 mb-2">{profile.fullName}</div>
+                                                <p className="mb-1 text-gray-light">{profile.role}</p>
+                                                <p className="mb-1 text-gray-light">
+                                                    {profile.city}, {profile.state} {profile.zipCode}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Details Section */}
                                     <div className="review-bar">
                                         <div className="row g-2 mb-4">
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Full Name</div>
-                                                    <div className="fw-semibold fs-18">Jason Doe</div>
+                                                    <div className="fw-semibold fs-18">{profile.fullName}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">Company Name</div>
-                                                    <div className="fw-semibold fs-18">Jason Tiles Limited</div>
+                                                    <div className="text-gray-light fw-medium mb-2">
+                                                        Company Name
+                                                    </div>
+                                                    <div className="fw-semibold fs-18">{profile.companyName}</div>
                                                 </div>
                                             </div>
-                                            <div className="col-xl-3 col-sm-6">
+                                            <div className="col-xl-3 col-sm-6 overflow-hidden">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">Email Address</div>
+                                                    <div className="text-gray-light fw-medium mb-2">
+                                                        Email Address
+                                                    </div>
                                                     <Link
-                                                        href="mailto:hello@example.com"
-                                                        className="fw-semibold fs-18 text-dark"
+                                                        href={`mailto:${profile.email}`}
+                                                        className="fw-semibold fs-18 text-dark text-truncate"
                                                     >
-                                                        hello@example.com
+                                                        {profile.email}
                                                     </Link>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">Phone Number</div>
+                                                    <div className="text-gray-light fw-medium mb-2">
+                                                        Phone Number
+                                                    </div>
                                                     <Link
-                                                        href="tel:+0000000000"
+                                                        href={`tel:${profile.phone}`}
                                                         className="fw-semibold fs-18 text-dark"
                                                     >
-                                                        (000) 000-0000
+                                                        {profile.phone}
                                                     </Link>
-                                                </div>
-                                            </div>
-                                            <div className="col-xl-3 col-sm-6">
-                                                <div className="content">
-                                                    <div className="text-gray-light fw-medium mb-2">License </div>
-                                                    <div className="fw-semibold fs-18">252545</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
             </div>
-
             <Footer />
         </>
     );

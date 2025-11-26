@@ -112,7 +112,7 @@
 }
 .pricing-sec .price-card .pricing-header .price,
 .hero-sec.pricing .price-card .pricing-header .price {
-  font-size: clamp(36px, 4vw, 48px);
+  font-size: clamp(28px, 4vw, 32px);
   font-weight: 400;
   color: #000;
 }
