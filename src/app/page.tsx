@@ -107,7 +107,7 @@ export default function HomePage() {
     const bannerSettings = {
         infinite: true,
         fade: true,
-        autoplay: false,
+        autoPlay: false,
         autoplaySpeed: 4000,
         speed: 1500,
         arrows: false,
