@@ -165,7 +165,7 @@ export default function HomePage() {
                                         autoPlay
                                         muted
                                         loop
-                                        playsinline
+                                        playsInline
                                         poster={banner.video_poster}
                                         className="hero-video"
                                         style={{
