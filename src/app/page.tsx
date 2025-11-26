@@ -116,6 +116,7 @@ export default function HomePage() {
         beforeChange: (_, next) => setCurrentSlide(next),
     };
 
+
     const projects = Array(6).fill({
         category: "Framing",
         location: "Whittier, CA",
