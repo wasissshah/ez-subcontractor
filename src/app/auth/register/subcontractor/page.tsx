@@ -340,7 +340,6 @@ export default function RegisterPage() {
                                                     placeholder="(555) 123-4567"
                                                     value={formData.phone}
                                                     onChange={handleChange}
-                                                    maxlength={14}          // (123) 456-7890 → 14 chars
                                                 />
                                                 {errors.phone && (
                                                     <span className="text-danger animate-slide-up">{errors.phone}</span>
