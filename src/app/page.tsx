@@ -149,7 +149,7 @@ export default function HomePage() {
                                         backgroundSize: "cover",
                                         backgroundPosition: "center",
                                         display: "flex",
-                                        alignItems: "center",
+                                        alignItems: "end",
                                         justifyContent: "center",
                                     }}
                                 >
