@@ -107,7 +107,7 @@ export default function HomePage() {
     const bannerSettings = {
         infinite: true,
         fade: true,
-        autoPlay: false,
+        autoplay: false,
         autoplaySpeed: 4000,
         speed: 1500,
         arrows: false,
@@ -115,7 +115,6 @@ export default function HomePage() {
         dots: false,
         beforeChange: (_, next) => setCurrentSlide(next),
     };
-
 
     const projects = Array(6).fill({
         category: "Framing",
@@ -163,7 +162,7 @@ export default function HomePage() {
                                     className="banner-wrapper"
                                 >
                                     <video
-                                        autoplay
+                                        autoPlay
                                         muted
                                         loop
                                         playsinline
