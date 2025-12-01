@@ -203,7 +203,6 @@ export default function PostAd() {
                 formData.append(`attachments[${index}][description]`, file.name);
             });
 
-            console.log('FormData contents:', [...formData.entries()]); // 👈 This shows actual key-value pairs
 
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/create`, {
