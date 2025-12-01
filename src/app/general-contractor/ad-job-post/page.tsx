@@ -212,16 +212,7 @@ export default function PostAd() {
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data',
                 },
-                body: {
-                    city: 'New York',
-                    state: 'NY',
-                    category_id: 1,
-                    zip: 12345,
-                    estimate_due_date: estimateDueDate,
-                    start_date: startDate,
-                    end_date: endDate,
-                    status: 'pending',
-                },
+                body: formData
             });
 
 
