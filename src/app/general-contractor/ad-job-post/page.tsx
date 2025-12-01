@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from 'next/Image';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
@@ -18,25 +18,33 @@ interface Category {
     name: string;
 }
 
+// 📄 Document Interface — exact AddAttachment jaisa
+interface DocumentItem {
+    id: string;
+    name: string;
+    description: string;
+    file: File; // 👈 Store actual file for API
+    url?: string; // 👈 For preview
+}
+
 export default function PostAd() {
     const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState('');
     const [selectOpen, setSelectOpen] = useState(false);
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-    const [description, setDescription] = useState('Test');
+    const [description, setDescription] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // 🆕 Error state — matching RegisterPage behavior
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Form fields
-    const [city, setCity] = useState('Santa Fe');
-    const [state, setState] = useState('TX');
-    const [zip, setZip] = useState('77510');
-    const [estimateDueDate, setEstimateDueDate] = useState('2025-12-20'); // 3 weeks out
-    const [startDate, setStartDate] = useState('2026-01-15');
-    const [endDate, setEndDate] = useState('2026-04-30');
+    // Form fields — ✅ All empty now
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zip, setZip] = useState('');
+    const [estimateDueDate, setEstimateDueDate] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
     // 🔹 NEW: API submission state
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,46 +116,84 @@ export default function PostAd() {
     }, []);
 
     // Close dropdown on outside click
-    // useEffect(() => {
-    //     const handleClickOutside = (event: MouseEvent) => {
-    //         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-    //             // setSelectOpen(false);
-    //             clearError('category');
-    //         }
-    //     };
-    //     document.addEventListener('mousedown', handleClickOutside);
-    //     return () => document.removeEventListener('mousedown', handleClickOutside);
-    // }, []);
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setSelectOpen(false);
+                clearError('category');
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // 📁 File handling — converted to DocumentItem format with actual File object
+    const [allDocuments, setAllDocuments] = useState<DocumentItem[]>([]);
+
+    const makeDoc = (file: File, offset = 0): DocumentItem => {
+        const doc: DocumentItem = {
+            id: `${Date.now()}-${Math.floor(Math.random() * 100000)}-${offset}`,
+            name: file.name,
+            description: '',
+            file: file,
+        };
+
+        // 👇 If it's an image, create a preview URL
+        if (file.type.startsWith('image/')) {
+            doc.url = URL.createObjectURL(file);
+        }
+
+        return doc;
+    };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        setUploadedFiles((prev) => [...prev, ...files]);
+        if (files.length === 0) return;
+
+        const newDocs = files.map((f, i) => makeDoc(f, i));
+        setAllDocuments(prev => [...prev, ...newDocs]);
+        e.target.value = ''; // reset input
         clearError('attachments');
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const files = Array.from(e.dataTransfer.files);
-        setUploadedFiles((prev) => [...prev, ...files]);
+        const files = Array.from(e.dataTransfer.files || []);
+        if (files.length === 0) return;
+
+        const newDocs = files.map((f, i) => makeDoc(f, i));
+        setAllDocuments(prev => [...prev, ...newDocs]);
         clearError('attachments');
     };
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
+
+    const handleRemoveFile = (id: string) => {
+        setAllDocuments(prev => {
+            // 👇 Revoke the URL to avoid memory leak
+            const docToRemove = prev.find(doc => doc.id === id);
+            if (docToRemove?.url) {
+                URL.revokeObjectURL(docToRemove.url);
+            }
+            return prev.filter(doc => doc.id !== id);
+        });
+    };
+
+    const handleDocumentDescriptionChange = (id: string, value: string) => {
+        setAllDocuments(prev =>
+            prev.map(doc => (doc.id === id ? { ...doc, description: value } : doc))
+        );
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // 🔒 Validation
         const newErrors: Record<string, string> = {};
-        //
-        // if (!selectedCategory || selectedCategory === '') {
-        //     newErrors.category = 'Please select a category.';
-        // } else {
-        //     const categoryIdNum = parseInt(selectedCategory);
-        //     if (isNaN(categoryIdNum)) {
-        //         newErrors.category = 'Invalid category selected.';
-        //     }
-        // }
+
+        if (!selectedCategory || selectedCategory === '') {
+            newErrors.category = 'Please select a category.';
+        }
 
         if (!city.trim()) newErrors.city = 'City is required.';
         if (!state.trim()) newErrors.state = 'State is required.';
@@ -181,63 +227,59 @@ export default function PostAd() {
             const formData = new FormData();
             formData.append('title', 'New Project');
             formData.append('description', description);
-            //
-            // // ✅ FIX: Send category_id as a single integer (not array)
-            // const categoryIdNum = parseInt(selectedCategory);
-            // if (isNaN(categoryIdNum)) {
-            //     setErrors({ category: 'Invalid category ID.' });
-            //     setIsSubmitting(false);
-            //     return;
-            // }
             formData.append('city', city);
             formData.append('state', state);
-            formData.append('category_id', '1');
+            formData.append('category_id', selectedCategory);
             formData.append('zip', zip);
             formData.append('estimate_due_date', estimateDueDate);
             formData.append('start_date', startDate);
             formData.append('end_date', endDate);
             formData.append('status', 'pending');
 
-            uploadedFiles.forEach((file, index) => {
-                formData.append(`attachments[${index}][file]`, file);
-                formData.append(`attachments[${index}][description]`, file.name);
+            allDocuments.forEach((doc, index) => {
+                formData.append(`attachments[${index}][file]`, doc.file, doc.name);
+                formData.append(`attachments[${index}][description]`, doc.description);
             });
-
-
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/create`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
                 },
-                body: formData
+                body: formData,
             });
 
-
             const result = await response.json();
-
-            console.log(result);
+            console.log('API Response:', result);
 
             if (response.status === 401) {
                 setErrors({ api: 'Session expired. Please log in again.' });
                 localStorage.removeItem('token');
-                router.push('/login');
+                router.push('/auth/login');
                 return;
             }
 
             if (!response.ok) {
-                const errorMsg = Array.isArray(result.message)
-                    ? result.message[0] || 'Failed to create project.'
-                    : result.message || 'Failed to create project.';
+                let errorMsg = 'Failed to create project.';
+                if (typeof result.message === 'string') {
+                    errorMsg = result.message;
+                } else if (Array.isArray(result.message)) {
+                    errorMsg = result.message[0] || errorMsg;
+                } else if (result.errors) {
+                    const firstField = Object.keys(result.errors)[0];
+                    errorMsg = result.errors[firstField][0] || errorMsg;
+                } else if (typeof result.error === 'string') {
+                    errorMsg = result.error;
+                }
+
                 setErrors({ api: errorMsg });
                 return;
             }
 
             // ✅ Success
             console.log('✅ Project created:', result);
-            router.push('/general_contractor/add-attachment');
+            router.push('/general-contractor/add-attachment');
 
         } catch (error) {
             console.error('Network error:', error);
@@ -275,59 +317,59 @@ export default function PostAd() {
                                 {/* LEFT SIDE */}
                                 <div className="col-lg-8">
                                     {/* Category Dropdown */}
-                                    {/*<div*/}
-                                    {/*    className="input-wrapper d-flex flex-column position-relative mb-4"*/}
-                                    {/*    ref={dropdownRef}*/}
-                                    {/*>*/}
-                                    {/*    <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>*/}
-                                    {/*    <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>*/}
-                                    {/*        <div*/}
-                                    {/*            className="select-selected"*/}
-                                    {/*            onClick={() => setSelectOpen(!selectOpen)}*/}
-                                    {/*        >*/}
-                                    {/*            {selectedCategory*/}
-                                    {/*                ? categories.find((c) => c.id === selectedCategory)?.name || 'Select category'*/}
-                                    {/*                : 'Select category'}*/}
-                                    {/*        </div>*/}
-                                    {/*        <svg*/}
-                                    {/*            xmlns="http://www.w3.org/2000/svg"*/}
-                                    {/*            width="16"*/}
-                                    {/*            height="16"*/}
-                                    {/*            fill="currentColor"*/}
-                                    {/*            className="select-arrow"*/}
-                                    {/*            viewBox="0 0 16 16"*/}
-                                    {/*            style={{*/}
-                                    {/*                position: 'absolute',*/}
-                                    {/*                right: '10px',*/}
-                                    {/*                top: '50%',*/}
-                                    {/*                transform: 'translateY(-50%)',*/}
-                                    {/*            }}*/}
-                                    {/*        >*/}
-                                    {/*            <path*/}
-                                    {/*                fillRule="evenodd"*/}
-                                    {/*                d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"*/}
-                                    {/*            />*/}
-                                    {/*        </svg>*/}
-                                    {/*        <ul className="select-options">*/}
-                                    {/*            {categories.map((cat) => (*/}
-                                    {/*                <li*/}
-                                    {/*                    key={cat.id}*/}
-                                    {/*                    data-value={cat.id}*/}
-                                    {/*                    onClick={() => {*/}
-                                    {/*                        setSelectedCategory(cat.id);*/}
-                                    {/*                        // setSelectOpen(false);*/}
-                                    {/*                        // clearError('category');*/}
-                                    {/*                    }}*/}
-                                    {/*                >*/}
-                                    {/*                    {cat.name}*/}
-                                    {/*                </li>*/}
-                                    {/*            ))}*/}
-                                    {/*        </ul>*/}
-                                    {/*    </div>*/}
-                                    {/*    {errors.category && (*/}
-                                    {/*        <span className="text-danger animate-slide-up">{errors.category}</span>*/}
-                                    {/*    )}*/}
-                                    {/*</div>*/}
+                                    <div
+                                        className="input-wrapper d-flex flex-column position-relative mb-4"
+                                        ref={dropdownRef}
+                                    >
+                                        <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
+                                        <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>
+                                            <div
+                                                className="select-selected"
+                                                onClick={() => setSelectOpen(!selectOpen)}
+                                            >
+                                                {selectedCategory
+                                                    ? categories.find((c) => c.id === selectedCategory)?.name || 'Select category'
+                                                    : 'Select category'}
+                                            </div>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                className="select-arrow"
+                                                viewBox="0 0 16 16"
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: '10px',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                }}
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                                                />
+                                            </svg>
+                                            <ul className="select-options">
+                                                {categories.map((cat) => (
+                                                    <li
+                                                        key={cat.id}
+                                                        data-value={cat.id}
+                                                        onClick={() => {
+                                                            setSelectedCategory(cat.id);
+                                                            setSelectOpen(false);
+                                                            clearError('category');
+                                                        }}
+                                                    >
+                                                        {cat.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        {errors.category && (
+                                            <span className="text-danger animate-slide-up">{errors.category}</span>
+                                        )}
+                                    </div>
 
                                     {/* Input Fields */}
                                     <div className="row g-4">
@@ -338,7 +380,7 @@ export default function PostAd() {
                                                 setter: setCity,
                                                 field: 'city',
                                                 type: 'text',
-                                                placeholder: 'New York',
+                                                placeholder: 'Enter city',
                                             },
                                             {
                                                 label: 'State *',
@@ -346,7 +388,7 @@ export default function PostAd() {
                                                 setter: setState,
                                                 field: 'state',
                                                 type: 'text',
-                                                placeholder: 'NY',
+                                                placeholder: 'Enter state',
                                             },
                                             {
                                                 label: 'Zip Code *',
@@ -354,7 +396,7 @@ export default function PostAd() {
                                                 setter: setZip,
                                                 field: 'zip',
                                                 type: 'text',
-                                                placeholder: '12345',
+                                                placeholder: 'Enter ZIP',
                                             },
                                             {
                                                 label: 'Estimate Due Date *',
@@ -408,7 +450,7 @@ export default function PostAd() {
                                                         setDescription(val);
                                                         clearError('description');
                                                     }}
-                                                    placeholder="Message"
+                                                    placeholder="Write project description..."
                                                 />
                                                 {errors.description && (
                                                     <span className="text-danger animate-slide-up">
@@ -419,28 +461,91 @@ export default function PostAd() {
                                         </div>
                                     </div>
 
-                                    {/* Documents Section */}
+                                    {/* Documents Description — Exact Screenshot Style */}
                                     <div className="mb-2 fw-semibold fs-5">Documents Description</div>
-                                    <div className="image-box d-block mb-5 text-center">
-                                        {uploadedFiles.length === 0 ? (
-                                            <>
+                                    <div className="documents-wrapper mb-4">
+                                        {allDocuments.length === 0 ? (
+                                            <div className="text-center">
                                                 <Image
                                                     src="/assets/img/post.webp"
                                                     className="d-block mx-auto mb-2"
                                                     width={166}
                                                     height={161}
-                                                    alt="Post Image"
+                                                    alt="No Document"
                                                     loading="lazy"
                                                 />
                                                 <div className="fs-14 fw-medium">No Document added</div>
-                                            </>
+                                            </div>
                                         ) : (
-                                            uploadedFiles.map((file, index) => (
-                                                <div key={index} className="mb-2">
-                                                    <p className="fw-medium">{file.name}</p>
+                                            allDocuments.map((doc) => (
+                                                <div
+                                                    className="document-item mb-3 p-2 border rounded d-flex align-items-center justify-content-between"
+                                                    key={doc.id}
+                                                >
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        {/* File Icon or Preview based on extension */}
+                                                        {doc.name.endsWith('.pdf') ? (
+                                                            <img
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg  "
+                                                                width={24}
+                                                                height={24}
+                                                                alt="PDF"
+                                                                className="me-2"
+                                                            />
+                                                        ) : doc.name.endsWith('.doc') || doc.name.endsWith('.docx') ? (
+                                                            <img
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/43/Microsoft_Word_2013_logo.svg  "
+                                                                width={24}
+                                                                height={24}
+                                                                alt="DOC"
+                                                                className="me-2"
+                                                            />
+                                                        ) : doc.url ? (
+                                                            // 👇 Show actual image preview
+                                                            <Image
+                                                                src={doc.url}
+                                                                width={24}
+                                                                height={24}
+                                                                alt={doc.name}
+                                                                className="me-2"
+                                                                unoptimized
+                                                            />
+                                                        ) : (
+                                                            <img
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/48/Image_file_icon.svg  "
+                                                                width={24}
+                                                                height={24}
+                                                                alt="File"
+                                                                className="me-2"
+                                                            />
+                                                        )}
+                                                        <span className="d-block fs-14 fw-semibold">{doc.name}</span>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-sm btn-outline-danger ms-2"
+                                                        onClick={() => handleRemoveFile(doc.id)}
+                                                        aria-label="Remove file"
+                                                    >
+                                                        &times;
+                                                    </button>
                                                 </div>
                                             ))
                                         )}
+
+                                        {/* Description Inputs for each file — NOW INLINE with each file */}
+                                        {allDocuments.map((doc) => (
+                                            <div className="input-wrapper mb-3" key={`desc-${doc.id}`}>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Write description"
+                                                    value={doc.description}
+                                                    onChange={(e) =>
+                                                        handleDocumentDescriptionChange(doc.id, e.target.value)
+                                                    }
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
 
                                     {/* 🔴 API-level error */}
@@ -450,17 +555,17 @@ export default function PostAd() {
                                         </div>
                                     )}
 
-                                    {/* Submit Button — ✅ Disabled during API call */}
+                                    {/* Submit Button */}
                                     <button
                                         type="submit"
                                         className="btn btn-primary rounded-3 w-100 justify-content-center mt-4"
-                                        disabled={isSubmitting} // ✅ disables on submit
+                                        disabled={isSubmitting}
                                     >
                                         {isSubmitting ? 'Submitting...' : 'Add Project'}
                                     </button>
                                 </div>
 
-                                {/* RIGHT SIDE */}
+                                {/* RIGHT SIDE — Only for Upload */}
                                 <div className="col-lg-4">
                                     <div className="attachment-wrapper">
                                         <div className="fw-semibold mb-3">Attachment</div>
