@@ -144,53 +144,6 @@ export default function RegisterPage() {
         fetchCategories();
     }, [accountType]);
 
-    // ✅ Initialize Select2 (after DOM + data ready)
-    useEffect(() => {
-        if (categories.length === 0 || categoriesLoading) return;
-
-        const timer = setTimeout(() => {
-            if (!selectRef.current) return;
-            const $select = $(selectRef.current);
-
-            // Cleanup
-            if ($select.data('select2')) {
-                $select.select2('destroy');
-            }
-
-            // Initialize
-            $select.select2({
-                placeholder: 'Select category',
-                allowClear: true,
-                width: '100%',
-                minimumResultsForSearch: 8,
-                theme: 'bootstrap-5', // ✅ Looks like Bootstrap 5
-            });
-
-            // Sync value
-            const handleChange = () => {
-                const value = $select.val() as string;
-                setFormData(prev => ({ ...prev, category: value }));
-                if (errors.category) {
-                    setErrors(prev => {
-                        const { category: _, ...rest } = prev;
-                        return rest;
-                    });
-                }
-            };
-
-            $select.on('change', handleChange);
-
-            return () => {
-                $select.off('change', handleChange);
-                if ($select.data('select2')) {
-                    $select.select2('destroy');
-                }
-            };
-        }, 100); // Small delay for DOM stability
-
-        return () => clearTimeout(timer);
-    }, [categories, categoriesLoading, errors.category]);
-
     // ✅ Next step
     const goToNextStep = () => {
         if (accountType === 'affiliate') return;
@@ -509,7 +462,6 @@ export default function RegisterPage() {
                                                 <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
                                                 <select
                                                     id="category-select"
-                                                    ref={selectRef} // ✅ Bound to ref
                                                     className="form-control"
                                                     value={formData.category}
                                                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
