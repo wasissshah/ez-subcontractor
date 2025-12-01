@@ -191,7 +191,7 @@ export default function PostAd() {
             // }
             formData.append('city', city);
             formData.append('state', state);
-            formData.append('category_id', 1);
+            formData.append('category_id', '1');
             formData.append('zip', zip);
             formData.append('estimate_due_date', estimateDueDate);
             formData.append('start_date', startDate);
