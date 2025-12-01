@@ -1,10 +1,8 @@
 'use client';
 
 import '../../../../styles/login.css';
-import 'select2/dist/css/select2.min.css';
 import React, { useState, useRef, useEffect } from 'react';
 import $ from 'jquery';
-import 'select2';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
@@ -43,8 +41,6 @@ export default function RegisterPage() {
     // Categories
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
-    const selectRef = useRef<HTMLSelectElement>(null); // ✅ Critical for Select2
-
     // ✅ Eye Icon Component (same as ChangePassword page)
     const EyeIcon = ({ active }: { active: boolean }) => (
         <svg
