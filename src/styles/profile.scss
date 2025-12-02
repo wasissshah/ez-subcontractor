@@ -413,6 +413,9 @@ $danger: #DC2626;
     }
   }
 }
+.uploaded-file-card img{
+  object-fit: contain !important;
+}
 .ql-editor{
   min-height: 220px;
 }

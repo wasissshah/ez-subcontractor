@@ -330,7 +330,7 @@
 .banner-sec.profile .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 30px;
 }
 .banner-sec.profile .custom-grid1 {
   display: grid;
@@ -405,6 +405,10 @@
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
+}
+
+.uploaded-file-card img {
+  object-fit: contain !important;
 }
 
 .ql-editor {

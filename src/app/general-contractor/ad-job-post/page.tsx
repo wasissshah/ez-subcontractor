@@ -179,12 +179,6 @@ export default function PostAd() {
         });
     };
 
-    const handleDocumentDescriptionChange = (id: string, value: string) => {
-        setAllDocuments(prev =>
-            prev.map(doc => (doc.id === id ? { ...doc, description: value } : doc))
-        );
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -279,7 +273,7 @@ export default function PostAd() {
 
             // ✅ Success
             console.log('✅ Project created:', result);
-            router.push('/general-contractor/add-attachment');
+            router.push('/general-contractor/edit-job-post');
 
         } catch (error) {
             console.error('Network error:', error);
@@ -461,7 +455,7 @@ export default function PostAd() {
                                         </div>
                                     </div>
 
-                                    {/* Documents Description — Exact Screenshot Style */}
+                                    {/* Documents Description — Now just a heading */}
                                     <div className="mb-2 fw-semibold fs-5">Documents Description</div>
                                     <div className="documents-wrapper mb-4">
                                         {allDocuments.length === 0 ? (
@@ -486,7 +480,7 @@ export default function PostAd() {
                                                         {/* File Icon or Preview based on extension */}
                                                         {doc.name.endsWith('.pdf') ? (
                                                             <img
-                                                                src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg  "
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg    "
                                                                 width={24}
                                                                 height={24}
                                                                 alt="PDF"
@@ -494,7 +488,7 @@ export default function PostAd() {
                                                             />
                                                         ) : doc.name.endsWith('.doc') || doc.name.endsWith('.docx') ? (
                                                             <img
-                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/43/Microsoft_Word_2013_logo.svg  "
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/43/Microsoft_Word_2013_logo.svg    "
                                                                 width={24}
                                                                 height={24}
                                                                 alt="DOC"
@@ -512,7 +506,7 @@ export default function PostAd() {
                                                             />
                                                         ) : (
                                                             <img
-                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/48/Image_file_icon.svg  "
+                                                                src="https://upload.wikimedia.org/wikipedia/commons/4/48/Image_file_icon.svg    "
                                                                 width={24}
                                                                 height={24}
                                                                 alt="File"
@@ -532,20 +526,6 @@ export default function PostAd() {
                                                 </div>
                                             ))
                                         )}
-
-                                        {/* Description Inputs for each file — NOW INLINE with each file */}
-                                        {allDocuments.map((doc) => (
-                                            <div className="input-wrapper mb-3" key={`desc-${doc.id}`}>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Write description"
-                                                    value={doc.description}
-                                                    onChange={(e) =>
-                                                        handleDocumentDescriptionChange(doc.id, e.target.value)
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
                                     </div>
 
                                     {/* 🔴 API-level error */}
@@ -610,7 +590,69 @@ export default function PostAd() {
                                                 onChange={handleFileUpload}
                                             />
                                         </div>
+                                        <div className="uploaded-files-preview d-flex align-items-center gap-2 flex-wrap mt-4">
+                                            {allDocuments.map((doc) => (
+                                                <div
+                                                    key={doc.id}
+                                                    className="uploaded-file-card  d-flex align-items-center justify-content-center gap-2"
+                                                    style={{
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        borderRadius: '4px',
+                                                        overflow: 'hidden',
+                                                        backgroundColor: 'transparent',
+                                                        padding: '6px',
+                                                        objectFit:'contain',
+                                                        border: '1px solid #B7C627',
+                                                        cursor: 'pointer',
+                                                        transition: 'transform 0.2s',
+                                                    }}
+                                                    onmouseenter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                                    onmouseleave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                                >
+                                                    {/* File Icon or Preview based on extension */}
+                                                    {doc.name.endsWith('.pdf') ? (
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg    "
+                                                            width={50}
+                                                            height={50}
+                                                            alt="PDF"
+                                                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                        />
+                                                    ) : doc.name.endsWith('.doc') || doc.name.endsWith('.docx') ? (
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/4/43/Microsoft_Word_2013_logo.svg    "
+                                                            width={50}
+                                                            height={50}
+                                                            alt="DOC"
+                                                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                        />
+                                                    ) : doc.url ? (
+                                                        // 👇 Show actual image preview
+                                                        <Image
+                                                            src={doc.url}
+                                                            width={50}
+                                                            height={50}
+                                                            alt={doc.name}
+                                                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                            unoptimized
+                                                        />
+                                                    ) : (
+                                                        <img
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/4/48/Image_file_icon.svg    "
+                                                            width={50}
+                                                            height={50}
+                                                            alt="File"
+                                                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
+
+                                    {/* Uploaded Files Preview — Exact Screenshot Style */}
+
                                 </div>
                             </div>
                         </form>

@@ -13,12 +13,12 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface DocumentItem {
     name: string;
-    file?: File;
+    file?: File; // 👈 Actual file object for upload
     description: string;
 }
 
 export default function PostAd() {
-    const router = useRouter(); // <- Router hook
+    const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectOpen, setSelectOpen] = useState<boolean>(false);
     const [description, setDescription] = useState<string>('');
@@ -26,6 +26,7 @@ export default function PostAd() {
         { name: 'master_crafts_man.pdf', description: '' },
         { name: 'master_crafts_man.pdf', description: '' },
     ]);
+    const [isSubmitting, setIsSubmitting] = useState(false); // 🔹 Submit state
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,26 @@ export default function PostAd() {
         { id: '3', name: 'Framing' },
         { id: '4', name: 'Roofing' },
     ];
+
+    // 🆕 Error state — optional, but recommended
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // 🔹 Helper: Clear specific field error
+    const clearError = (field: string) => {
+        setErrors(prev => {
+            const { [field]: _, ...rest } = prev;
+            return rest;
+        });
+    };
+
+    // Fetch token and validate
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token || token.trim() === '') {
+            // Redirect to login if no token
+            router.push('/auth/login');
+        }
+    }, [router]);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -77,6 +98,84 @@ export default function PostAd() {
 
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
 
+    // ✅ API Submit Handler
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setIsSubmitting(true);
+        setErrors({}); // Reset errors
+
+        try {
+            const token = localStorage.getItem('token');
+            if (!token || token.trim() === '') {
+                setErrors({ api: 'Authentication required. Please log in.' });
+                router.push('/auth/login');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('title', 'Updated Project Title'); // You can make this dynamic
+            formData.append('description', description);
+            formData.append('status', 'in_progress'); // Fixed for now, can be dynamic
+
+            // Attachments
+            allDocuments.forEach((doc, index) => {
+                if (doc.file) {
+                    formData.append(`attachments[${index}][file]`, doc.file, doc.name);
+                    formData.append(`attachments[${index}][description]`, doc.description);
+                }
+            });
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/1/update`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    // ❌ Do NOT set Content-Type manually with FormData — browser does it automatically
+                },
+                body: formData,
+            });
+            console.log(formData);
+
+            const result = await response.json();
+            console.log('API Response:', result);
+
+            if (response.status === 401) {
+                setErrors({ api: 'Session expired. Please log in again.' });
+                localStorage.removeItem('token');
+                router.push('/auth/login');
+                return;
+            }
+
+            if (!response.ok) {
+                let errorMsg = 'Failed to update project.';
+                if (typeof result.message === 'string') {
+                    errorMsg = result.message;
+                } else if (Array.isArray(result.message)) {
+                    errorMsg = result.message[0] || errorMsg;
+                } else if (result.errors) {
+                    const firstField = Object.keys(result.errors)[0];
+                    errorMsg = result.errors[firstField][0] || errorMsg;
+                } else if (typeof result.error === 'string') {
+                    errorMsg = result.error;
+                }
+
+                setErrors({ api: errorMsg });
+                return;
+            }
+
+            // ✅ Success — Redirect or show success message
+            console.log('✅ Project updated:', result);
+            router.push('/general_contractor/view-more-reviews');
+
+        } catch (error) {
+            console.error('Network error:', error);
+            setErrors({ api: 'Network error. Please check your connection.' });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <>
             <Header />
@@ -100,7 +199,7 @@ export default function PostAd() {
 
                         <div className="row g-3">
                             <div className="col-lg-8">
-                                <form className="mb-4">
+                                <form onSubmit={handleSubmit} className="mb-4"> {/* ✅ Form added */}
                                     {/* Category Select */}
                                     <div className="input-wrapper d-flex flex-column position-relative mb-4" ref={dropdownRef}>
                                         <label className="mb-1 fw-semibold">Category *</label>
@@ -159,7 +258,7 @@ export default function PostAd() {
                                         <div className="document-item mb-3" key={index}>
                                             <div className="d-flex align-items-center gap-3 justify-content-between mb-2">
                                                 <div className="d-flex align-items-center gap-2">
-                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" width={27} height={32} alt="PDF" />
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg  " width={27} height={32} alt="PDF" />
                                                     <span className="d-block fs-14 fw-semibold">{doc.name}</span>
                                                 </div>
                                                 <button type="button" className="remove-btn" onClick={() => handleRemoveFile(index)}>x</button>
@@ -176,13 +275,17 @@ export default function PostAd() {
                                     ))}
                                 </div>
 
-                                {/* ✅ Add Project Button -> Redirect */}
+                                {/* ✅ Add Project Button -> Now Submit Button */}
                                 <button
-                                    type="button"
+                                    type="submit"
                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                    onClick={() => router.push('/general_contractor/view-more-reviews')}
+                                    disabled={isSubmitting}
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent form submission if needed
+                                        // But since we have form, it will trigger handleSubmit
+                                    }}
                                 >
-                                    Add Project
+                                    {isSubmitting ? 'Updating...' : 'Add Project'}
                                 </button>
                             </div>
 
