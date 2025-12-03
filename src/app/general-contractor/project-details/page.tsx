@@ -1,9 +1,9 @@
-import {Suspense} from 'react';
-import ProjectDetailsPage from './ProjectDetailsForm';
+import { Suspense } from 'react';
+import ProjectDetailsForm from './ProjectDetailsForm';
 
 export default async function ProjectDetailsPage({
-                                                  searchParams,
-                                              }: {
+                                                     searchParams,
+                                                 }: {
     searchParams: Promise<{ id?: string }>;
 }) {
     return (
@@ -13,10 +13,11 @@ export default async function ProjectDetailsPage({
                     <div className="spinner-border text-primary" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
+                    <p className="mt-3">Loading project details...</p>
                 </div>
             </div>
         }>
-            <ProjectDetailsPage searchParams={searchParams}/>
+            <ProjectDetailsForm searchParams={searchParams} />
         </Suspense>
     );
 }

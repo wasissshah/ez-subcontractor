@@ -38,7 +38,7 @@ interface Project {
     created_at: string;
 }
 
-export default function JobDetailsPage() {
+export default function ProjectDetailsPage() {
     const searchParams = useSearchParams();
     const projectId = searchParams.get('id');
     const [project, setProject] = useState<Project | null>(null);
