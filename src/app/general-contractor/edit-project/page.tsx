@@ -582,11 +582,7 @@ export default function EditProjectPage() {
                                         >
                                             <div className="upload-content">
                                                 <div className="upload-icon">
-<<<<<<< HEAD
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="none" stroke="#272727" viewBox="0 0 24 24" stroke="currentColor">
-=======
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="none" stroke="#272727" viewBox="0 0 24 24">
->>>>>>> 28e46d0 (ch)
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v4h16v-4" />
                                                     </svg>
                                                 </div>
