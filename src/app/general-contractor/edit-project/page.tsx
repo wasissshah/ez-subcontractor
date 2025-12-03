@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from 'next/Image';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '../../components/Header';
@@ -263,7 +263,6 @@ export default function EditProjectPage() {
                 router.push('/auth/login');
                 return;
             }
-
             const formData = new FormData();
             formData.append('title', 'Updated Project');
             formData.append('description', description);
@@ -347,7 +346,6 @@ export default function EditProjectPage() {
             </>
         );
     }
-
     if (error || !project) {
         return (
             <>
@@ -375,7 +373,6 @@ export default function EditProjectPage() {
             </>
         );
     }
-
     return (
         <>
             <Header />
