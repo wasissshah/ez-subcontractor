@@ -600,6 +600,7 @@ export default function EditProjectPage() {
                                                 onChange={handleFileUpload}
                                             />
                                         </div>
+
                                         <div className="uploaded-files-preview d-flex align-items-center gap-2 flex-wrap mt-4">
                                             {allDocuments.map((doc, index) => (
                                                 <div
