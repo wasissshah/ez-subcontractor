@@ -482,13 +482,19 @@ export default function DashboardPage() {
                                                 <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                     <button
                                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                        onClick={() => router.push(`/general-contractor/project-details/${project.id}`)}
+                                                        onClick={() => {
+                                                            localStorage.setItem('project-id', `${project.id}`);
+                                                            router.push('/general-contractor/project-details');
+                                                        }}
                                                     >
                                                         View Details
                                                     </button>
                                                     <button
                                                         className="btn bg-dark rounded-3 w-100 justify-content-center text-white"
-                                                        onClick={() => router.push(`/general-contractor/edit-project/${project.id}`)}
+                                                        onClick={() => {
+                                                            localStorage.setItem('project-id', `${project.id}`);
+                                                            router.push('/general-contractor/edit-project');
+                                                        }}
                                                     >
                                                         Edit
                                                     </button>
