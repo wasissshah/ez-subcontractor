@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
-import '../../../../../styles/job-single.css';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import '../../../styles/job-single.css';
 
 // 🔹 Helper: Extract file name from path
 const getFileName = (filePath: string): string => {

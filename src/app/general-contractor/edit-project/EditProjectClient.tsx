@@ -6,10 +6,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import Header from '../../../../components/Header';
-import Footer from '../../../../components/Footer';
-import '../../../../../styles/profile.css';
-import '../../../../../styles/post-detail.css';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import '../../../styles/profile.css';
+import '../../../styles/post-detail.css';
 import 'react-quill/dist/quill.snow.css';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
