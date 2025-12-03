@@ -225,14 +225,6 @@ export default function ReviewsPage() {
                                                     </div>
                                                 </div>
                                             ))
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 28e46d0 (ch)
-=======
-
->>>>>>> 999fc84 (push)
                                         ) : (
                                             <div className="col-12">
                                                 <div className="text-center py-4">
