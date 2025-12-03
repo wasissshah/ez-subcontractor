@@ -168,20 +168,22 @@ export default function RegisterPage() {
             let data = await response.json();
 
             console.log(data);
+
             if (response.ok) {
                 // 🔑 Extract token & user
                 const token = data.data.token;
-
-                console.log(token);
-
+                localStorage.setItem('token', token);
                 if (token) {
-                    if (role === 'general_contractor') {
+                    if (role == 'general_contractor') {
+                        console.log(1);
                         router.push('/general-contractor/dashboard');
                     }
-                    if (role === 'subcontractor') {
+                    if (role == 'subcontractor') {
+                        console.log(2);
                         router.push('/subcontractor/subscription');
                     }
-                    if (role === 'affiliate') {
+                    if (role == 'affiliate') {
+                        console.log(3);
                         router.push('/affiliate/subscription');
                     }
                 } else {
