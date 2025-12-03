@@ -602,6 +602,7 @@ export default function EditProjectPage() {
                                         </div>
                                         <div className="uploaded-files-preview d-flex align-items-center gap-2 flex-wrap mt-4">
                                             {allDocuments.map((doc, index) => (
+
                                                 <div
                                                     key={index}
                                                     className="uploaded-file-card d-flex align-items-center justify-content-center a gap-2"
