@@ -225,6 +225,7 @@ export default function ReviewsPage() {
                                                     </div>
                                                 </div>
                                             ))
+
                                         ) : (
                                             <div className="col-12">
                                                 <div className="text-center py-4">
