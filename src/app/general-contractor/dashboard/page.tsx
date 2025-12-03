@@ -482,13 +482,13 @@ export default function DashboardPage() {
                                                 <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                     <button
                                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                        onClick={() => router.push(`/general-contractor/project-details?id=${project.id}`)}
+                                                        onClick={() => router.push(`/general-contractor/project-details/${project.id}`)}
                                                     >
                                                         View Details
                                                     </button>
                                                     <button
                                                         className="btn bg-dark rounded-3 w-100 justify-content-center text-white"
-                                                        onClick={() => router.push(`/general-contractor/edit-project?id=${project.id}`)}
+                                                        onClick={() => router.push(`/general-contractor/edit-project/${project.id}`)}
                                                     >
                                                         Edit
                                                     </button>

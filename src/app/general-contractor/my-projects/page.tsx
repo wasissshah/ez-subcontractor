@@ -115,7 +115,7 @@ export default function DashboardPage() {
 
     // 🔹 Handle Edit → navigate with ?id=
     const handleEditProject = (id: number) => {
-        router.push(`/general-contractor/edit-project?id=${id}`);
+        router.push(`/general-contractor/edit-project/${id}`);
     };
 
     // 🔹 ✅ FIXED: Delete project using FormData (matches your Postman)
@@ -205,7 +205,7 @@ export default function DashboardPage() {
     const filteredProjects = getFilteredProjects();
 
     const handleViewDetails = (id: number) => {
-        router.push(`/general-contractor/project-details?id=${id}`);
+        router.push(`/general-contractor/project-details/${id}`);
     };
 
     return (
