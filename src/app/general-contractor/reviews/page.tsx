@@ -81,7 +81,6 @@ export default function ReviewsPage() {
                 setLoading(false);
             }
         };
-
         fetchContractors();
     }, []);
 
@@ -170,7 +169,7 @@ export default function ReviewsPage() {
                                                                     loading="lazy"
                                                                 />
                                                                 <div className="content">
-                                                                    <div className="fw-semibold fs-14 mb-1">{contractor.name}</div>
+                                                                    <div className="fw-semibold fs-14 mb-1 text-capitalize">{contractor.name}</div>
                                                                     <div style={{ color: '#8F9B1F' }} className="fw-semibold fs-14">
                                                                         {contractor.company_name || 'Unknown Company'}
                                                                     </div>
@@ -182,7 +181,7 @@ export default function ReviewsPage() {
                                                         </div>
 
                                                         <div className="bottom d-flex align-items-center justify-content-between gap-2 flex-wrap">
-                                                            <div className="fs-14 fw-medium">
+                                                            <div className="fs-12 fw-medium">
                                                                 {contractor.city && contractor.state
                                                                     ? `${contractor.city}, ${contractor.state}`
                                                                     : 'Location not available'}
@@ -206,7 +205,7 @@ export default function ReviewsPage() {
                                                                                             ? '/assets/img/start1.svg'
                                                                                             : isHalf
                                                                                             ? '/assets/img/star2.svg'
-                                                                                            : '/assets/img/star2.svg' // fallback for empty
+                                                                                            : '/assets/img/star-empty.svg' // ✅ Correct empty star
                                                                                     }
                                                                                     width={14}
                                                                                     height={14}

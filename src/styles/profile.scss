@@ -489,6 +489,14 @@ $danger: #DC2626;
     }
   }
 }
+.review-card-s1 {
+  .review-inner-card {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #DADADA;
+    background: #F9F9F9;
+  }
+}
 @media (max-width: 768px) {
   .table-responsive {
     border-radius: 6px;

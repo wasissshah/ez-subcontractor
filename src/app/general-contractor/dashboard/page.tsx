@@ -22,6 +22,17 @@ interface Project {
     };
 }
 
+interface Contractor {
+    id: number;
+    name: string;
+    company_name: string;
+    city: string | null;
+    state: string | null;
+    average_rating: string; // e.g., "4.50"
+    ratings_count: string;  // e.g., "2"
+    created_at: string;     // e.g., "2025-11-06T20:51:19.000000Z"
+}
+
 export default function DashboardPage() {
     const router = useRouter();
     const [expandedCards, setExpandedCards] = useState<number[]>([]);
@@ -30,6 +41,8 @@ export default function DashboardPage() {
     const [error, setError] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
     const [deleteError, setDeleteError] = useState<string | null>(null);
+
+    const [contractors, setContractors] = useState<Contractor[]>([]);
 
     const toggleCard = (index: number) => {
         setExpandedCards(prev =>
@@ -68,11 +81,13 @@ export default function DashboardPage() {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
                     },
                     body: formData,
                 }
             );
 
+            console.log(response.json());
             const responseData = await response.json().catch(() => null);
 
             if (!response.ok) {
@@ -152,6 +167,61 @@ export default function DashboardPage() {
         fetchProjects();
     }, [router]);
 
+    useEffect(() => {
+        const fetchContractors = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    setError('Authentication required.');
+                    return;
+                }
+
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/contractors?page=1&perPage=3`, // ✅ Changed to 3
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json',
+                        },
+                    }
+                );
+
+                if (response.status === 401) {
+                    setError('Session expired. Please log in again.');
+                    localStorage.removeItem('token');
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message?.[0] || 'Failed to load contractors');
+                }
+
+                if (data?.success && Array.isArray(data.data?.data)) {
+                    setContractors(data.data.data);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            } catch (err: any) {
+                console.error('Fetch error:', err);
+                setError(err.message || 'Failed to load contractors.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchContractors();
+    }, []);
+
+    const formatDate = (dateStr: string) => {
+        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString('en-US', options);
+    };
+
     const sliderRef = useRef<Slider | null>(null);
     const settings = {
         dots: false,
@@ -178,7 +248,7 @@ export default function DashboardPage() {
                                 alt="Section Image"
                                 className="img-fluid w-100 h-100"
                                 style={{
-                                    borderRadius: '25px',
+                                    borderRadius: '12px',
                                     boxShadow: '0 4px 35px 0 #00000025',
                                     objectFit: 'cover',
                                 }}
@@ -231,52 +301,120 @@ export default function DashboardPage() {
                     {/* Rate a Subcontractor (unchanged) */}
                     <div className="review-wrapper mb-4">
                         <div className="d-flex align-items-center gap-2 justify-content-between filter-sec p-0 mb-3">
-                            <div className="fs-3 fw-semibold">Rate a Subcontractor</div>
+                            <div>
+                                <div className="fs-3 fw-semibold">Rate a Subcontractor</div>
+                                <div className="fs-14 fw-semibold">Recently rated contractors</div>
+                            </div>
                             <div className="form-wrapper">
                                 <Image src="/assets/img/icons/search-gray.svg" width={18} height={18} alt="Search Icon" />
                                 <input type="text" placeholder="Search here" />
                                 <Image src="/assets/img/icons/voice.svg" width={18} height={18} alt="Voice Icon" />
                             </div>
                         </div>
-                        <div className="review-card-s1">
-                            <div className="d-flex align-items-center gap-2 justify-content-between mb-2">
-                                <div className="fs-14 fw-semibold">Recently rated contractors</div>
-                                <Link href="/general-contractor/reviews" className="fs-14 fw-medium text-decoration-underline text-gray-light">
-                                    View More
-                                </Link>
-                            </div>
-                            <div className="row g-3">
-                                {[1, 2, 3].map((_, i) => (
-                                    <div className="col-lg-4 col-md-6" key={i}>
-                                        <div className="review-inner-card">
-                                            <div className="top d-flex align-items-center gap-2 justify-content-between flex-wrap mb-2">
-                                                <div className="icon-wrapper d-flex align-items-center gap-2">
-                                                    <Image src="/assets/img/profile-img.webp" width={40} height={40} alt="Card Image" />
-                                                    <div className="content">
-                                                        <div className="fw-semibold fs-14 mb-1">Marlous</div>
-                                                        <div style={{ color: "#8F9B1F" }} className="fw-semibold fs-14">BrightSide Homes</div>
-                                                    </div>
-                                                </div>
-                                                <div className="date fs-12 text-gray-light">Oct 12, 2025</div>
-                                            </div>
-                                            <div className="bottom d-flex align-items-center justify-content-between gap-2 flex-wrap">
-                                                <div className="fs-14">Whittier, CA, 23981</div>
-                                                <div className="right d-flex align-items-center gap-2 flex-wrap">
-                                                    <div className="rating-icons d-flex align-items-center gap-1 flex-wrap">
-                                                        {[1, 2, 3, 4].map((star) => (
-                                                            <Image key={star} src="/assets/img/start1.svg" width={14} height={14} alt="Star Icon" />
-                                                        ))}
-                                                        <Image src="/assets/img/star2.svg" width={14} height={14} alt="Star Icon" />
-                                                    </div>
-                                                    <div className="content">
-                                                        <div className="fs-12">4.5/5</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                        <div className="review-card-s1 p-0 bg-transparent">
+                            {loading ? (
+                                <div className="text-center py-5">
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
                                     </div>
-                                ))}
-                            </div>
+                                    <p className="mt-3">Loading contractors...</p>
+                                </div>
+                            ) : error ? (
+                                <div className="alert alert-warning d-flex align-items-center" role="alert">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                    </svg>
+                                    <div>{error}</div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="row g-4">
+                                        {contractors.length > 0 ? (
+                                            contractors.map((contractor, index) => (
+                                                <div className="col-lg-4 col-md-6" key={contractor.id}>
+                                                    <div className="review-inner-card">
+                                                        <div className="top d-flex align-items-center gap-2 justify-content-between flex-wrap mb-2">
+                                                            <div className="icon-wrapper d-flex align-items-center gap-2">
+                                                                <Image
+                                                                    src="/assets/img/profile-img.webp"
+                                                                    width={40}
+                                                                    height={40}
+                                                                    alt="Card Image"
+                                                                    loading="lazy"
+                                                                />
+                                                                <div className="content">
+                                                                    <div className="fw-semibold fs-14 mb-1 text-capitalize">{contractor.name}</div>
+                                                                    <div style={{ color: '#8F9B1F' }} className="fw-semibold fs-14">
+                                                                        {contractor.company_name || 'Unknown Company'}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="date fs-12 text-gray-light">
+                                                                {formatDate(contractor.created_at)}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="bottom d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                                                            <div className="fs-12 fw-medium">
+                                                                {contractor.city && contractor.state
+                                                                    ? `${contractor.city}, ${contractor.state}`
+                                                                    : 'Location not available'}
+                                                            </div>
+                                                            <div className="right d-flex align-items-center gap-2 flex-wrap">
+                                                                <div className="rating-icons d-flex align-items-center gap-1 flex-wrap">
+                                                                    {/* Render stars based on average_rating */}
+                                                                    {Array(5)
+                                                                        .fill(0)
+                                                                        .map((_, j) => {
+                                                                            const starValue = j + 1;
+                                                                            const rating = parseFloat(contractor.average_rating) || 0;
+                                                                            const isFull = starValue <= Math.floor(rating);
+                                                                            const isHalf = !isFull && starValue <= rating + 0.5;
+
+                                                                            return (
+                                                                                <Image
+                                                                                    key={j}
+                                                                                    src={
+                                                                                        isFull
+                                                                                            ? '/assets/img/start1.svg'
+                                                                                            : isHalf
+                                                                                            ? '/assets/img/star2.svg'
+                                                                                            : '/assets/img/star-empty.svg' // ✅ Correct empty star
+                                                                                    }
+                                                                                    width={14}
+                                                                                    height={14}
+                                                                                    alt="Star Icon"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            );
+                                                                        })}
+                                                                </div>
+                                                                <div className="content">
+                                                                    <div className="fs-12">{contractor.average_rating}/5</div>
+                                                                    <div className="fs-12 text-muted d-none">({contractor.ratings_count} reviews)</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="col-12">
+                                                <div className="text-center py-4">
+                                                    <Image
+                                                        src="/assets/img/post.webp"
+                                                        width={120}
+                                                        height={120}
+                                                        alt="No contractors"
+                                                        className="mb-3"
+                                                    />
+                                                    <p className="text-muted">No contractors found.</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
