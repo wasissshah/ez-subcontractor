@@ -113,11 +113,6 @@ export default function DashboardPage() {
         fetchProjects();
     }, [router]);
 
-    // 🔹 Handle Edit → navigate with ?id=
-    const handleEditProject = (id: number) => {
-        router.push(`/general-contractor/edit-project/${id}`);
-    };
-
     // 🔹 ✅ FIXED: Delete project using FormData (matches your Postman)
     const handleDelete = async () => {
         if (!deletingId) return;
@@ -203,10 +198,6 @@ export default function DashboardPage() {
     };
 
     const filteredProjects = getFilteredProjects();
-
-    const handleViewDetails = (id: number) => {
-        router.push(`/general-contractor/project-details/${id}`);
-    };
 
     return (
         <>
@@ -326,13 +317,19 @@ export default function DashboardPage() {
                                             <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                 <button
                                                     className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                    onClick={() => handleViewDetails(project.id)}
+                                                    onClick={() => {
+                                                        localStorage.setItem('project-id', `${project.id}`);
+                                                        router.push('/general-contractor/project-details');
+                                                    }}
                                                 >
                                                     View Details
                                                 </button>
                                                 <button
-                                                    className="btn bg-dark text-white rounded-3 w-100 justify-content-center"
-                                                    onClick={() => handleEditProject(project.id)}
+                                                    className="btn bg-dark rounded-3 w-100 justify-content-center text-white"
+                                                    onClick={() => {
+                                                        localStorage.setItem('project-id', `${project.id}`);
+                                                        router.push('/general-contractor/edit-project');
+                                                    }}
                                                 >
                                                     Edit
                                                 </button>

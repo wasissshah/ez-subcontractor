@@ -46,6 +46,10 @@ $danger: #DC2626;
         justify-content: center;
         background-color: $dark;
       }
+      .icon.delete {
+        background-color: #DC2626 !important;
+      }
+
       .icon-box {
         display: flex;
         align-items: center;

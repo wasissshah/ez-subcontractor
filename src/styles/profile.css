@@ -37,6 +37,9 @@
   justify-content: center;
   background-color: #272727 !important;
 }
+.banner-sec.profile .right-bar .icon-wrapper .icon.delete {
+  background-color: #DC2626 !important;
+}
 .banner-sec.profile .right-bar .icon-wrapper .icon-box {
   display: flex;
   align-items: center;

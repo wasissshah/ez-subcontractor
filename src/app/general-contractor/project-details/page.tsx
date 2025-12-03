@@ -39,7 +39,7 @@ interface Project {
 }
 
 export default function ProjectDetailsPage() {
-    const projectId = localStorage.getItem('project-id');;
+    const [projectId, setProjectId] = useState<string | null>(null);
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -77,7 +77,9 @@ export default function ProjectDetailsPage() {
             label: status.charAt(0).toUpperCase() + status.slice(1)
         };
     };
-
+    useEffect(() => {
+        setProjectId(localStorage.getItem('project-id'));
+    }, []);
     useEffect(() => {
 
         if (!projectId) {
@@ -284,14 +286,20 @@ export default function ProjectDetailsPage() {
                                     </div>
                                 </div>
                                 <div className="icon-wrapper d-flex align-items-center gap-3 flex-wrap">
-                                    <Link href={`/general-contractor/edit-project?id=${project.id}`} className="icon">
+                                    <button
+                                        className="icon"
+                                        onClick={() => {
+                                            localStorage.setItem('project-id', `${project.id}`);
+                                            router.push('/general-contractor/edit-project');
+                                        }}
+                                    >
                                         <Image
                                             src="/assets/img/icons/edit.svg"
                                             width={24}
                                             height={24}
                                             alt="Edit Icon"
                                         />
-                                    </Link>
+                                    </button>
                                     <button
                                         type="button"
                                         className="icon delete"

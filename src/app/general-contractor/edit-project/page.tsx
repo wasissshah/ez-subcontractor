@@ -50,7 +50,8 @@ interface DocumentItem {
 
 export default function EditProjectPage() {
     const router = useRouter();
-    const projectId = localStorage.getItem('project-id');
+    const [projectId, setProjectId] = useState<string | null>(null);
+
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -71,6 +72,9 @@ export default function EditProjectPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        setProjectId(localStorage.getItem('project-id'));
+    }, []);
     // 🔹 Fetch categories
     useEffect(() => {
         const fetchCategories = async () => {
@@ -330,7 +334,7 @@ export default function EditProjectPage() {
             <>
                 <Header />
                 <div className="sections overflow-hidden">
-                    <section className="banner-sec post profile">
+                    <section className="banner-sec job-single post profile">
                         <div className="container">
                             <div className="text-center py-5">
                                 <div className="spinner-border text-primary" role="status">
@@ -350,7 +354,7 @@ export default function EditProjectPage() {
             <>
                 <Header />
                 <div className="sections overflow-hidden">
-                    <section className="banner-sec post profile">
+                    <section className="banner-sec job-single post profile">
                         <div className="container">
                             <div className="alert alert-danger d-flex align-items-center" role="alert">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
@@ -376,8 +380,7 @@ export default function EditProjectPage() {
         <>
             <Header />
             <div className="sections overflow-hidden">
-                <div>Project ID:</div>
-                <section className="banner-sec post profile">
+                <section className="banner-sec job-single position-static">
                     <div className="container">
                         <div className="right-bar mb-5">
                             <div className="d-flex align-items-center gap-3">
@@ -385,7 +388,7 @@ export default function EditProjectPage() {
                                     <button
                                         type="button"
                                         onClick={() => router.back()}
-                                        className="icon"
+                                        className="icon btn-back"
                                         aria-label="Go back"
                                     >
                                         <Image
