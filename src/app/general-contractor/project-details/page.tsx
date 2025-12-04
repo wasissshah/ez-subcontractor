@@ -346,6 +346,7 @@ export default function ProjectDetailsPage() {
                                         className="mb-4"
                                         dangerouslySetInnerHTML={{ __html: project.description || '' }}
                                     />
+                                    {project.state}
 
                                     <div className="title text-black fs-5 fw-semibold mb-3">Project Details</div>
                                     <div className="estimated-wrapper">

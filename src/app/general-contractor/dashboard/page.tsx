@@ -87,7 +87,6 @@ export default function DashboardPage() {
                 }
             );
 
-            console.log(response.json());
             const responseData = await response.json().catch(() => null);
 
             if (!response.ok) {
@@ -180,7 +179,7 @@ export default function DashboardPage() {
                 }
 
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/contractors?page=1&perPage=3`, // ✅ Changed to 3
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/contractors/latest-rated`, // ✅ Changed to 3
                     {
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -197,12 +196,14 @@ export default function DashboardPage() {
 
                 const data = await response.json();
 
+                console.log(data);
+
                 if (!response.ok) {
                     throw new Error(data.message?.[0] || 'Failed to load contractors');
                 }
 
-                if (data?.success && Array.isArray(data.data?.data)) {
-                    setContractors(data.data.data);
+                if (data?.success) {
+                    setContractors(data.data);
                 } else {
                     throw new Error('Invalid response format');
                 }
@@ -482,19 +483,13 @@ export default function DashboardPage() {
                                                 <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                     <button
                                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
-                                                        onClick={() => {
-                                                            localStorage.setItem('project-id', `${project.id}`);
-                                                            router.push('/general-contractor/project-details');
-                                                        }}
+                                                        onClick={() => router.push(`/general-contractor/project-details?id=${project.id}`)}
                                                     >
                                                         View Details
                                                     </button>
                                                     <button
                                                         className="btn bg-dark rounded-3 w-100 justify-content-center text-white"
-                                                        onClick={() => {
-                                                            localStorage.setItem('project-id', `${project.id}`);
-                                                            router.push('/general-contractor/edit-project');
-                                                        }}
+                                                        onClick={() => router.push(`/general-contractor/edit-project?id=${project.id}`)}
                                                     >
                                                         Edit
                                                     </button>
