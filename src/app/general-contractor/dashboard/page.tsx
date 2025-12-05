@@ -8,10 +8,6 @@ import { useRouter } from 'next/navigation';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import '../../../styles/free-trial.css';
-import { Select2 } from "select2-react-component";
-import $ from 'jquery';
-import 'select2';
-import 'select2/dist/css/select2.min.css';
 import Slider from "react-slick";
 
 interface Project {
