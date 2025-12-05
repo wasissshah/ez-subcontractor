@@ -580,13 +580,13 @@ export default function EditProjectPage() {
                                                                 className="me-2"
                                                             />
                                                         ) : doc.file ? (
-                                                            <Image
-                                                                src={doc.file}
+                                                            <img
+                                                                src={URL.createObjectURL(doc.file)}
                                                                 width={24}
                                                                 height={24}
                                                                 alt={doc.name || 'File'}
                                                                 className="me-2"
-                                                                unoptimized
+                                                                style={{ objectFit: 'contain' }}
                                                             />
                                                         ) : (
                                                             <Image
