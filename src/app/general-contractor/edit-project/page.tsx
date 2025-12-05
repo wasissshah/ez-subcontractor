@@ -175,7 +175,7 @@ export default function EditProjectPage() {
                         proj.attachments.map(att => ({
                             id: att.id,
                             name: att.file ? new URL(att.file).pathname.split('/').pop() || 'unknown-file' : att.file,
-                            file: att.file,
+                            url: att.file,
                             description: att.description,
                         }))
                     );
@@ -211,6 +211,7 @@ export default function EditProjectPage() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
 
     // 🔹 File helpers
     const makeDoc = (file: File): DocumentItem => ({
@@ -579,14 +580,14 @@ export default function EditProjectPage() {
                                                                 alt="DOC"
                                                                 className="me-2"
                                                             />
-                                                        ) : doc.file ? (
-                                                            <img
-                                                                src={URL.createObjectURL(doc.file)}
+                                                        ) : doc.url ? (
+                                                            <Image
+                                                                src={doc.url}
                                                                 width={24}
                                                                 height={24}
                                                                 alt={doc.name || 'File'}
                                                                 className="me-2"
-                                                                style={{ objectFit: 'contain' }}
+                                                                unoptimized
                                                             />
                                                         ) : (
                                                             <Image
@@ -705,9 +706,9 @@ export default function EditProjectPage() {
                                                             alt="DOC"
                                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                         />
-                                                    ) : doc.file ? (
+                                                    ) : doc.url ? (
                                                         <Image
-                                                            src={doc.file}
+                                                            src={doc.url}
                                                             width={50}
                                                             height={50}
                                                             alt={doc.name || 'File'}
