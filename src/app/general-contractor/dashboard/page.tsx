@@ -832,9 +832,8 @@ export default function DashboardPage() {
                         <p className="text-muted fs-14 mb-4">
                             {currentContractor.city && currentContractor.state
                                 ? `${currentContractor.city}, ${currentContractor.state}`
-                                : currentContractor.zip
-                                    ? `ZIP: ${currentContractor.zip}`
-                                    : 'Location not available'}
+                                : ''
+                            }
                         </p>
 
                         {/* Star Rating */}
