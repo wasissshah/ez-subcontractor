@@ -190,7 +190,7 @@ export default function DashboardPage() {
                 }
 
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/contractors/latest-rated`,
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/contractors/latest-rated?limit=3`,
                     {
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -212,7 +212,11 @@ export default function DashboardPage() {
                 }
 
                 if (data?.success) {
-                    setContractors(data.data);
+                    // ✅ Reverse and take only first 3
+                    const contractors = Array.isArray(data.data)
+                        ? [...data.data].slice(0, 3)
+                        : [];
+                    setContractors(contractors);
                 } else {
                     throw new Error('Invalid response format');
                 }
@@ -453,7 +457,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className="text-end mt-3">
-                                    <Link href={'/general-contractor/reviews'} className={'text-dark border-bottom me-0 d-inline-block'}>View More</Link>
+                                    <Link href={'/general-contractor/reviews'} className={'text-dark border-bottom me-0 d-inline-block fs-12'}>View More</Link>
                                 </div>
                                 {(showList || searchLoading) && results.length > 0 && (
                                     <ul
