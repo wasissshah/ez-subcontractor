@@ -438,7 +438,7 @@ export default function EditProjectPage() {
                                 <div className="icon-wrapper d-flex align-items-center gap-3 flex-wrap">
                                     <div className="row g-3 align-items-center">
                                         <div className="col-auto">
-                                            <label for="inputPassword6" className="col-form-label">Status:</label>
+                                            <label className="col-form-label">Status:</label>
                                         </div>
                                         <div className="col-auto">
                                             <select
