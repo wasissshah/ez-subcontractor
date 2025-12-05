@@ -867,7 +867,6 @@ export default function DashboardPage() {
                         {/* Comment Input */}
                         <input
                             className="form-control mb-3 shadow-none"
-                            rows={3}
                             placeholder="Leave a comment (optional)"
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
