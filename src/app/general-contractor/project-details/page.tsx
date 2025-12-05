@@ -402,9 +402,9 @@ export default function ProjectDetailsPage() {
                                                         <Image
                                                             src={`${img.file.replace(/^\/+/, '')}`}
                                                             width={112}
-                                                            height={117}
+                                                            height={112}
                                                             alt={img.file_name || getFileName(img.file)}
-                                                            className="img-fluid shadow-sm rounded-2"
+                                                            className="shadow-sm rounded-2"
                                                             loading="lazy"
                                                             unoptimized
                                                         />
@@ -486,7 +486,7 @@ export default function ProjectDetailsPage() {
                 aria-labelledby="attachmentsModalLabel"
                 aria-hidden="true"
             >
-                <div className="modal-dialog modal-xl modal-dialog-centered">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header border-0">
                             <h5 className="modal-title" id="attachmentsModalLabel">
@@ -500,7 +500,7 @@ export default function ProjectDetailsPage() {
                             ></button>
                         </div>
                         <div className="modal-body p-0">
-                            <ul className="nav nav-tabs nav-fill px-3 pt-3" id="attachmentTabs" role="tablist">
+                            <ul className="nav nav-tabs nav-fill px-3 pt-3 border-bottom" id="attachmentTabs" role="tablist">
                                 <li className="nav-item" role="presentation">
                                     <button
                                         className="nav-link active"

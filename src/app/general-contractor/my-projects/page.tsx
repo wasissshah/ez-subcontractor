@@ -300,19 +300,36 @@ export default function DashboardPage() {
                                                 </div>
                                             </div>
 
-                                            <p className="description mb-4">
-                                                {expandedCards.includes(index)
-                                                    ? project.description
-                                                    : project.description?.replace(/<[^>]*>/g, '').slice(0, 120) + (project.description?.replace(/<[^>]*>/g, '').length > 120 ? "..." : "")}
-                                            </p>
-                                            {project.description && project.description.replace(/<[^>]*>/g, '').length > 120 && (
-                                                <button
-                                                    className="see-more-btn mb-3 d-block"
-                                                    onClick={() => toggleCard(index)}
-                                                >
-                                                    {expandedCards.includes(index) ? "See less" : "See more"}
-                                                </button>
-                                            )}
+                                            <p
+                                                className="description mb-4"
+                                                dangerouslySetInnerHTML={{
+                                                    __html:
+                                                        expandedCards.includes(index)
+                                                            ? project.description /* full html */
+                                                            : (() => {
+                                                                const tmp = document.createElement('div');
+                                                                tmp.innerHTML = project.description || '';
+                                                                const text = tmp.textContent || tmp.innerText || '';
+                                                                return text.length > 120
+                                                                    ? text.slice(0, 120) + '…'
+                                                                    : text;
+                                                            })(),
+                                                }}
+                                            />
+                                            {/* “see more / see less” still relies on character count of the *text* version */}
+                                            {/*{project.description &&*/}
+                                            {/*(() => {*/}
+                                            {/*    const tmp = document.createElement('div');*/}
+                                            {/*    tmp.innerHTML = project.description;*/}
+                                            {/*    return (tmp.textContent || tmp.innerText || '').length > 120;*/}
+                                            {/*})() && (*/}
+                                            {/*    <button*/}
+                                            {/*        className="see-more-btn mb-3 d-block"*/}
+                                            {/*        onClick={() => toggleCard(index)}*/}
+                                            {/*    >*/}
+                                            {/*        {expandedCards.includes(index) ? 'See less' : 'See more'}*/}
+                                            {/*    </button>*/}
+                                            {/*)}*/}
 
                                             <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                 <button

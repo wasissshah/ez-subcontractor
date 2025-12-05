@@ -268,6 +268,8 @@ export default function PostAd() {
                 formData.append(`attachments[${index}][description]`, doc.description);
             });
 
+            console.log(allDocuments);
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/create`, {
                 method: 'POST',
                 headers: {
@@ -533,7 +535,7 @@ export default function PostAd() {
                                                             &times;
                                                         </button>
                                                     </div>
-                                                    <div className="input-wrapper w-100 mt-2">
+                                                    <div className="input-wrapper w-100 mt-2 mb-4">
                                                         <input
                                                             type="text"
                                                             className="form-control"

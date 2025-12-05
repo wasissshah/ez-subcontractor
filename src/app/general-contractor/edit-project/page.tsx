@@ -68,6 +68,7 @@ export default function EditProjectPage() {
     const [allDocuments, setAllDocuments] = useState<DocumentItem[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [status, setStatus] = useState<string>('');
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -152,6 +153,8 @@ export default function EditProjectPage() {
 
                 const data = await response.json();
 
+                // console.log(data);
+
                 if (!response.ok) {
                     throw new Error(data.message?.[0] || 'Failed to load project');
                 }
@@ -159,6 +162,7 @@ export default function EditProjectPage() {
                 if (data?.data?.project) {
                     const proj = data.data.project;
                     setProject(proj);
+                    setStatus(proj.status);
                     setSelectedCategory(proj.category_id);
                     setCity(proj.city);
                     setState(proj.state);
@@ -170,7 +174,8 @@ export default function EditProjectPage() {
                     setAllDocuments(
                         proj.attachments.map(att => ({
                             id: att.id,
-                            name: att.file_name,
+                            name: att.file ? new URL(att.file).pathname.split('/').pop() || 'unknown-file' : att.file,
+                            file: att.file,
                             description: att.description,
                         }))
                     );
@@ -236,10 +241,28 @@ export default function EditProjectPage() {
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
 
     const handleRemoveFile = (index: number) => {
+        console.log(`[DEBUG] Removing document at index ${index}`);
+
         setAllDocuments(prev => {
-            const doc = prev[index];
-            if (doc?.url) URL.revokeObjectURL(doc.url);
-            return prev.filter((_, i) => i !== index);
+            // 🔹 Validate index
+            if (index < 0 || index >= prev.length) {
+                console.warn(`[DEBUG] Invalid index ${index} — no document removed`);
+                return prev;
+            }
+
+            const docToRemove = prev[index];
+            console.log(`[DEBUG] Removing doc:`, docToRemove);
+
+            // 🔹 Revoke object URL if created locally
+            if (docToRemove.url && URL.revokeObjectURL) {
+                URL.revokeObjectURL(docToRemove.url);
+                console.log(`[DEBUG] Revoked object URL for:`, docToRemove.name);
+            }
+
+            // 🔹 Return new array without this doc
+            const updated = prev.filter((_, i) => i !== index);
+            console.log(`[DEBUG] Documents after removal:`, updated);
+            return updated;
         });
     };
 
@@ -253,6 +276,9 @@ export default function EditProjectPage() {
 
     // 🔹 Submit
     const handleSubmit = async (e: React.FormEvent) => {
+
+        console.log(allDocuments);
+
         e.preventDefault();
 
         if (!project) return;
@@ -276,17 +302,23 @@ export default function EditProjectPage() {
             formData.append('estimate_due_date', estimateDueDate);
             formData.append('start_date', startDate);
             formData.append('end_date', endDate);
-            formData.append('status', project.status);
+            formData.append('status', status || project.status);
 
             allDocuments.forEach((doc, index) => {
-                if (doc.id) {
+                if (doc.id && !doc.file) {
+                    // ✅ Existing attachment → send id + description only
                     formData.append(`attachments[${index}][id]`, String(doc.id));
                     formData.append(`attachments[${index}][description]`, doc.description);
-                } else if (doc.file) {
+                } else if (doc.file instanceof File) {
+                    // ✅ New upload → send file + name + description
+                    // formData.append(`attachments[${index}][id]`, doc.id);
                     formData.append(`attachments[${index}][file]`, doc.file, doc.name);
                     formData.append(`attachments[${index}][description]`, doc.description);
                 }
+                // ❌ Skip if doc.id exists but doc.file is a string (URL)
             });
+
+            console.log(allDocuments);
 
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/${project.id}/update`,
@@ -382,14 +414,15 @@ export default function EditProjectPage() {
             <div className="sections overflow-hidden">
                 <section className="banner-sec job-single position-static">
                     <div className="container">
-                        <div className="right-bar mb-5">
-                            <div className="d-flex align-items-center gap-3">
-                                <div className="icon-wrapper d-flex align-items-center gap-3">
+                        <div className="right-bar mb-5 topbar">
+                            <div className="d-flex align-items-center flex-wrap justify-content-between gap-3">
+                                <div className="d-flex align-items-center gap-3">
                                     <button
                                         type="button"
                                         onClick={() => router.back()}
-                                        className="icon btn-back"
+                                        className="icon"
                                         aria-label="Go back"
+                                        style={{background: 'none', border: 'none', padding: 0, cursor: 'pointer'}}
                                     >
                                         <Image
                                             src="/assets/img/button-angle.svg"
@@ -398,7 +431,43 @@ export default function EditProjectPage() {
                                             alt="Back"
                                         />
                                     </button>
-                                    <span className="fs-4 fw-semibold">Edit Project</span>
+                                    <div className="login-title fw-semibold fs-4 text-center">
+                                        Edit Project
+                                    </div>
+                                </div>
+                                <div className="icon-wrapper d-flex align-items-center gap-3 flex-wrap">
+                                    <div className="row g-3 align-items-center">
+                                        <div className="col-auto">
+                                            <label for="inputPassword6" className="col-form-label">Status:</label>
+                                        </div>
+                                        <div className="col-auto">
+                                            <select
+                                                className="form-control"
+                                                style={{minWidth: '200px'}}
+                                                value={status}
+                                                onChange={(e) => setStatus(e.target.value)}
+                                            >
+                                                <option value="">Select</option>
+                                                <option value="active">Active</option>
+                                                <option value="hired">Hired</option>
+                                                <option value="deleted">Deleted</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="icon delete"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteProjectModal"
+                                        style={{backgroundColor: '#DC2626 !important'}}
+                                    >
+                                        <Image
+                                            src="/assets/img/icons/delete.svg"
+                                            width={24}
+                                            height={24}
+                                            alt="Delete Icon"
+                                        />
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -510,9 +579,9 @@ export default function EditProjectPage() {
                                                                 alt="DOC"
                                                                 className="me-2"
                                                             />
-                                                        ) : doc.url ? (
+                                                        ) : doc.file ? (
                                                             <Image
-                                                                src={doc.url}
+                                                                src={doc.file}
                                                                 width={24}
                                                                 height={24}
                                                                 alt={doc.name || 'File'}
@@ -636,9 +705,9 @@ export default function EditProjectPage() {
                                                             alt="DOC"
                                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                         />
-                                                    ) : doc.url ? (
+                                                    ) : doc.file ? (
                                                         <Image
-                                                            src={doc.url}
+                                                            src={doc.file}
                                                             width={50}
                                                             height={50}
                                                             alt={doc.name || 'File'}
