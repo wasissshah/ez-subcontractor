@@ -258,7 +258,7 @@ export default function RegisterPage() {
                                     </div>
                                 </div>
                                 <div className="input-wrapper d-flex flex-column">
-                                    <label htmlFor="name" className="mb-1 fw-semibold">Full Name</label>
+                                    <label htmlFor="name" className="mb-1 fw-semibold">Full Name <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
                                         id="name"
@@ -273,7 +273,7 @@ export default function RegisterPage() {
                                     )}
                                 </div>
                                 <div className="input-wrapper d-flex flex-column">
-                                    <label htmlFor="company_name" className="mb-1 fw-semibold">Company Name</label>
+                                    <label htmlFor="company_name" className="mb-1 fw-semibold">Company Name <span className="text-danger">*</span></label>
                                     <input
                                         type="text"
                                         id="company_name"
@@ -305,7 +305,7 @@ export default function RegisterPage() {
                                     )}
                                 </div>
                                 <div className="input-wrapper d-flex flex-column">
-                                    <label htmlFor="email" className="mb-1 fw-semibold">Email Address</label>
+                                    <label htmlFor="email" className="mb-1 fw-semibold">Email Address <span className="text-danger">*</span></label>
                                     <input
                                         type="email"
                                         id="email"
@@ -320,7 +320,7 @@ export default function RegisterPage() {
                                     )}
                                 </div>
                                 <div className="input-wrapper d-flex flex-column">
-                                    <label htmlFor="phone" className="mb-1 fw-semibold">Phone Number</label>
+                                    <label htmlFor="phone" className="mb-1 fw-semibold">Phone Number <span className="text-danger">*</span></label>
                                     <input
                                         type="tel"
                                         id="phone"
@@ -336,7 +336,7 @@ export default function RegisterPage() {
                                     )}
                                 </div>
                                 <div className="input-wrapper d-flex flex-column position-relative">
-                                    <label htmlFor="password" className="mb-1 fw-semibold">Password</label>
+                                    <label htmlFor="password" className="mb-1 fw-semibold">Password <span className="text-danger">*</span></label>
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         id="password"
@@ -360,7 +360,7 @@ export default function RegisterPage() {
                                 </div>
                                 <div className="input-wrapper d-flex flex-column position-relative">
                                     <label htmlFor="password_confirmation" className="mb-1 fw-semibold">
-                                        Confirm Password
+                                        Confirm Password <span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type={showConfirmPassword ? 'text' : 'password'}
@@ -395,11 +395,11 @@ export default function RegisterPage() {
                                         />
                                         <label className="form-check-label fw-semibold fs-12" htmlFor="agreement">
                                             By registering, you confirm that you have reviewed and accepted our{' '}
-                                            <Link href="/privacy" className="text-primary">
+                                            <Link href="/privacy-policy" style={{color: '#8F9B1F'}}>
                                                 Privacy Policy
                                             </Link>{' '}
                                             and{' '}
-                                            <Link href="/terms" className="text-primary">
+                                            <Link href="/terms-and-conditions" style={{color: '#8F9B1F'}}>
                                                 Terms &amp; Conditions.
                                             </Link>
                                         </label>

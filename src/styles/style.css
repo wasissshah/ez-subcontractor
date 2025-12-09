@@ -331,4 +331,14 @@ body .select2-dropdown--below .select2-results__options .select2-results__option
   opacity: 0.5;
 }
 
+.form-check-input:checked {
+  background-color: #8F9B1F;
+  border-color: #8F9B1F;
+}
+
+.form-check-input:focus {
+  border-color: #8F9B1F;
+  box-shadow: 0 0 0 0.25rem rgba(174, 253, 75, 0.25);
+}
+
 /*# sourceMappingURL=style.css.map */

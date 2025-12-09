@@ -333,7 +333,8 @@
 .banner-sec.profile .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  column-gap: 30px;
+  row-gap: 10px;
 }
 .banner-sec.profile .custom-grid1 {
   display: grid;

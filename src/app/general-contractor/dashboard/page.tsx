@@ -801,15 +801,15 @@ export default function DashboardPage() {
                         zIndex: 1060,
                         maxWidth: '400px',
                         width: '90%',
-                        height: '430px',
+                        height: '330px',
                         backgroundColor: 'white',
                         borderRadius: '12px',
                         padding: '20px',
                         boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                     }}
                 >
-                    <div className="modal-header border-0 mb-0 pb-0">
-                        <h5 className="modal-title text-center w-100 mb-0 pb-0">Rate Now</h5>
+                    <div className="modal-header border-0 mb-0 py-0 px-0">
+                        <h5 className="modal-title text-center w-100 mb-0 py-0 px-0">Rate Now</h5>
                         <button
                             type="button"
                             className="btn-close shadow-none"
@@ -829,17 +829,11 @@ export default function DashboardPage() {
                         <img
                             src="/assets/img/placeholder-round.png"
                             alt="Contractor"
-                            className="rounded-circle mb-3"
+                            className="rounded-circle mb-1"
                             style={{ width: '60px', height: '60px', objectFit: 'cover' }}
                         />
                         <h6 className="mb-1 text-capitalize">{currentContractor.name}</h6>
-                        <p className="text-muted fs-14 mb-4">
-                            {currentContractor.city && currentContractor.state
-                                ? `${currentContractor.city}, ${currentContractor.state}`
-                                : ''
-                            }
-                        </p>
-
+                        <h6 className="mb-1 text-capitalize mb-3 text-primary">{currentContractor.company_name}</h6>
                         {/* Star Rating */}
                         <div className="d-flex justify-content-center align-items-center gap-1 mb-4">
                             {[1, 2, 3, 4, 5].map((star) => (
@@ -868,15 +862,6 @@ export default function DashboardPage() {
                             ))}
                         </div>
 
-                        {/* Comment Input */}
-                        <input
-                            className="form-control mb-3 shadow-none"
-                            placeholder="Leave a comment (optional)"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            style={{ resize: 'none' }}
-                        />
-
                         {ratingError && (
                             <div className="alert alert-danger mt-2 p-2 mb-3 text-start">
                                 {ratingError}
@@ -886,7 +871,7 @@ export default function DashboardPage() {
                         {/* Buttons */}
                         <div className="d-flex gap-2">
                             <button
-                                className="btn btn-outline-dark justify-content-center w-50"
+                                className="btn btn-outline-dark justify-content-center w-50 rounded-2"
                                 onClick={() => {
                                     setIsRatingModalOpen(false);
                                     setCurrentContractor(null);
@@ -899,7 +884,8 @@ export default function DashboardPage() {
                                 Cancel
                             </button>
                             <button
-                                className="btn btn-primary w-50 justify-content-center"
+                                className="btn btn-primary w-50 justify-content-center rounded-2"
+                                style={{height: 50}}
                                 onClick={handleRateSubcontractor}
                                 disabled={ratingLoading || selectedRating === 0}
                             >
