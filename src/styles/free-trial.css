@@ -45,6 +45,7 @@
   border: 1px solid #272727 !important;
   border-radius: 30px;
   padding: 2px;
+  width: -moz-fit-content;
   width: fit-content;
   flex-wrap: wrap;
 }
@@ -329,6 +330,4 @@
   .flex-wrap-md {
     flex-wrap: wrap;
   }
-}
-
-/*# sourceMappingURL=free-trial.css.map */
+}/*# sourceMappingURL=free-trial.css.map */

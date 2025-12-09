@@ -448,10 +448,8 @@ export default function EditProjectPage() {
                                                 value={status}
                                                 onChange={(e) => setStatus(e.target.value)}
                                             >
-                                                <option value="">Select</option>
                                                 <option value="active">Active</option>
                                                 <option value="hired">Hired</option>
-                                                <option value="deleted">Deleted</option>
                                             </select>
                                         </div>
                                     </div>

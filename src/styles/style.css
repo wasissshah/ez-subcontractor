@@ -60,7 +60,9 @@ h2 {
 .btn {
   padding: 12px 31px;
   font-weight: 600;
+  width: -moz-fit-content;
   width: fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   background-color: transparent;
   border: 1px solid transparent;
@@ -108,7 +110,9 @@ h2 {
 .custom-select {
   position: relative;
   width: 100%;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   border: 1px solid #DADADA;
   border-radius: 10px;
   background: #fff;
@@ -339,6 +343,4 @@ body .select2-dropdown--below .select2-results__options .select2-results__option
 .form-check-input:focus {
   border-color: #8F9B1F;
   box-shadow: 0 0 0 0.25rem rgba(174, 253, 75, 0.25);
-}
-
-/*# sourceMappingURL=style.css.map */
+}/*# sourceMappingURL=style.css.map */

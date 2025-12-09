@@ -85,7 +85,9 @@
   grid-column: 1/-1;
 }
 .banner-sec.contact .form-wrapper .form .submit-btn {
+  width: -moz-fit-content;
   width: fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   background-color: #C9DA2B;
   border-radius: 10px;
@@ -148,6 +150,4 @@
     display: flex !important;
     flex-direction: column !important;
   }
-}
-
-/*# sourceMappingURL=contact-us.css.map */
+}/*# sourceMappingURL=contact-us.css.map */

@@ -123,6 +123,13 @@ export default function DashboardPage() {
         }
     };
 
+    const formatRatingDisplay = (rating: string | number): string => {
+        if (rating == null) return '0';
+        const num = typeof rating === 'string' ? parseFloat(rating) : rating;
+        if (isNaN(num)) return '0';
+        return num.toFixed(1).replace(/\.0$/, '');
+    };
+
     // 🔹 Fetch 4 most recent projects
     useEffect(() => {
         const fetchProjects = async () => {
@@ -601,7 +608,7 @@ export default function DashboardPage() {
                                                                     })}
                                                             </div>
                                                             <div className="content">
-                                                                <div className="fs-12">{contractor.average_rating}/5</div>
+                                                                <div className="fs-12">{formatRatingDisplay(contractor.average_rating)}/5</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -631,7 +638,7 @@ export default function DashboardPage() {
                     <div className="bar d-flex align-items-center gap-2 justify-content-between flex-wrap mb-4">
                         <div className="fs-4 fw-semibold">My Projects</div>
                         <button
-                            onClick={() => router.push('/general-contractor/ad-project')}
+                            onClick={() => router.push('/general-contractor/add-project')}
                             className="btn btn-primary rounded-3 d-flex align-items-center gap-2"
                         >
                             <Image src="/assets/img/icons/plus.svg" width={12} height={12} alt="Icon" />

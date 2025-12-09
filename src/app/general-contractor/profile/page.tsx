@@ -193,16 +193,16 @@ export default function ProfilePage() {
                             <div className="col-xl-3">
                                 <div className="sidebar">
                                     <div className="main-wrapper bg-dark p-0">
-                                        <div className="topbar mb-5 d-flex justify-content-between align-items-start">
-                                            <div className="icon-wrapper d-flex align-items-start gap-3">
+                                        <div className="topbar mb-5 d-flex justify-content-between align-items-start position-relative">
+                                            <div className="icon-wrapper d-flex align-items-start gap-3 flex-nowrap overflow-hidden">
                                                 <Image
                                                     src="/assets/img/profile-img.webp"
-                                                    width={80}
-                                                    height={80}
+                                                    width={50}
+                                                    height={50}
                                                     alt="Worker Icon"
                                                 />
-                                                <div className="content-wrapper">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">
+                                                <div className="content-wrapper pe-3 overflow-hidden">
+                                                    <div className="title text-black fs-5 fw-medium mb-2 text-truncate">
                                                         {profile.fullName}
                                                     </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
@@ -212,12 +212,11 @@ export default function ProfilePage() {
                                                             height={16}
                                                             alt="Message Icon"
                                                         />
-                                                        <Link
-                                                            href={`mailto:${profile.email}`}
-                                                            className="fs-14 fw-medium text-dark"
+                                                        <div
+                                                            className="fs-14 fw-medium text-dark text-truncate"
                                                         >
                                                             {profile.email}
-                                                        </Link>
+                                                        </div>
                                                     </div>
                                                     <div className="d-flex align-items-center gap-2 mb-1">
                                                         <Image
@@ -226,21 +225,21 @@ export default function ProfilePage() {
                                                             height={16}
                                                             alt="Call Icon"
                                                         />
-                                                        <Link
-                                                            href={`tel:${profile.phone}`}
-                                                            className="fs-14 fw-medium text-dark"
+                                                        <div
+                                                            className="fs-14 fw-medium text-dark text-truncate"
                                                         >
                                                             {profile.phone}
-                                                        </Link>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <Image
                                                 src="/assets/img/icons/arrow-dark.svg"
-                                                width={16}
+                                                width={10}
                                                 height={10}
                                                 alt="Arrow"
-                                                style={{ objectFit: 'contain' }}
+                                                style={{ objectFit: 'contain', top: '50%', left: 'auto', right: '10px', transform: 'translate(-50%, -50%)', }}
+                                                className="position-absolute"
                                             />
                                         </div>
 
@@ -347,7 +346,7 @@ export default function ProfilePage() {
                                             />
                                             <div className="content">
                                                 <div className="title fw-semibold fs-4 mb-2">{profile.fullName}</div>
-                                                <p className="mb-1 text-gray-light">{profile.role}</p>
+                                                <p className="mb-1 text-gray-light text-capitalize">{profile.role.replace(/[^a-zA-Z0-9]/g, ' ')}</p>
                                                 <p className="mb-1 text-gray-light">
                                                     {profile.city}, {profile.state} {profile.zipCode}
                                                 </p>
@@ -356,11 +355,11 @@ export default function ProfilePage() {
                                     </div>
 
                                     <div className="review-bar">
-                                        <div className="row g-2 mb-4">
+                                        <div className="row g-2">
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Full Name</div>
-                                                    <div className="fw-semibold fs-18">{profile.fullName}</div>
+                                                    <div className="fw-semibold fs-18  text-truncate">{profile.fullName}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6">
@@ -368,7 +367,7 @@ export default function ProfilePage() {
                                                     <div className="text-gray-light fw-medium mb-2">
                                                         Company Name
                                                     </div>
-                                                    <div className="fw-semibold fs-18">{profile.companyName}</div>
+                                                    <div className="fw-semibold fs-18 text-truncate">{profile.companyName}</div>
                                                 </div>
                                             </div>
                                             <div className="col-xl-3 col-sm-6 overflow-hidden">
@@ -378,7 +377,7 @@ export default function ProfilePage() {
                                                     </div>
                                                     <Link
                                                         href={`mailto:${profile.email}`}
-                                                        className="fw-semibold fs-18 text-dark text-truncate"
+                                                        className="fw-semibold fs-18 text-dark  text-truncate"
                                                     >
                                                         {profile.email}
                                                     </Link>
@@ -391,7 +390,7 @@ export default function ProfilePage() {
                                                     </div>
                                                     <Link
                                                         href={`tel:${profile.phone}`}
-                                                        className="fw-semibold fs-18 text-dark"
+                                                        className="fw-semibold fs-18 text-dark text-truncate"
                                                     >
                                                         {profile.phone}
                                                     </Link>

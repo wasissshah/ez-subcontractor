@@ -323,7 +323,9 @@
   color: #333;
   font-size: 16px;
   line-height: 36px;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 @media (max-width: 400px) {
   .banner-sec.profile .right-bar .pagination-separator {
@@ -333,13 +335,15 @@
 .banner-sec.profile .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
+  -moz-column-gap: 30px;
+       column-gap: 30px;
   row-gap: 10px;
 }
 .banner-sec.profile .custom-grid1 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  column-gap: 20px;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
   row-gap: 30px;
   margin-top: 30px;
 }
@@ -537,6 +541,4 @@
 }
 .buttons-wrapper .custom-btn:hover img, .buttons-wrapper .custom-btn.active img {
   filter: invert(1);
-}
-
-/*# sourceMappingURL=profile.css.map */
+}/*# sourceMappingURL=profile.css.map */
