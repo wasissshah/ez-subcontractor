@@ -422,18 +422,20 @@ export default function DashboardPage() {
                 <div className="container">
                     <div className="row g-4">
                         <div className="col-lg-6">
-                            <Image
-                                src="/assets/img/dashboard-free-trial-img.webp"
-                                width={800}
-                                height={600}
-                                alt="Section Image"
-                                className="img-fluid w-100 h-100"
-                                style={{
-                                    borderRadius: '12px',
-                                    boxShadow: '0 4px 35px 0 #00000025',
-                                    objectFit: 'cover',
-                                }}
-                            />
+                            <div className="slider">
+                                <Image
+                                    src="/assets/img/dashboard-free-trial-img.webp"
+                                    width={800}
+                                    height={600}
+                                    alt="Section Image"
+                                    className="img-fluid w-100 h-100"
+                                    style={{
+                                        borderRadius: '12px',
+                                        boxShadow: '0 4px 35px 0 #00000025',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                            </div>
                         </div>
                         <div className="col-lg-6">
                             <div className="banner-wrapper" style={{ backgroundImage: "url('/assets/img/free-trial-img2.webp')" }}>
