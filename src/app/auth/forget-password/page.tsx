@@ -117,7 +117,7 @@ export default function ForgotPassword() {
     };
 
     return (
-        <section className="hero-sec login overflow-hidden position-static">
+        <section className="hero-sec login login-s1 overflow-hidden position-static">
             <div className="image-wrapper">
                 <Image
                     src="/assets/img/left-image.webp"
@@ -167,6 +167,9 @@ export default function ForgotPassword() {
                                 </div>
 
                                 <div className="buttons-wrapper d-flex align-items-center gap-4 mt-3">
+                                    <button onClick={() => router.back()} className="btn btn-outline-dark rounded-3 justify-content-center w-100">
+                                        Back
+                                    </button>
                                     <button
                                         type="submit"
                                         className="btn btn-primary rounded-3 justify-content-center w-100"

@@ -195,7 +195,7 @@ export default function VerifyEmail() {
     const isOtpComplete = otp.every(d => d !== '');
 
     return (
-        <section className="hero-sec login overflow-hidden position-static">
+        <section className="hero-sec login login-s1 overflow-hidden position-static">
             <div className="image-wrapper">
                 <Image
                     src="/assets/img/left-image.webp"

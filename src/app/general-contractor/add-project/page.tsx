@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { format } from 'date-fns';
@@ -13,7 +12,6 @@ import '../../../styles/post-detail.css';
 import 'react-quill/dist/quill.snow.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {start} from "repl";
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface Category {
@@ -32,10 +30,8 @@ interface DocumentItem {
 export default function PostAd() {
     const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectOpen, setSelectOpen] = useState(false);
     const [description, setDescription] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const dropdownRef = useRef<HTMLDivElement>(null);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
@@ -44,12 +40,11 @@ export default function PostAd() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [allDocuments, setAllDocuments] = useState<DocumentItem[]>([]);
-
     const [estimateDueDate, setEstimateDueDate] = useState<Date | null>();
     const [startDate, setStartDate] = useState<Date | null>();
     const [endDate, setEndDate] = useState<Date | null>();
 
-    // 🔹 Clean up object URLs on unmount or when docs change
+    // 🔹 Clean up object URLs
     useEffect(() => {
         return () => {
             allDocuments.forEach(doc => {
@@ -58,7 +53,6 @@ export default function PostAd() {
         };
     }, [allDocuments]);
 
-    // 🔹 Helper: Clear specific field error
     const clearError = (field: string) => {
         setErrors(prev => {
             const { [field]: _, ...rest } = prev;
@@ -66,7 +60,6 @@ export default function PostAd() {
         });
     };
 
-    // 🔹 Helper: Input change with auto-clear
     const handleInputChange =
         (setter: (v: string) => void, field: string) =>
             (value: string) => {
@@ -74,14 +67,12 @@ export default function PostAd() {
                 clearError(field);
             };
 
-    // 🔹 Update description for a specific doc by ID
     const handleDocDescriptionChange = (id: string, desc: string) => {
         setAllDocuments(prev =>
             prev.map(doc => (doc.id === id ? { ...doc, description: desc } : doc))
         );
     };
 
-    // 🔹 Show non-blocking success toast
     const showSuccessToast = (message: string) => {
         const toast = document.createElement('div');
         toast.innerHTML = `
@@ -106,13 +97,10 @@ export default function PostAd() {
                 <button type="button" class="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
             </div>
         `;
-
         document.body.appendChild(toast);
-
         const timeoutId = setTimeout(() => {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
         }, 4000);
-
         const closeButton = toast.querySelector('.btn-close');
         closeButton?.addEventListener('click', () => {
             clearTimeout(timeoutId);
@@ -120,14 +108,6 @@ export default function PostAd() {
         });
     };
 
-    const getToastPosition = () => {
-        const existingToasts = document.querySelectorAll('.toast.show');
-        const baseTop = 20;
-        const spacing = 15;
-        return baseTop + (existingToasts.length * (60 + spacing));
-    };
-
-    // 🔹 Show non-blocking error toast (matches your success toast style)
     const showErrorToast = (message: string) => {
         const toast = document.createElement('div');
         toast.innerHTML = `
@@ -155,7 +135,7 @@ export default function PostAd() {
         document.body.appendChild(toast);
         const timeoutId = setTimeout(() => {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
-        }, 5000); // Slightly longer for errors
+        }, 5000);
         const closeButton = toast.querySelector('.btn-close');
         closeButton?.addEventListener('click', () => {
             clearTimeout(timeoutId);
@@ -172,7 +152,6 @@ export default function PostAd() {
                 });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
-
                 let fetchedCategories: Category[] = [];
                 if (Array.isArray(data)) {
                     fetchedCategories = data.map(item => ({ id: String(item.id), name: item.name }));
@@ -187,7 +166,6 @@ export default function PostAd() {
                         name: item.name,
                     }));
                 }
-
                 setCategories(fetchedCategories.length > 0 ? fetchedCategories : [
                     { id: '1', name: 'Plumbing' },
                     { id: '2', name: 'Electric Work' },
@@ -209,17 +187,30 @@ export default function PostAd() {
         fetchCategories();
     }, []);
 
-    // Close dropdown on outside click
+    // 🎯 Initialize Select2 AFTER categories load
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setSelectOpen(false);
-                clearError('category');
-            }
+        if (typeof window === 'undefined' || categoriesLoading) return;
+
+        // Dynamically import jQuery & Select2 (SSR-safe)
+        const $ = require('jquery');
+        require('select2');
+        require('select2/dist/css/select2.min.css');
+
+        $('#category-select2').select2({
+            placeholder: 'Select category',
+            allowClear: false,
+            width: '100%',
+            minimumInputLength: 0, // enable search immediately
+        }).on('change', function () {
+            const val = $(this).val() as string;
+            setSelectedCategory(val || '');
+            clearError('category');
+        });
+
+        return () => {
+            $('#category-select2').select2('destroy');
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [categoriesLoading, categories]);
 
     // 📁 File handling
     const makeDoc = (file: File, offset = 0): DocumentItem => {
@@ -268,18 +259,17 @@ export default function PostAd() {
     const handleChangeEstimateDueDate = (date: Date | null) => {
         setEstimateDueDate(date);
     };
+
     const handleChangeStartDate = (date: Date | null) => {
         setStartDate(date);
     };
+
     const handleChangeEndDate = (date: Date | null) => {
         setEndDate(date);
     };
 
-
-    // 🔹 Enhanced handleSubmit with reset + toast
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         const newErrors: Record<string, string> = {};
         if (!selectedCategory) newErrors.category = 'Please select a category.';
         if (!city.trim()) newErrors.city = 'City is required.';
@@ -292,10 +282,8 @@ export default function PostAd() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            // 🔹 Show error toast for validation failures
             const firstError = Object.values(newErrors)[0];
             showErrorToast(`Form Error: ${firstError}`);
-
             setTimeout(() => {
                 document.querySelector('.text-danger')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
@@ -332,8 +320,6 @@ export default function PostAd() {
                 formData.append(`attachments[${index}][description]`, doc.description);
             });
 
-            console.log(formData);
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/create`, {
                 method: 'POST',
                 headers: {
@@ -344,7 +330,6 @@ export default function PostAd() {
             });
 
             const result = await response.json();
-            console.log('API Response:', result);
 
             if (response.status === 401) {
                 setErrors({ api: 'Session expired. Please log in again.' });
@@ -372,10 +357,7 @@ export default function PostAd() {
                 return;
             }
 
-            // ✅ SUCCESS — Show toast & reset form
             showSuccessToast('✅ Project posted successfully!');
-
-            // 🔁 Reset all state
             setSelectedCategory('');
             setCity('');
             setState('');
@@ -385,15 +367,11 @@ export default function PostAd() {
             setEndDate(null);
             setDescription('');
             setAllDocuments([]);
-
-            // Optional: Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
         } catch (error) {
             console.error('Network error:', error);
             const errorMsg = 'Network error. Please check your connection.';
             setErrors({ api: errorMsg });
-            // 🔹 Show network error toast
             showErrorToast(`Connection Error: ${errorMsg}`);
         } finally {
             setIsSubmitting(false);
@@ -426,61 +404,28 @@ export default function PostAd() {
                                 </div>
                             </div>
                         </div>
-
                         <form onSubmit={handleSubmit} className="mb-4">
                             <div className="row g-3">
                                 {/* LEFT SIDE */}
                                 <div className="col-lg-8">
-                                    {/* Category Dropdown */}
-                                    <div
-                                        className="input-wrapper d-flex flex-column position-relative mb-4"
-                                        ref={dropdownRef}
-                                    >
-                                        <label htmlFor="category" className="mb-1 fw-semibold">Category <span className="text-danger">*</span></label>
-                                        <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>
-                                            <div
-                                                className="select-selected"
-                                                onClick={() => setSelectOpen(!selectOpen)}
-                                            >
-                                                {selectedCategory
-                                                    ? categories.find((c) => c.id === selectedCategory)?.name || 'Select category'
-                                                    : 'Select category'}
-                                            </div>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                fill="currentColor"
-                                                className="select-arrow"
-                                                viewBox="0 0 16 16"
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: '10px',
-                                                    top: '50%',
-                                                    transform: 'translateY(-50%)',
-                                                }}
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M1.646 5.646a.5.5 0 0 1 .708 0L8 11.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                                                />
-                                            </svg>
-                                            <ul className="select-options">
-                                                {categories.map((cat) => (
-                                                    <li
-                                                        key={cat.id}
-                                                        data-value={cat.id}
-                                                        onClick={() => {
-                                                            setSelectedCategory(cat.id);
-                                                            setSelectOpen(false);
-                                                            clearError('category');
-                                                        }}
-                                                    >
-                                                        {cat.name}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+                                    {/* 🎯 REPLACED: Custom Select → Select2 */}
+                                    <div className="input-wrapper d-flex flex-column position-relative mb-4">
+                                        <label htmlFor="category-select2" className="mb-1 fw-semibold">
+                                            Category <span className="text-danger">*</span>
+                                        </label>
+                                        <select
+                                            id="category-select2"
+                                            className="form-control"
+                                            value={selectedCategory}
+                                            // onChange handled by Select2
+                                        >
+                                            <option value="">Select category</option>
+                                            {categories.map((cat) => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                         {errors.category && (
                                             <span className="text-danger animate-slide-up">{errors.category}</span>
                                         )}
@@ -488,35 +433,31 @@ export default function PostAd() {
 
                                     {/* Input Fields */}
                                     <div className="row g-4">
-                                        {
-                                            [
-                                                { label: 'City', value: city, setter: setCity, field: 'city', type: 'text', placeholder: 'Enter city' },
-                                                { label: 'State', value: state, setter: setState, field: 'state', type: 'text', placeholder: 'Enter state' },
-                                                { label: 'Zip Code', value: zip, setter: setZip, field: 'zip', type: 'text', placeholder: 'Enter ZIP' },
-                                            ].map((field, index) => (
-                                                <div className="col-lg-4" key={index}>
-                                                    <div className="input-wrapper">
-                                                        <div className="label mb-1 fw-semibold">
-                                                            {field.label}
-                                                            {field.required && <span className="text-danger"> *</span>}
-                                                        </div>
-                                                        <input
-                                                            type={field.type}
-                                                            placeholder={field.placeholder || ''}
-                                                            value={field.value}
-                                                            onChange={(e) => handleInputChange(field.setter, field.field)(e.target.value)}
-                                                            required={field.required}
-                                                        />
-                                                        {errors[field.field] && (
-                                                            <span className="text-danger animate-slide-up">{errors[field.field]}</span>
-                                                        )}
+                                        {[
+                                            { label: 'City', value: city, setter: setCity, field: 'city', type: 'text', placeholder: 'Enter city' },
+                                            { label: 'State', value: state, setter: setState, field: 'state', type: 'text', placeholder: 'Enter state' },
+                                            { label: 'Zip Code', value: zip, setter: setZip, field: 'zip', type: 'text', placeholder: 'Enter ZIP' },
+                                        ].map((field, index) => (
+                                            <div className="col-lg-4" key={index}>
+                                                <div className="input-wrapper">
+                                                    <div className="label mb-1 fw-semibold">
+                                                        {field.label}
                                                     </div>
+                                                    <input
+                                                        type={field.type}
+                                                        placeholder={field.placeholder || ''}
+                                                        value={field.value}
+                                                        onChange={(e) => handleInputChange(field.setter, field.field)(e.target.value)}
+                                                    />
+                                                    {errors[field.field] && (
+                                                        <span className="text-danger animate-slide-up">{errors[field.field]}</span>
+                                                    )}
                                                 </div>
-                                            ))
-                                        }
+                                            </div>
+                                        ))}
 
-                                        <div class="col-lg-4">
-                                            <div class="input-wrapper">
+                                        <div className="col-lg-4">
+                                            <div className="input-wrapper">
                                                 <div className="label mb-1 fw-semibold">Estimate Due Date <span className="text-danger">*</span></div>
                                                 <DatePicker
                                                     selected={estimateDueDate}
@@ -524,7 +465,6 @@ export default function PostAd() {
                                                     selectsStart
                                                     startDate={estimateDueDate}
                                                     endDate={endDate}
-                                                    className=""
                                                     minDate={new Date()}
                                                 />
                                                 {errors.estimateDueDate && (
@@ -532,15 +472,15 @@ export default function PostAd() {
                                                 )}
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <div class="input-wrapper">
+
+                                        <div className="col-lg-4">
+                                            <div className="input-wrapper">
                                                 <div className="label mb-1 fw-semibold">Project Start Date <span className="text-danger">*</span></div>
                                                 <DatePicker
                                                     selected={startDate}
                                                     onChange={handleChangeStartDate}
                                                     startDate={startDate}
                                                     endDate={endDate}
-                                                    className=""
                                                     minDate={new Date()}
                                                     maxDate={estimateDueDate || undefined}
                                                     disabled={!estimateDueDate}
@@ -550,8 +490,9 @@ export default function PostAd() {
                                                 )}
                                             </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <div class="input-wrapper">
+
+                                        <div className="col-lg-4">
+                                            <div className="input-wrapper">
                                                 <div className="label mb-1 fw-semibold">Project End Date <span className="text-danger">*</span></div>
                                                 <DatePicker
                                                     selected={endDate}
@@ -562,7 +503,6 @@ export default function PostAd() {
                                                     minDate={startDate || undefined}
                                                     maxDate={estimateDueDate || undefined}
                                                     disabled={!startDate || !estimateDueDate}
-                                                    className=""
                                                 />
                                                 {errors.endDate && (
                                                     <span className="text-danger animate-slide-up">{errors.endDate}</span>

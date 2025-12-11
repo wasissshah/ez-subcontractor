@@ -76,6 +76,7 @@ export default function Header() {
             onMouseEnter={() => typeof window !== 'undefined' && window.innerWidth >= 992 && setIsNotificationOpen(true)}
             onMouseLeave={() => typeof window !== 'undefined' && window.innerWidth >= 992 && setIsNotificationOpen(false)}
         >
+
             <Link
                 href="#"
                 className="icon-link notification-icon-link"

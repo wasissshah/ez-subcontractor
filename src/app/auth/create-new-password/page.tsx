@@ -167,7 +167,7 @@ export default function CreateNewPassword() {
     );
 
     return (
-        <section className="hero-sec login overflow-hidden">
+        <section className="hero-sec login login-s1 overflow-hidden">
             <div className="image-wrapper">
                 <Image
                     src="/assets/img/left-image.webp"

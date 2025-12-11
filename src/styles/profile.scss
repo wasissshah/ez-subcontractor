@@ -518,6 +518,21 @@ $danger: #DC2626;
     background: #F9F9F9;
   }
 }
+
+// Media Query
+@media (max-width:1200px) {
+  .banner-sec.profile{
+    .sidebar{
+      min-height: 100%;
+      .main-wrapper{
+        gap: 40px;
+        .topbar{
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+  }
+}
 @media (max-width: 768px) {
   .table-responsive {
     border-radius: 6px;

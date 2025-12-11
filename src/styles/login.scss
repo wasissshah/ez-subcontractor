@@ -178,6 +178,8 @@ $danger: #DC2626;
 
 @media (max-width:576px) {
   .hero-sec.login {
+    height: 100%;
+    justify-content: space-between !important;
     .content-wrapper {
       .content {
         .account-wrapper {
@@ -191,5 +193,8 @@ $danger: #DC2626;
         }
       }
     }
+  }
+  .login-s1{
+    height: 100vh !important;
   }
 }

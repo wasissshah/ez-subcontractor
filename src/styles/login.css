@@ -1,8 +1,7 @@
 .hero-sec.login .image-wrapper .left-image {
   position: fixed;
   inset: 0;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   width: 50%;
   height: 100vh;
 }
@@ -62,7 +61,6 @@
   padding: 7px 12px;
   border-radius: 30px;
   border: 1px solid #C9DA2B;
-  width: -moz-fit-content;
   width: fit-content;
   margin: 0 auto;
   margin-bottom: 10px;
@@ -164,10 +162,19 @@
   }
 }
 @media (max-width: 576px) {
+  .hero-sec.login {
+    height: 100%;
+    justify-content: space-between !important;
+  }
   .hero-sec.login .content-wrapper .content .account-wrapper {
     grid-template-columns: 1fr;
   }
   .hero-sec.login .content-wrapper .content .input-wrapper-s2 .buttons {
     flex-wrap: wrap;
   }
-}/*# sourceMappingURL=login.css.map */
+  .login-s1 {
+    height: 100vh !important;
+  }
+}
+
+/*# sourceMappingURL=login.css.map */

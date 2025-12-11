@@ -482,9 +482,9 @@ export default function DashboardPage() {
                 <div className="container">
                     {/* 🔍 Rate a Subcontractor with Search */}
                     <div className="review-wrapper mb-4">
-                        <div className="d-flex align-items-center gap-2 justify-content-between filter-sec p-0 mb-3">
+                        <div className="d-flex align-items-center text-center text-md-start flex-column flex-md-row gap-3 justify-content-between filter-sec p-0 mb-3">
                             <div>
-                                <div className="fs-3 fw-semibold mb-3">Rate a Subcontractor</div>
+                                <div className="fs-3 fw-semibold mb-1 mb-md-3">Rate a Subcontractor</div>
                                 <div className="fs-14 fw-semibold">Recently rated contractors</div>
                             </div>
                             <div className="search-wrapper position-relative">
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                                         )}
                                     </div>
                                 </div>
-                                <div className="text-end mt-3">
+                                <div className="text-center text-md-end mt-3">
                                     <Link href={'/general-contractor/reviews'} className={'text-dark border-bottom me-0 d-inline-block fs-12'}>View More</Link>
                                 </div>
                                 {(showList || searchLoading) && results.length > 0 && (

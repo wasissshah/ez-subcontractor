@@ -501,6 +501,17 @@
   background: #F9F9F9;
 }
 
+@media (max-width: 1200px) {
+  .banner-sec.profile .sidebar {
+    min-height: 100%;
+  }
+  .banner-sec.profile .sidebar .main-wrapper {
+    gap: 40px;
+  }
+  .banner-sec.profile .sidebar .main-wrapper .topbar {
+    margin-bottom: 0 !important;
+  }
+}
 @media (max-width: 768px) {
   .table-responsive {
     border-radius: 6px;
