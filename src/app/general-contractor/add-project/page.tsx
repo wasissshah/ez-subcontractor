@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { format } from 'date-fns';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -10,7 +11,9 @@ import Footer from '../../components/Footer';
 import '../../../styles/profile.css';
 import '../../../styles/post-detail.css';
 import 'react-quill/dist/quill.snow.css';
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {start} from "repl";
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface Category {
@@ -37,13 +40,14 @@ export default function PostAd() {
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [zip, setZip] = useState('');
-    const [estimateDueDate, setEstimateDueDate] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
     const [allDocuments, setAllDocuments] = useState<DocumentItem[]>([]);
+
+    const [estimateDueDate, setEstimateDueDate] = useState<Date | null>();
+    const [startDate, setStartDate] = useState<Date | null>();
+    const [endDate, setEndDate] = useState<Date | null>();
 
     // 🔹 Clean up object URLs on unmount or when docs change
     useEffect(() => {
@@ -109,6 +113,49 @@ export default function PostAd() {
             if (toast.parentNode) toast.parentNode.removeChild(toast);
         }, 4000);
 
+        const closeButton = toast.querySelector('.btn-close');
+        closeButton?.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        });
+    };
+
+    const getToastPosition = () => {
+        const existingToasts = document.querySelectorAll('.toast.show');
+        const baseTop = 20;
+        const spacing = 15;
+        return baseTop + (existingToasts.length * (60 + spacing));
+    };
+
+    // 🔹 Show non-blocking error toast (matches your success toast style)
+    const showErrorToast = (message: string) => {
+        const toast = document.createElement('div');
+        toast.innerHTML = `
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        ">
+            <span>${message}</span>
+            <button type="button" class="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+        document.body.appendChild(toast);
+        const timeoutId = setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 5000); // Slightly longer for errors
         const closeButton = toast.querySelector('.btn-close');
         closeButton?.addEventListener('click', () => {
             clearTimeout(timeoutId);
@@ -218,6 +265,17 @@ export default function PostAd() {
         });
     };
 
+    const handleChangeEstimateDueDate = (date: Date | null) => {
+        setEstimateDueDate(date);
+    };
+    const handleChangeStartDate = (date: Date | null) => {
+        setStartDate(date);
+    };
+    const handleChangeEndDate = (date: Date | null) => {
+        setEndDate(date);
+    };
+
+
     // 🔹 Enhanced handleSubmit with reset + toast
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -234,6 +292,10 @@ export default function PostAd() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            // 🔹 Show error toast for validation failures
+            const firstError = Object.values(newErrors)[0];
+            showErrorToast(`Form Error: ${firstError}`);
+
             setTimeout(() => {
                 document.querySelector('.text-danger')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
@@ -246,7 +308,9 @@ export default function PostAd() {
         try {
             const token = localStorage.getItem('token');
             if (!token || token.trim() === '') {
-                setErrors({ api: 'Authentication required. Please log in.' });
+                const errorMsg = 'Authentication required. Please log in.';
+                setErrors({ api: errorMsg });
+                showErrorToast(errorMsg);
                 router.push('/auth/login');
                 return;
             }
@@ -258,9 +322,9 @@ export default function PostAd() {
             formData.append('state', state);
             formData.append('category_id', selectedCategory);
             formData.append('zip', zip);
-            formData.append('estimate_due_date', estimateDueDate);
-            formData.append('start_date', startDate);
-            formData.append('end_date', endDate);
+            formData.append('estimate_due_date', estimateDueDate ? format(estimateDueDate, 'yyyy-MM-dd') : '');
+            formData.append('start_date', startDate ? format(startDate, 'yyyy-MM-dd') : '');
+            formData.append('end_date', endDate ? format(endDate, 'yyyy-MM-dd') : '');
             formData.append('status', 'active');
 
             allDocuments.forEach((doc, index) => {
@@ -268,7 +332,7 @@ export default function PostAd() {
                 formData.append(`attachments[${index}][description]`, doc.description);
             });
 
-            console.log(allDocuments);
+            console.log(formData);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/create`, {
                 method: 'POST',
@@ -292,7 +356,7 @@ export default function PostAd() {
             if (!response.ok) {
                 let errorMsg = 'Failed to create project.';
                 if (typeof result.message === 'string') {
-                    errorMsg = result.message;
+                    showErrorToast(`Submission Failed: ${errorMsg}`);
                 } else if (Array.isArray(result.message)) {
                     errorMsg = result.message[0] || errorMsg;
                 } else if (result.errors) {
@@ -304,6 +368,7 @@ export default function PostAd() {
                     errorMsg = result.error;
                 }
                 setErrors({ api: errorMsg });
+                showErrorToast(`Submission Failed: ${errorMsg}`);
                 return;
             }
 
@@ -315,9 +380,9 @@ export default function PostAd() {
             setCity('');
             setState('');
             setZip('');
-            setEstimateDueDate('');
-            setStartDate('');
-            setEndDate('');
+            setEstimateDueDate(null);
+            setStartDate(null);
+            setEndDate(null);
             setDescription('');
             setAllDocuments([]);
 
@@ -326,7 +391,10 @@ export default function PostAd() {
 
         } catch (error) {
             console.error('Network error:', error);
-            setErrors({ api: 'Network error. Please check your connection.' });
+            const errorMsg = 'Network error. Please check your connection.';
+            setErrors({ api: errorMsg });
+            // 🔹 Show network error toast
+            showErrorToast(`Connection Error: ${errorMsg}`);
         } finally {
             setIsSubmitting(false);
         }
@@ -354,7 +422,7 @@ export default function PostAd() {
                                             alt="Back"
                                         />
                                     </button>
-                                    <span className="fs-4 fw-semibold">Post an Ad</span>
+                                    <span className="fs-4 fw-semibold">Add Project</span>
                                 </div>
                             </div>
                         </div>
@@ -368,7 +436,7 @@ export default function PostAd() {
                                         className="input-wrapper d-flex flex-column position-relative mb-4"
                                         ref={dropdownRef}
                                     >
-                                        <label htmlFor="category" className="mb-1 fw-semibold">Category *</label>
+                                        <label htmlFor="category" className="mb-1 fw-semibold">Category <span className="text-danger">*</span></label>
                                         <div className={`custom-select position-relative ${selectOpen ? 'open' : ''}`}>
                                             <div
                                                 className="select-selected"
@@ -420,36 +488,91 @@ export default function PostAd() {
 
                                     {/* Input Fields */}
                                     <div className="row g-4">
-                                        {[
-                                            { label: 'City *', value: city, setter: setCity, field: 'city', type: 'text', placeholder: 'Enter city' },
-                                            { label: 'State *', value: state, setter: setState, field: 'state', type: 'text', placeholder: 'Enter state' },
-                                            { label: 'Zip Code *', value: zip, setter: setZip, field: 'zip', type: 'text', placeholder: 'Enter ZIP' },
-                                            { label: 'Estimate Due Date *', value: estimateDueDate, setter: setEstimateDueDate, field: 'estimateDueDate', type: 'date' },
-                                            { label: 'Project Start Date *', value: startDate, setter: setStartDate, field: 'startDate', type: 'date' },
-                                            { label: 'Project End Date *', value: endDate, setter: setEndDate, field: 'endDate', type: 'date' },
-                                        ].map((field, index) => (
-                                            <div className="col-lg-4" key={index}>
-                                                <div className="input-wrapper">
-                                                    <div className="label mb-1 fw-semibold">{field.label}</div>
-                                                    <input
-                                                        type={field.type}
-                                                        placeholder={field.placeholder || ''}
-                                                        value={field.value}
-                                                        onChange={(e) => handleInputChange(field.setter, field.field)(e.target.value)}
-                                                        required
-                                                    />
-                                                    {errors[field.field] && (
-                                                        <span className="text-danger animate-slide-up">
-                                                            {errors[field.field]}
-                                                        </span>
-                                                    )}
+                                        {
+                                            [
+                                                { label: 'City', value: city, setter: setCity, field: 'city', type: 'text', placeholder: 'Enter city' },
+                                                { label: 'State', value: state, setter: setState, field: 'state', type: 'text', placeholder: 'Enter state' },
+                                                { label: 'Zip Code', value: zip, setter: setZip, field: 'zip', type: 'text', placeholder: 'Enter ZIP' },
+                                            ].map((field, index) => (
+                                                <div className="col-lg-4" key={index}>
+                                                    <div className="input-wrapper">
+                                                        <div className="label mb-1 fw-semibold">
+                                                            {field.label}
+                                                            {field.required && <span className="text-danger"> *</span>}
+                                                        </div>
+                                                        <input
+                                                            type={field.type}
+                                                            placeholder={field.placeholder || ''}
+                                                            value={field.value}
+                                                            onChange={(e) => handleInputChange(field.setter, field.field)(e.target.value)}
+                                                            required={field.required}
+                                                        />
+                                                        {errors[field.field] && (
+                                                            <span className="text-danger animate-slide-up">{errors[field.field]}</span>
+                                                        )}
+                                                    </div>
                                                 </div>
+                                            ))
+                                        }
+
+                                        <div class="col-lg-4">
+                                            <div class="input-wrapper">
+                                                <div className="label mb-1 fw-semibold">Estimate Due Date <span className="text-danger">*</span></div>
+                                                <DatePicker
+                                                    selected={estimateDueDate}
+                                                    onChange={handleChangeEstimateDueDate}
+                                                    selectsStart
+                                                    startDate={estimateDueDate}
+                                                    endDate={endDate}
+                                                    className=""
+                                                    minDate={new Date()}
+                                                />
+                                                {errors.estimateDueDate && (
+                                                    <span className="text-danger animate-slide-up">{errors.estimateDueDate}</span>
+                                                )}
                                             </div>
-                                        ))}
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="input-wrapper">
+                                                <div className="label mb-1 fw-semibold">Project Start Date <span className="text-danger">*</span></div>
+                                                <DatePicker
+                                                    selected={startDate}
+                                                    onChange={handleChangeStartDate}
+                                                    startDate={startDate}
+                                                    endDate={endDate}
+                                                    className=""
+                                                    minDate={new Date()}
+                                                    maxDate={estimateDueDate || undefined}
+                                                    disabled={!estimateDueDate}
+                                                />
+                                                {errors.startDate && (
+                                                    <span className="text-danger animate-slide-up">{errors.startDate}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="input-wrapper">
+                                                <div className="label mb-1 fw-semibold">Project End Date <span className="text-danger">*</span></div>
+                                                <DatePicker
+                                                    selected={endDate}
+                                                    onChange={handleChangeEndDate}
+                                                    selectsEnd
+                                                    startDate={startDate}
+                                                    endDate={endDate}
+                                                    minDate={startDate || undefined}
+                                                    maxDate={estimateDueDate || undefined}
+                                                    disabled={!startDate || !estimateDueDate}
+                                                    className=""
+                                                />
+                                                {errors.endDate && (
+                                                    <span className="text-danger animate-slide-up">{errors.endDate}</span>
+                                                )}
+                                            </div>
+                                        </div>
 
                                         {/* Description */}
                                         <div className="col-12">
-                                            <div className="label mb-1 fw-semibold">Description *</div>
+                                            <div className="label mb-1 fw-semibold">Description <span className="text-danger">*</span></div>
                                             <div className="input-wrapper mb-5 d-block">
                                                 <ReactQuill
                                                     theme="snow"

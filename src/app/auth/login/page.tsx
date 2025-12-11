@@ -15,6 +15,49 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
+    // 🔹 Show non-blocking toast notification
+    const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? '#d4edda' : '#f8d7da';
+        const textColor = type === 'success' ? '#155724' : '#721c24';
+        const borderColor = type === 'success' ? '#c3e6cb' : '#f5c6cb';
+        const icon = type === 'success' ? '✅' : '❌';
+
+        toast.innerHTML = `
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                background-color: ${bgColor};
+                color: ${textColor};
+                border: 1px solid ${borderColor};
+                border-radius: 8px;
+                padding: 12px 20px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+            ">
+                <span>${icon} ${message}</span>
+                <button type="button" class="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        const timeoutId = setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 4000);
+
+        const closeButton = toast.querySelector('.btn-close');
+        closeButton?.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        });
+    };
+
     // ✅ Eye Icon — identical to RegisterPage
     const EyeIcon = ({ active }: { active: boolean }) => (
         <svg
@@ -50,18 +93,21 @@ export default function LoginPage() {
         // Validation
         if (!email.trim()) {
             setError('Email is required');
+            showToast('Email is required', 'error');
             setIsLoading(false);
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(email)) {
             setError('Email is invalid');
+            showToast('Email is invalid', 'error');
             setIsLoading(false);
             return;
         }
 
         if (!password.trim()) {
             setError('Password is required');
+            showToast('Password is required', 'error');
             setIsLoading(false);
             return;
         }
@@ -86,6 +132,7 @@ export default function LoginPage() {
                 const user = data.data?.user;
                 if (!token || !user) {
                     setError('Authentication succeeded but no token/user received.');
+                    showToast('Authentication succeeded but no token/user received.', 'error');
                     setIsLoading(false);
                     return;
                 }
@@ -97,21 +144,31 @@ export default function LoginPage() {
 
                 const role = user.role;
 
-                if (role === 'general_contractor') {
-                    router.push('/general-contractor/dashboard');
-                } else if (role === 'subcontractor') {
-                    router.push('/subcontractor/subscription');
-                } else if (role === 'affiliate') {
-                    router.push('/affiliate/subscription');
-                } else {
-                    router.push('/');
-                }
+                // 🔹 Show success toast before redirect
+                showToast('Login successful! Redirecting to dashboard...');
+
+                // Delay redirect to show toast
+                setTimeout(() => {
+                    if (role === 'general_contractor') {
+                        router.push('/general-contractor/dashboard');
+                    } else if (role === 'subcontractor') {
+                        router.push('/subcontractor/subscription');
+                    } else if (role === 'affiliate') {
+                        router.push('/affiliate/subscription');
+                    } else {
+                        router.push('/');
+                    }
+                }, 1000);
 
             } else {
-                setError(data.message || 'Invalid email or password');
+                const errorMsg = data.message || 'Invalid email or password';
+                setError(errorMsg);
+                showToast(errorMsg, 'error');
             }
         } catch (err) {
-            setError('Something went wrong. Please try again.');
+            const errorMsg = 'Something went wrong. Please try again.';
+            setError(errorMsg);
+            showToast(errorMsg, 'error');
             console.error('Login error:', err);
         } finally {
             setIsLoading(false);
@@ -227,7 +284,7 @@ export default function LoginPage() {
                             </form>
 
                             <div className="text-center fw-medium text-gray-light">
-                                Don’t have an account?{' '}
+                                Don't have an account?{' '}
                                 <Link href="/auth/register" className="fw-semibold text-black">
                                     Register
                                 </Link>

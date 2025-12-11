@@ -1,6 +1,5 @@
 // app/dashboard/page.tsx
 'use client';
-
 import { useRef, useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -57,9 +56,53 @@ export default function DashboardPage() {
     const [ratingError, setRatingError] = useState<string | null>(null);
     const [ratingLoading, setRatingLoading] = useState(false);
     const [currentContractor, setCurrentContractor] = useState<Contractor | null>(null); // Track which contractor is being rated
-
     const [contractors, setContractors] = useState<Contractor[]>([]);
+
     const selectRef = useRef(null);
+    const sliderRef = useRef<Slider | null>(null);
+
+    // 🔹 Show non-blocking success toast
+    const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? '#d4edda' : '#f8d7da';
+        const textColor = type === 'success' ? '#155724' : '#721c24';
+        const borderColor = type === 'success' ? '#c3e6cb' : '#f5c6cb';
+        const icon = type === 'success' ? '✅' : '❌';
+
+        toast.innerHTML = `
+            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                background-color: ${bgColor};
+                color: ${textColor};
+                border: 1px solid ${borderColor};
+                border-radius: 8px;
+                padding: 12px 20px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+            ">
+                <span>${icon} ${message}</span>
+                <button type="button" class="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        const timeoutId = setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 4000);
+
+        const closeButton = toast.querySelector('.btn-close');
+        closeButton?.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+        });
+    };
 
     // 🔹 Toggle card expansion
     const toggleCard = (index: number) => {
@@ -84,7 +127,6 @@ export default function DashboardPage() {
     // 🔹 Delete project
     const handleDelete = async () => {
         if (!deletingId) return;
-
         setDeleteError(null);
         try {
             const token = localStorage.getItem('token');
@@ -108,7 +150,9 @@ export default function DashboardPage() {
             }
 
             setProjects(prev => prev.filter(p => p.id !== deletingId));
-            alert('✅ Project deleted successfully.');
+
+            // 🔹 Replaced alert with toast
+            showToast('Project deleted successfully!');
 
             const modalEl = document.getElementById('deleteProjectModal');
             if (modalEl && (window as any).bootstrap) {
@@ -118,6 +162,9 @@ export default function DashboardPage() {
         } catch (err: any) {
             console.error('Delete error:', err);
             setDeleteError(err.message || 'Failed to delete project.');
+
+            // 🔹 Show error toast
+            showToast(err.message || 'Failed to delete project.', 'error');
         } finally {
             setDeletingId(null);
         }
@@ -135,7 +182,6 @@ export default function DashboardPage() {
         const fetchProjects = async () => {
             setLoading(true);
             setError(null);
-
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -162,7 +208,6 @@ export default function DashboardPage() {
                 }
 
                 const data = await response.json();
-
                 if (!response.ok) {
                     throw new Error(data.message?.[0] || 'Failed to load projects');
                 }
@@ -171,10 +216,12 @@ export default function DashboardPage() {
                 if (data?.data?.projects?.data && Array.isArray(data.data.projects.data)) {
                     fetchedProjects = [...data.data.projects.data].reverse();
                 }
-
                 setProjects(fetchedProjects);
             } catch (err: any) {
                 setError(err.message || 'Failed to load projects.');
+
+                // 🔹 Show error toast
+                showToast(err.message || 'Failed to load projects.', 'error');
             } finally {
                 setLoading(false);
             }
@@ -188,7 +235,6 @@ export default function DashboardPage() {
         const fetchContractors = async () => {
             setLoading(true);
             setError(null);
-
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -213,7 +259,6 @@ export default function DashboardPage() {
                 }
 
                 const data = await response.json();
-
                 if (!response.ok) {
                     throw new Error(data.message?.[0] || 'Failed to load contractors');
                 }
@@ -229,6 +274,9 @@ export default function DashboardPage() {
                 }
             } catch (err: any) {
                 setError(err.message || 'Failed to load contractors.');
+
+                // 🔹 Show error toast
+                showToast(err.message || 'Failed to load contractors.', 'error');
             } finally {
                 setLoading(false);
             }
@@ -260,15 +308,16 @@ export default function DashboardPage() {
                 );
 
                 const data = await res.json();
-
                 // ✅ Extract contractors from nested data.data
                 const contractors = data?.data?.data || [];
-
                 setResults(contractors);
                 setShowList(true);
             } catch (error) {
                 console.error('Search failed:', error);
                 setResults([]);
+
+                // 🔹 Show error toast
+                showToast('Search failed. Please try again.', 'error');
             } finally {
                 setSearchLoading(false);
             }
@@ -305,10 +354,8 @@ export default function DashboardPage() {
     // 🔹 Handle rating submission
     const handleRateSubcontractor = async () => {
         if (!currentContractor || selectedRating === 0) return;
-
         setRatingLoading(true);
         setRatingError(null);
-
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Not authenticated');
@@ -330,7 +377,6 @@ export default function DashboardPage() {
             );
 
             const data = await response.json();
-
             console.log(data);
 
             if (!response.ok) {
@@ -338,7 +384,9 @@ export default function DashboardPage() {
             }
 
             // ✅ Success!
-            alert('✅ Rating submitted successfully!');
+            // 🔹 Replaced alert with toast
+            showToast('Rating submitted successfully!');
+
             setIsRatingModalOpen(false);
             setCurrentContractor(null);
             setSelectedRating(0);
@@ -346,16 +394,17 @@ export default function DashboardPage() {
 
             // Optional: Refresh contractor list or update average_rating locally
             // You could refetch contractors here if needed
-
         } catch (err: any) {
             console.error('Rating error:', err);
             setRatingError(err.message || 'Failed to submit rating. Please try again.');
+
+            // 🔹 Show error toast
+            showToast(err.message || 'Failed to submit rating. Please try again.', 'error');
         } finally {
             setRatingLoading(false);
         }
     };
 
-    const sliderRef = useRef<Slider | null>(null);
     const settings = {
         dots: false,
         infinite: true,
@@ -368,7 +417,6 @@ export default function DashboardPage() {
     return (
         <div className="sections overflow-hidden">
             <Header />
-
             {/* Banner Section */}
             <section className="banner-sec trial position-static">
                 <div className="container">
@@ -427,7 +475,6 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </section>
-
             {/* My Projects & Rate Subcontractor */}
             <section className="review mb-5">
                 <div className="container">
@@ -517,7 +564,6 @@ export default function DashboardPage() {
                                         ))}
                                     </ul>
                                 )}
-
                                 {showList && !searchLoading && results.length === 0 && query.trim() && (
                                     <ul
                                         ref={listRef}
@@ -529,7 +575,6 @@ export default function DashboardPage() {
                                 )}
                             </div>
                         </div>
-
                         {/* Contractor Cards */}
                         <div className="review-card-s1 p-0 bg-transparent">
                             {loading ? (
@@ -572,7 +617,6 @@ export default function DashboardPage() {
                                                             {formatDate(contractor.created_at)}
                                                         </div>
                                                     </div>
-
                                                     <div className="bottom d-flex align-items-center justify-content-between gap-2 flex-wrap">
                                                         <div className="fs-12 fw-medium">
                                                             {contractor.city && contractor.state
@@ -588,7 +632,6 @@ export default function DashboardPage() {
                                                                         const rating = parseFloat(contractor.average_rating) || 0;
                                                                         const isFull = starValue <= Math.floor(rating);
                                                                         const isHalf = !isFull && starValue <= rating + 0.5;
-
                                                                         return (
                                                                             <Image
                                                                                 key={j}
@@ -633,7 +676,6 @@ export default function DashboardPage() {
                             )}
                         </div>
                     </div>
-
                     {/* ✅ My Projects */}
                     <div className="bar d-flex align-items-center gap-2 justify-content-between flex-wrap mb-4">
                         <div className="fs-4 fw-semibold">My Projects</div>
@@ -645,7 +687,6 @@ export default function DashboardPage() {
                             <span>Add Project</span>
                         </button>
                     </div>
-
                     {loading ? (
                         <div className="text-center py-5">
                             <div className="spinner-border text-primary" role="status">
@@ -681,20 +722,17 @@ export default function DashboardPage() {
                                                         {getStatusLabel(project.status)}
                                                     </span>
                                                 </div>
-
                                                 <p className="description mb-0">
                                                     {expandedCards.includes(index)
                                                         ? project.description
                                                         : project.description?.replace(/<[^>]*>/g, '').slice(0, 150) + '...'}
                                                 </p>
-
                                                 <button
                                                     className="see-more-btn mb-3 d-block"
                                                     onClick={() => toggleCard(index)}
                                                 >
                                                     {expandedCards.includes(index) ? 'See less' : 'See more'}
                                                 </button>
-
                                                 <div className="buttons d-flex align-items-center gap-2 flex-wrap-md">
                                                     <button
                                                         className="btn btn-primary rounded-3 w-100 justify-content-center"
@@ -728,12 +766,11 @@ export default function DashboardPage() {
                                                 alt="No projects"
                                                 className="mb-3"
                                             />
-                                            <p className="text-muted">You haven’t posted any projects yet.</p>
+                                            <p className="text-muted">You haven't posted any projects yet.</p>
                                         </div>
                                     </div>
                                 )}
                             </div>
-
                             <Link href="/general-contractor/my-projects" className="btn bg-dark rounded-3 mx-auto d-block w-fit">
                                 <span className="text-white me-2">See All Projects</span>
                                 <Image src="/assets/img/icons/arrow-white.svg" width={12} height={12} alt="Icon" />
@@ -742,7 +779,6 @@ export default function DashboardPage() {
                     )}
                 </div>
             </section>
-
             {/* Delete Modal */}
             <div
                 className="modal fade"
@@ -792,7 +828,6 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-
             {/* Rating Modal */}
             {isRatingModalOpen && currentContractor && (
                 <div className="modal-backdrop show" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050 }}></div>
@@ -830,7 +865,6 @@ export default function DashboardPage() {
                             aria-label="Close"
                         ></button>
                     </div>
-
                     <div className="modal-body text-center">
                         {/* Avatar */}
                         <img
@@ -868,13 +902,11 @@ export default function DashboardPage() {
                                 </button>
                             ))}
                         </div>
-
                         {ratingError && (
                             <div className="alert alert-danger mt-2 p-2 mb-3 text-start">
                                 {ratingError}
                             </div>
                         )}
-
                         {/* Buttons */}
                         <div className="d-flex gap-2">
                             <button
@@ -906,7 +938,6 @@ export default function DashboardPage() {
                     </div>
                 </div>
             )}
-
             <Footer />
         </div>
     );
@@ -931,7 +962,7 @@ const getStatusLabel = (status: string) => {
     return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-// ✅ Debounce utility (fixes "ReferenceError: debounce is not defined")
+// ✅ Debounce utility
 function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<F>): Promise<ReturnType<F>> => {

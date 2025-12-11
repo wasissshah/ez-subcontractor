@@ -59,14 +59,14 @@ export default function ProfilePage() {
 
                 if (response.ok) {
                     setProfile({
-                        fullName: data.data.name || 'N/A',
-                        email: data.data.email || 'N/A',
-                        phone: data.data.phone || 'N/A',
-                        companyName: data.data.company_name || 'N/A',
-                        role: data.data.role || 'N/A',
-                        city: data.data.city || 'N/A',
-                        state: data.data.state || 'N/A',
-                        zipCode: data.data.zipCode || 'N/A',
+                        fullName: data.data.name || '',
+                        email: data.data.email || '',
+                        phone: data.data.phone || '',
+                        companyName: data.data.company_name || '',
+                        role: data.data.role || '',
+                        city: data.data.city || '',
+                        state: data.data.state || '',
+                        zipCode: data.data.zipCode || '',
                         workRadius: data.data.workRadius || 0,
                         categories: data.data.categories || [],
                     });
@@ -193,55 +193,6 @@ export default function ProfilePage() {
                             <div className="col-xl-3">
                                 <div className="sidebar">
                                     <div className="main-wrapper bg-dark p-0">
-                                        <div className="topbar mb-5 d-flex justify-content-between align-items-start position-relative">
-                                            <div className="icon-wrapper d-flex align-items-start gap-3 flex-nowrap overflow-hidden">
-                                                <Image
-                                                    src="/assets/img/profile-img.webp"
-                                                    width={50}
-                                                    height={50}
-                                                    alt="Worker Icon"
-                                                />
-                                                <div className="content-wrapper pe-3 overflow-hidden">
-                                                    <div className="title text-black fs-5 fw-medium mb-2 text-truncate">
-                                                        {profile.fullName}
-                                                    </div>
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/message-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Message Icon"
-                                                        />
-                                                        <div
-                                                            className="fs-14 fw-medium text-dark text-truncate"
-                                                        >
-                                                            {profile.email}
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/call-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Call Icon"
-                                                        />
-                                                        <div
-                                                            className="fs-14 fw-medium text-dark text-truncate"
-                                                        >
-                                                            {profile.phone}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <Image
-                                                src="/assets/img/icons/arrow-dark.svg"
-                                                width={10}
-                                                height={10}
-                                                alt="Arrow"
-                                                style={{ objectFit: 'contain', top: '50%', left: 'auto', right: '10px', transform: 'translate(-50%, -50%)', }}
-                                                className="position-absolute"
-                                            />
-                                        </div>
 
                                         {/* Sidebar Links */}
                                         <div className="buttons-wrapper">
@@ -345,11 +296,13 @@ export default function ProfilePage() {
                                                 alt="Worker Image"
                                             />
                                             <div className="content">
-                                                <div className="title fw-semibold fs-4 mb-2">{profile.fullName}</div>
+                                                <div className="title fw-semibold fs-4 mb-0">{profile.fullName}</div>
                                                 <p className="mb-1 text-gray-light text-capitalize">{profile.role.replace(/[^a-zA-Z0-9]/g, ' ')}</p>
-                                                <p className="mb-1 text-gray-light">
-                                                    {profile.city}, {profile.state} {profile.zipCode}
-                                                </p>
+                                                {(profile.city || profile.state || profile.zipCode) && (
+                                                    <p className="mb-1 text-gray-light">
+                                                        {profile.city}, {profile.state} {profile.zipCode}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

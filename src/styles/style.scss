@@ -1,5 +1,6 @@
 $primary: #C9DA2B;
 $gray: #F9F9F9;
+$white: #fff;
 $gray-light: #9A9A9A;
 $dark: #272727;
 $danger: #DC2626;
@@ -324,6 +325,54 @@ body {
       }
     }
   }
+
+  .react-datepicker__month-container {
+    .react-datepicker__header {
+      .react-datepicker__current-month {
+        font-size: 14px !important;
+      }
+    }
+  }
+  .react-datepicker__day--selected,
+  .react-datepicker__day--in-selecting-range,
+  .react-datepicker__day--in-range,
+  .react-datepicker__month-text--selected,
+  .react-datepicker__month-text--in-selecting-range,
+  .react-datepicker__month-text--in-range,
+  .react-datepicker__quarter-text--selected,
+  .react-datepicker__quarter-text--in-selecting-range,
+  .react-datepicker__quarter-text--in-range,
+  .react-datepicker__year-text--selected,
+  .react-datepicker__year-text--in-selecting-range,
+  .react-datepicker__year-text--in-range {
+    color: $dark;
+    background-color: $primary;
+  }
+  .react-datepicker__day--selected:not([aria-disabled=true]):hover,
+  .react-datepicker__day--in-selecting-range:not([aria-disabled=true]):hover,
+  .react-datepicker__day--in-range:not([aria-disabled=true]):hover,
+  .react-datepicker__month-text--selected:not([aria-disabled=true]):hover,
+  .react-datepicker__month-text--in-selecting-range:not([aria-disabled=true]):hover,
+  .react-datepicker__month-text--in-range:not([aria-disabled=true]):hover,
+  .react-datepicker__quarter-text--selected:not([aria-disabled=true]):hover,
+  .react-datepicker__quarter-text--in-selecting-range:not([aria-disabled=true]):hover,
+  .react-datepicker__quarter-text--in-range:not([aria-disabled=true]):hover,
+  .react-datepicker__year-text--selected:not([aria-disabled=true]):hover,
+  .react-datepicker__year-text--in-selecting-range:not([aria-disabled=true]):hover,
+  .react-datepicker__year-text--in-range:not([aria-disabled=true]):hover {
+    color: $white;
+    background-color: rgb(28.75, 93.2196969697, 143.75);
+  }
+  .quill {
+    .ql-toolbar {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    .ql-container {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
 }
 
 .modal.show.d-block {
@@ -342,4 +391,10 @@ body {
 .form-check-input:focus {
   border-color: #8F9B1F;
   box-shadow: 0 0 0 .25rem rgba(174, 253, 75, 0.25);
+}
+.input-wrapper {
+  .react-datepicker-wrapper {
+    display: block;
+    width: 100%;
+  }
 }
