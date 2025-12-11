@@ -12,12 +12,14 @@ interface ProfileData {
     fullName: string;
     email: string;
     phone: string;
+    profile_image: string,
     companyName: string;
     role: string;
     city: string;
     state: string;
     zipCode: string;
     workRadius: number;
+    license_number: string;
     categories: string[];
 }
 
@@ -62,11 +64,13 @@ export default function ProfilePage() {
                         fullName: data.data.name || '',
                         email: data.data.email || '',
                         phone: data.data.phone || '',
+                        profile_image: data.data.profile_image || '/assets/img/profile-placeholder.webp',
                         companyName: data.data.company_name || '',
                         role: data.data.role || '',
                         city: data.data.city || '',
                         state: data.data.state || '',
                         zipCode: data.data.zipCode || '',
+                        license_number: data.data.license_number || '',
                         workRadius: data.data.workRadius || 0,
                         categories: data.data.categories || [],
                     });
@@ -289,8 +293,8 @@ export default function ProfilePage() {
                                     <div className="review-bar d-flex align-items-center justify-content-between gap-2 flex-wrap mb-5">
                                         <div className="image-box d-flex align-items-center gap-4">
                                             <Image
-                                                src="/assets/img/profile-img.webp"
-                                                className="worker-img"
+                                                src={profile.profile_image}
+                                                className="worker-img rounded-circle"
                                                 width={180}
                                                 height={180}
                                                 alt="Worker Image"
@@ -308,7 +312,7 @@ export default function ProfilePage() {
                                     </div>
 
                                     <div className="review-bar">
-                                        <div className="row g-2">
+                                        <div className="row g-2 gy-4">
                                             <div className="col-xl-3 col-sm-6">
                                                 <div className="content">
                                                     <div className="text-gray-light fw-medium mb-2">Full Name</div>
@@ -347,6 +351,18 @@ export default function ProfilePage() {
                                                     >
                                                         {profile.phone}
                                                     </Link>
+                                                </div>
+                                            </div>
+                                            <div className="col-xl-3 col-sm-6">
+                                                <div className="content">
+                                                    <div className="text-gray-light fw-medium mb-2">
+                                                        License Number
+                                                    </div>
+                                                    <div
+                                                        className="fw-semibold fs-18 text-dark text-truncate"
+                                                    >
+                                                        {profile.license_number}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

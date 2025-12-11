@@ -1,6 +1,6 @@
+// app/general-contractor/edit-profile/page.tsx
 'use client';
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -14,11 +14,18 @@ const links = [
     { href: '/general-contractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
 ];
 
+// 🔹 Default profile placeholder
+const DEFAULT_PROFILE_IMAGE = '/assets/img/profile-placeholder.webp';
+
 export default function EditProfile() {
     const [loading, setLoading] = useState(true); // For initial fetch
     const [submitting, setSubmitting] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false); // For image upload state
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
+
+    // Ref for hidden file input
+    const imageFileInputRef = useRef<HTMLInputElement>(null);
 
     // 🔹 Show non-blocking toast notification
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -67,6 +74,7 @@ export default function EditProfile() {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
+        profile_image: DEFAULT_PROFILE_IMAGE,
         company_name: '',
         license_number: '',
         zip: '',
@@ -80,6 +88,43 @@ export default function EditProfile() {
 
     const pathname = usePathname();
     const router = useRouter();
+
+    // 🔹 Refetch profile data
+    const refetchProfile = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            router.push('/auth/login');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+
+            console.log('Profile refetched:', data);
+            if (res.ok && data.data) {
+                setFormData({
+                    name: data.data.name || '',
+                    phone: data.data.phone || '',
+                    profile_image: data.data.profile_image || DEFAULT_PROFILE_IMAGE,
+                    company_name: data.data.company_name || '',
+                    license_number: data.data.license_number || '',
+                    zip: data.data.zip || '',
+                    work_radius: data.data.work_radius || 0,
+                    category: data.data.category || 1,
+                    address: data.data.address || '',
+                    city: data.data.city || '',
+                    state: data.data.state || '',
+                    email: data.data.email || '',
+                });
+            }
+        } catch (err) {
+            console.error('Failed to refetch profile:', err);
+            showToast('Failed to refresh profile data. Please try again.', 'error');
+        }
+    };
 
     // Fetch current profile data
     useEffect(() => {
@@ -95,10 +140,13 @@ export default function EditProfile() {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const data = await res.json();
+
+                console.log(data);
                 if (res.ok && data.data) {
                     setFormData({
                         name: data.data.name || '',
                         phone: data.data.phone || '',
+                        profile_image: data.data.profile_image || DEFAULT_PROFILE_IMAGE,
                         company_name: data.data.company_name || '',
                         license_number: data.data.license_number || '',
                         zip: data.data.zip || '',
@@ -124,6 +172,52 @@ export default function EditProfile() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // 👇 NEW: Handle profile image upload with automatic refetch
+    const handleProfileImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            showToast('Authentication required. Please log in.', 'error');
+            router.push('/auth/login');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('profile_image', file);
+
+        setUploadingImage(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/profile/update-image`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showToast('Profile image updated successfully!');
+                // ✅ Refetch profile data to update the image URL
+                await refetchProfile();
+            } else {
+                showToast(result.message || 'Failed to upload image. Please try again.', 'error');
+            }
+        } catch (err) {
+            console.error('Image upload error:', err);
+            showToast('Network error. Please check your connection.', 'error');
+        } finally {
+            setUploadingImage(false);
+            // Reset input so same file can be re-selected
+            if (imageFileInputRef.current) {
+                imageFileInputRef.current.value = '';
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -327,14 +421,40 @@ export default function EditProfile() {
                                         </div>
                                     </div>
 
-                                    <Image
-                                        src="/assets/img/profile-img.webp"
-                                        width={234}
-                                        height={234}
-                                        alt="Worker Image"
-                                        className="d-block mb-4 img-fluid w-100"
-                                        style={{ maxWidth: '234px' }}
-                                    />
+                                    {/* 👇 Image Upload Section (NEW) */}
+                                    <div className="image-wrapper-s1">
+                                        <Image
+                                            src={formData.profile_image}
+                                            width={234}
+                                            height={234}
+                                            alt="Worker Image"
+                                            className="d-block mb-4 img-fluid rounded-circle"
+                                            style={{ width: '234px', height: '234px' }}
+                                        />
+                                        <button
+                                            type="button" // Important: not "submit"
+                                            className="icon"
+                                            onClick={() => imageFileInputRef.current?.click()}
+                                            disabled={uploadingImage}
+                                            aria-label="Upload profile image"
+                                        >
+                                            <Image
+                                                src="/assets/img/camera-icon.svg"
+                                                width={24}
+                                                height={24}
+                                                alt="Camera Icon"
+                                                style={{ maxWidth: '24px' }}
+                                            />
+                                        </button>
+                                        {/* Hidden file input */}
+                                        <input
+                                            type="file"
+                                            ref={imageFileInputRef}
+                                            accept="image/*"
+                                            onChange={handleProfileImageUpload}
+                                            style={{ display: 'none' }}
+                                        />
+                                    </div>
 
                                     <form onSubmit={handleSubmit}>
                                         <div className="form">

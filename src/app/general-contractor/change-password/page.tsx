@@ -213,56 +213,6 @@ export default function ChangePassword() {
                             <div className="col-xl-3">
                                 <div className="sidebar h-100">
                                     <div className="main-wrapper bg-dark p-0 h-100 d-flex flex-column justify-content-between">
-                                        <div className="topbar mb-5 d-flex justify-content-between align-items-start position-relative">
-                                            <div className="icon-wrapper d-flex align-items-start gap-3 flex-nowrap overflow-hidden">
-                                                <Image
-                                                    src="/assets/img/profile-img.webp"
-                                                    width={80}
-                                                    height={80}
-                                                    alt="Worker Icon"
-                                                />
-                                                <div className="content-wrapper overflow-hidden pe-3">
-                                                    <div className="title text-black fs-5 fw-medium mb-2">
-                                                        {user?.name || 'Loading...'}
-                                                    </div>
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/message-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Message Icon"
-                                                        />
-                                                        <div
-                                                            className="fs-14 fw-medium text-dark text-truncate"
-                                                        >
-                                                            {user?.email || '—'}
-                                                        </div>
-                                                    </div>
-                                                    <div className="d-flex align-items-center gap-2 mb-1">
-                                                        <Image
-                                                            src="/assets/img/icons/call-dark.svg"
-                                                            width={16}
-                                                            height={16}
-                                                            alt="Call Icon"
-                                                        />
-                                                        <div
-                                                            className="fs-14 fw-medium text-dark text-truncate"
-                                                        >
-                                                            {user?.phone || '—'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <Image
-                                                src="/assets/img/icons/arrow-dark.svg"
-                                                width={10}
-                                                height={10}
-                                                alt="Arrow"
-                                                style={{ objectFit: 'contain', top: '50%', left: 'auto', right: '10px', transform: 'translate(-50%, -50%)', }}
-                                                className="position-absolute"
-                                            />
-                                        </div>
 
                                         {/* Sidebar Links */}
                                         <div className="buttons-wrapper">

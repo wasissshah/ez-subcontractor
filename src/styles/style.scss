@@ -114,7 +114,7 @@ h2 {
 
 /* Styling */
 
-.custom-select {
+.custom-select{
       position: relative;
       width: 100%;
       user-select: none;
@@ -274,57 +274,57 @@ li {
 }
 
 body {
-  .search-wrapper {
-    min-width: 500px;
-  }
-  .search-contractors {
-    .select2-container {
-      min-width: 500px;
-    }
-  }
-  .select2-container {
-    .select2-selection {
-      height: 40px;
-      border-color: #DADADA;
-      border-radius: 10px;
-      .select2-selection__rendered {
-        padding: 5px 10px;
-      }
-    }
-    .select2-selection__arrow {
-      top: 50% !important;
-      transform: translate(-50%, -50%)
-    }
-  }
-  .select2-dropdown--below {
-    border-color: #DADADA;
-    .select2-search__field {
-      border-radius: 8px;
-      border-color: #DADADA !important;
-      background-color: #efefef;
-    }
-    .select2-results__options {
-      .select2-results__option {
-        color: #333342;
-        background-color: #F8F9FA;
-        margin: 2px 0;
-        padding: 5px 10px;
-        > span {
-          display: flex;
-          justify-content: space-between;
-          font-weight: 500;
-        }
-        .btn {
-          font-size: 12px;
-          padding: 5px 15px;
-          &:hover,
-          &:focus {
-            background-color: $primary !important;
-          }
-        }
-      }
-    }
-  }
+  //.search-wrapper {
+  //  min-width: 500px;
+  //}
+  //.search-contractors {
+  //  .select2-container {
+  //    min-width: 500px;
+  //  }
+  //}
+  //.select2-container {
+  //  .select2-selection {
+  //    height: 40px;
+  //    border-color: #DADADA;
+  //    border-radius: 10px;
+  //    .select2-selection__rendered {
+  //      padding: 5px 10px;
+  //    }
+  //  }
+  //  .select2-selection__arrow {
+  //    top: 50% !important;
+  //    transform: translate(-50%, -50%)
+  //  }
+  //}
+  //.select2-dropdown--below {
+  //  border-color: #DADADA;
+  //  .select2-search__field {
+  //    border-radius: 8px;
+  //    border-color: #DADADA !important;
+  //    background-color: #efefef;
+  //  }
+  //  .select2-results__options {
+  //    .select2-results__option {
+  //      color: #333342;
+  //      background-color: #F8F9FA;
+  //      margin: 2px 0;
+  //      padding: 5px 10px;
+  //      > span {
+  //        display: flex;
+  //        justify-content: space-between;
+  //        font-weight: 500;
+  //      }
+  //      .btn {
+  //        font-size: 12px;
+  //        padding: 5px 15px;
+  //        &:hover,
+  //        &:focus {
+  //          background-color: $primary !important;
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
 
   .react-datepicker__month-container {
     .react-datepicker__header {
