@@ -488,7 +488,7 @@ export default function DashboardPage() {
                                 <div className="fs-14 fw-semibold">Recently rated contractors</div>
                             </div>
                             <div className="search-wrapper position-relative">
-                                <div className="form-wrapper mb-0 d-flex align-items-center px-3 py-0">
+                                <div className="form-wrapper mb-0 d-flex align-items-center px-3 py-0 me-0">
                                     <input
                                         ref={inputRef}
                                         type="text"

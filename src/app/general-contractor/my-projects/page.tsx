@@ -249,6 +249,7 @@ export default function DashboardPage() {
                                     Active ({projects.filter(p => p.status.toLowerCase() === 'active').length})
                                 </button>
                             </li>
+                            <div className="slider"></div>
                         </ul>
 
                         {loading ? (
