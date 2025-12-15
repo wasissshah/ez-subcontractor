@@ -275,9 +275,6 @@ export default function DashboardSubContractor() {
         }
     };
 
-    const showDetailPage = async () => {
-        () => router.push(`/subcontractor/project-details?id=${project.id}`)
-    };
 
     // 🔹 On mount: fetch projects + saved project in parallel
     useEffect(() => {
