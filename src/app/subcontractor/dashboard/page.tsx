@@ -485,7 +485,7 @@ export default function DashboardSubContractor() {
                                                             }
                                                             width={16}
                                                             height={16}
-                                                            alt={savedproject.has(project.user_id) ? 'Saved' : 'Save'}
+                                                            alt="save"
                                                         />
                                                     </button>
                                                 </div>
