@@ -130,8 +130,6 @@ export default function ProjectSubcontractorDetailsPage() {
             } catch (err: any) {
                 console.error('Fetch error:', err);
                 setError(err.message || 'Failed to load project details.');
-                // 🔹 Show error toast
-                showToast(err.message || 'Failed to load project details.', 'error');
             } finally {
                 setLoading(false);
             }
