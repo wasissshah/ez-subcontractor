@@ -184,8 +184,6 @@ export default function RegisterPage() {
         };
         const role = localStorage.getItem('role');
 
-        console.log(role)
-
         const payload: Record<string, any> = {
             name: formData.name,
             email: formData.email,

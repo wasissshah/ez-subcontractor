@@ -95,7 +95,8 @@
   border: 1px solid #00BBFF;
   border-radius: 10px;
   padding: 21px 35px;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 14px;
 }
 .hero-sec.login .register-topbar {
   background-color: #F9F9F9;

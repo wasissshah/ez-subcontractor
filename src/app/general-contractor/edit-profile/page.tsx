@@ -278,7 +278,7 @@ export default function EditProfile() {
 
             if (response.ok) {
                 showToast('Profile updated successfully!');
-                // Redirect to profile page after success
+                // Redirect to profile page after thank-you
                 setTimeout(() => {
                     router.push('/general-contractor/profile');
                 }, 1500);

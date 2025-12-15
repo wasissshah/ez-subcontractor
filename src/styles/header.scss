@@ -101,7 +101,17 @@ $danger: #DC2626;
     }
   }
 }
-// styles/header.scss
+.header.header-show-logo {
+  position: absolute;
+  background-color: transparent;
+  box-shadow: none !important;
+  .logo {
+    text-align: center;
+  }
+  #primary-navigation, .hamburger  {
+    display: none !important;
+  }
+}
 
 .notification-dropdown-wrapper {
   position: relative;

@@ -92,6 +92,18 @@
   transform: translateY(-10px) rotate(-45deg);
 }
 
+.header.header-show-logo {
+  position: absolute;
+  background-color: transparent;
+  box-shadow: none !important;
+}
+.header.header-show-logo .logo {
+  text-align: center;
+}
+.header.header-show-logo #primary-navigation, .header.header-show-logo .hamburger {
+  display: none !important;
+}
+
 .notification-dropdown-wrapper {
   position: relative;
 }

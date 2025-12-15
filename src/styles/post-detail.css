@@ -124,8 +124,7 @@
 }
 .banner-sec.post .image-wrapper .post-img {
   border-radius: 25px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
   box-shadow: 0px 4px 35px 4px rgba(0, 0, 0, 0.1450980392);
   position: relative;
 }
@@ -327,4 +326,6 @@
   .documents-wrapper1 {
     grid-template-columns: 1fr;
   }
-}/*# sourceMappingURL=post-detail.css.map */
+}
+
+/*# sourceMappingURL=post-detail.css.map */

@@ -61,7 +61,7 @@ export default function DashboardPage() {
     const selectRef = useRef(null);
     const sliderRef = useRef<Slider | null>(null);
 
-    // 🔹 Show non-blocking success toast
+    // 🔹 Show non-blocking thank-you toast
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
         const toast = document.createElement('div');
         const bgColor = type === 'success' ? '#d4edda' : '#f8d7da';

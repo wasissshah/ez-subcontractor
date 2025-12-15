@@ -9,62 +9,133 @@ import Footer from "../../components/Footer";
 import '../../../styles/pricing.css';
 import '../../../styles/checkout.css';
 
+interface ProfileData {
+    address: string
+    city: string
+    companyName: string
+    email: string
+    licenseNumber: string
+    fullName: string
+    phone: string
+    profile_image: string
+    role: string
+    categories: string[];
+    state: string
+    workRadius: string
+    zipCode: string
+}
+
+
 export default function CheckoutPage() {
-    const router = useRouter(); // ✅ Router for redirect
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState("Select category");
     const [selectedPlan, setSelectedPlan] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [profile, setProfile] = useState<ProfileData | null>(null);
+    const [error, setError] = useState<string | null>(null); // ✅ Add error state
 
-    const categories = [
-        { id: 1, name: "Plumbing" },
-        { id: 2, name: "Electric Work" },
-        { id: 3, name: "Framing" },
-        { id: 4, name: "Roofing" },
-    ];
-
-    const handleSelect = (category: string) => {
-        setSelectedCategory(category);
-        setIsOpen(false);
+    const handleConfirmPayment = () => {
+        router.push('/subcontractor/thank-you');
     };
-
     // ✅ Load selected plan from localStorage
     useEffect(() => {
         const plan = localStorage.getItem('selectedPlan');
         if (plan) setSelectedPlan(JSON.parse(plan));
+        else router.push('/pricing'); // optional: redirect if no plan
+        console.log(plan);
     }, []);
 
-    // ✅ Price summary
+    // 🔁 Fetch profile after confirming token on client
+    useEffect(() => {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+        if (!token) {
+            setLoading(false);
+            router.push('/auth/login');
+            return;
+        }
+
+        const fetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                const data = await response.json();
+
+                console.log(data);
+
+                if (response.ok && data.data) {
+                    setProfile({
+                        address: data.data.address || null,
+                        city: data.data.city || 'N/A',
+                        companyName: data.data.company_name || 'N/A',
+                        email: data.data.email || 'N/A',
+                        licenseNumber: data.data.license_number || null, // ✅ fixed typo: was "date"
+                        fullName: data.data.name || 'N/A',
+                        phone: data.data.phone || 'N/A',
+                        profile_image: data.data.profile_image || null,
+                        role: data.data.role || 'N/A',
+                        categories: data.data.categories || [],
+                        state: data.data.state || 'N/A',
+                        workRadius: data.data.workRadius || '0',
+                        zipCode: data.data.zipCode || 'N/A'
+                    });
+                } else {
+                    setError(data.message || 'Failed to load profile');
+                    router.push('/auth/login');
+                }
+            } catch (err) {
+                console.error('Profile fetch error:', err);
+                setError('Network error. Please try again.');
+                router.push('/auth/login');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, [router]);
+
+    // ✅ Don't render anything until plan is loaded
+    if (!selectedPlan) return null;
+
+    // ✅ Show loading spinner or message while fetching profile
+    if (loading) {
+        return (
+            <div className="sections overflow-hidden">
+                <Header />
+                <section className="hero-sec pricing no-before overflow-hidden">
+                    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+                        <div className="text-center">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                            <p className="mt-2">Loading...</p>
+                        </div>
+                    </div>
+                </section>
+                <Footer />
+            </div>
+        );
+    }
+
+    // ✅ If profile failed to load, it should have redirected already — but just in case:
+    if (!profile) {
+        return null; // or redirect again
+    }
+
+    // ✅ Price summary (unchanged)
     const basePrice = selectedPlan ? parseFloat(selectedPlan.price) || 0 : 0;
     const extraCategories = 2 * 125;
     const tax = Math.round((basePrice + extraCategories) * 0.08);
     const total = basePrice + extraCategories + tax;
 
-    // ✅ Note card for Trial plan
-    const renderNoteCard = () => (
-        <div className="note-card d-flex align-items-start gap-1">
-            <Image
-                src="/assets/img/icons/note.webp"
-                width={24}
-                height={24}
-                alt="Note"
-                loading="lazy"
-                className="d-block"
-            />
-            <div className="content">
-                <span className="d-block fw-semibold mb-1" style={{ fontSize: '14px' }}>Note</span>
-                <p className="mb-0" style={{ fontSize: '12px' }}>
-                    After your trial ends, you’ll need to subscribe to keep bidding on projects, chatting with contractors, and accessing premium tools.
-                </p>
-            </div>
-        </div>
-    );
-
-    // ✅ Handle payment confirm
-    const handleConfirmPayment = () => {
-        router.push('/subcontractor/success');
-    };
-
-    if (!selectedPlan) return null; // loading state if plan not yet loaded
 
     return (
         <div className="sections overflow-hidden">
@@ -77,24 +148,45 @@ export default function CheckoutPage() {
                         <div className="col-lg-8">
                             <div className="d-flex flex-column justify-content-center w-100 h-100">
                                 <div className="d-flex align-items-center gap-2 mb-4">
-                                    <div className="icon">
-                                        <Image src="/assets/img/button-angle.svg" width={10} height={15} alt="Angle" />
-                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => router.back()}
+                                        className="icon"
+                                        aria-label="Go back"
+                                    >
+                                        <Image
+                                            src="/assets/img/button-angle.svg"
+                                            width={10}
+                                            height={15}
+                                            alt="Back"
+                                        />
+                                    </button>
                                     <div className="login-title fw-semibold fs-2 text-center">
-                                        Business Details
+                                        Checkout
                                     </div>
                                 </div>
 
                                 <div className="form">
-                                    {/* User Info */}
+                                    {/* Use profile data to prefill or just confirm existence */}
+                                    {/* Full Name */}
                                     <div className="input-wrapper-s2">
                                         <div className="input-wrapper d-flex flex-column">
                                             <label className="mb-1 fw-semibold">Full Name *</label>
-                                            <input type="text" placeholder="Jason Doe" />
+                                            <input
+                                                type="text"
+                                                placeholder="Jason Doe"
+                                                defaultValue={profile.fullName}
+                                                readOnly
+                                            />
                                         </div>
                                         <div className="input-wrapper d-flex flex-column">
                                             <label className="mb-1 fw-semibold">Email Address *</label>
-                                            <input type="email" placeholder="hello@example.com" />
+                                            <input
+                                                type="email"
+                                                placeholder="hello@example.com"
+                                                defaultValue={profile.email}
+                                                readOnly
+                                            />
                                         </div>
                                     </div>
 
@@ -118,9 +210,9 @@ export default function CheckoutPage() {
 
                                     {/* Extra Selected Categories (Buttons) */}
                                     <div className="buttons d-flex align-items-center gap-2 flex-wrap">
-                                        {categories.map((cat) => (
-                                            <Link key={cat.id} href="#" className="btn bg-dark p-2 fs-12 rounded-3">
-                                                <span className="text-gray-light">{cat.name}</span>
+                                        {profile.categories.slice(0, 3).map((cat, idx) => (
+                                            <Link key={idx} href="#" className="btn bg-dark p-2 fs-12 rounded-3">
+                                                <span className="text-gray-light">{cat}</span>
                                                 <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel" />
                                             </Link>
                                         ))}
@@ -152,7 +244,11 @@ export default function CheckoutPage() {
                                     <div className="input-wrapper-s2">
                                         <div className="input-wrapper d-flex flex-column">
                                             <label className="mb-1 fw-semibold">Zip Code *</label>
-                                            <input type="number" placeholder="Enter zip code" />
+                                            <input
+                                                type="number"
+                                                placeholder="Enter zip code"
+                                                defaultValue={profile.zipCode !== 'N/A' ? profile.zipCode : ''}
+                                            />
                                         </div>
                                         <div className="input-wrapper d-flex flex-column">
                                             <label className="mb-1 fw-semibold">Promo Code</label>
@@ -221,20 +317,19 @@ export default function CheckoutPage() {
                                                 )}
                                             </div>
                                             <div className="d-flex align-items-center gap-2">
-                                                <span className="price">{selectedPlan.price === 'Free' ? 'Free' : `$${selectedPlan.price}`}</span>
+                                                {selectedPlan.discount
+                                                    && <del className="fs-18">${selectedPlan.price}</del>
+                                                }
+                                                {selectedPlan.discount
+                                                    ? <span className="price">${selectedPlan.price-selectedPlan.price/100*selectedPlan.discount}</span>
+                                                    : <span className="price">${selectedPlan.price}</span>
+                                                }
                                                 {selectedPlan.saveText && (
-                                                    <Link
-                                                        href="#"
-                                                        className="btn btn-primary rounded-pill p-2 m-0"
-                                                        style={{
-                                                            backgroundColor: selectedPlan.saveColor,
-                                                            color: 'white !important',
-                                                            fontSize: '14px !important',
-                                                            width: 'fit-content',
-                                                        }}
+                                                    <div
+                                                        className="btn btn-primary rounded-pill p-2 m-0 bg-primary"
                                                     >
-                                                        {selectedPlan.saveText}
-                                                    </Link>
+                                                        {parseFloat(selectedPlan.discount)}% OFF
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
@@ -247,7 +342,7 @@ export default function CheckoutPage() {
                                             </ul>
                                         </div>
 
-                                        {selectedPlan.id === 2 && renderNoteCard()}
+                                        {selectedPlan.id === 2}
                                     </div>
                                 </div>
                             </div>

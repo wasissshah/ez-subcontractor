@@ -7,8 +7,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('admin_s@gmail.com');
-    const [password, setPassword] = useState('Password123');
+    const [email, setEmail] = useState('johndoe@gmail.com');
+    const [password, setPassword] = useState('Password123!');
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
@@ -144,7 +144,7 @@ export default function LoginPage() {
 
                 const role = user.role;
 
-                // 🔹 Show success toast before redirect
+                // 🔹 Show thank-you toast before redirect
                 showToast('Login successful! Redirecting to dashboard...');
 
                 // Delay redirect to show toast
@@ -256,13 +256,13 @@ export default function LoginPage() {
                                             onChange={() => setRememberMe(!rememberMe)}
                                             id="rememberMe"
                                         />
-                                        <label className="form-check-label fw-semibold" htmlFor="rememberMe">
+                                        <label className="form-check-label" htmlFor="rememberMe">
                                             Remember me
                                         </label>
                                     </div>
                                     <Link
                                         href="/auth/forget-password"
-                                        className="text-decoration-none fw-semibold text-gray-light"
+                                        className="text-decoration-none text-gray-light"
                                     >
                                         Forgot password?
                                     </Link>
