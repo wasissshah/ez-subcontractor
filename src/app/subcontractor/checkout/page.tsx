@@ -196,15 +196,15 @@ export default function CheckoutPage() {
                                         <div className={`custom-select ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
                                             <div className="select-selected">{selectedCategory}</div>
                                             <i className="bi bi-chevron-down select-arrow"></i>
-                                            {isOpen && (
-                                                <ul className="select-options">
-                                                    {categories.map((cat) => (
-                                                        <li key={cat.id} onClick={() => handleSelect(cat.name)}>
-                                                            {cat.name}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
+                                            {/*{isOpen && (*/}
+                                            {/*    <ul className="select-options">*/}
+                                            {/*        {categories.map((cat) => (*/}
+                                            {/*            <li key={cat.id} onClick={() => handleSelect(cat.name)}>*/}
+                                            {/*                {cat.name}*/}
+                                            {/*            </li>*/}
+                                            {/*        ))}*/}
+                                            {/*    </ul>*/}
+                                            {/*)}*/}
                                         </div>
                                     </div>
 
