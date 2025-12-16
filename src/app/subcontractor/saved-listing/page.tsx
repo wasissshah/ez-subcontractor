@@ -113,13 +113,27 @@ export default function SavedListingPage() {
                     throw new Error(data.message?.[0] || 'Failed to load saved projects');
                 }
 
-                // ✅ Extract projects array from data.projects
-                const fetchedProjects = data.data?.projects || [];
+                // ✅ Explicitly type fetched projects
+                interface SavedProject {
+                    id: number | string;
+                    city: string;
+                    state: string;
+                    description: string;
+                    status: string;
+                    created_at: string;
+                    category: {
+                        name: string;
+                    };
+                }
 
-                setProjects(fetchedProjects);
+                const fetchedProjects: SavedProject[] = data.data?.projects || [];
 
-                // ✅ Also update savedproject set with project IDs
-                const savedIds = new Set(fetchedProjects.map((p: any) => p.id));
+                setProjects(fetchedProjects as Project[]);
+
+                // ✅ Convert IDs to numbers safely
+                const savedIds = new Set(
+                    fetchedProjects.map(p => typeof p.id === 'string' ? parseInt(p.id) : Number(p.id))
+                );
                 setSavedproject(savedIds);
 
             } catch (err: any) {
