@@ -37,8 +37,14 @@ interface Project {
     category: { name: string };
     attachments: Attachment[];
     created_at: string;
-    email: string;
-    user: string;
+    user: { // ✅ This is an object
+        id: string;
+        name: string;
+        email: string;
+        phone: string;
+        company_name: string;
+        profile_image_url: string | null;
+    };
 }
 
 
@@ -470,23 +476,27 @@ export default function ProjectSubcontractorDetailsPage() {
                                         className="d-block mx-auto mb-3"
                                         alt="P Icon"
                                     />
-                                    <div className="title text-black fw-semibold text-center fs-5 mb-2">ProBuilds Express</div>
-                                    {project.user.email &&
+
+                                    {project.user?.company_name && (
+                                        <div className="title text-black fw-semibold text-center fs-5 mb-2">{project.user.company_name}</div>
+                                    )}
+                                    {project.user?.email && (
                                         <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-2">
                                             <Image src="/assets/img/icons/message-dark.svg" width={20} height={20} alt="Message Icon" />
-                                            <Link href="mailto:hello@example.com" className="text-dark fw-medium">
+                                            <Link href={`mailto:${project.user.email}`} className="text-dark fw-medium">
                                                 {project.user.email}
                                             </Link>
                                         </div>
-                                    }
-                                    {project.user.phone &&
+                                    )}
+
+                                    {project.user?.phone && (
                                         <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-3">
                                             <Image src="/assets/img/icons/call-dark.svg" width={20} height={20} alt="Call Icon" />
-                                            <Link href="tel:+000000000" className="text-dark fw-medium">
+                                            <Link href={`tel:${project.user.phone}`} className="text-dark fw-medium">
                                                 {project.user.phone}
                                             </Link>
                                         </div>
-                                    }
+                                    )}
 
                                     <Link href="#" className="btn bg-dark w-100 justify-content-center rounded-3 mt-4 mb-3">
                                         <Image src="/assets/img/Chat-light.svg" width={20} height={20} alt="Chat Icon" />
@@ -494,14 +504,19 @@ export default function ProjectSubcontractorDetailsPage() {
                                     </Link>
 
                                     <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap">
-                                        <Link href="#" className="btn btn-outline-dark rounded-3">
-                                            <Image src="/assets/img/icons/message-dark.svg" width={20} height={20} alt="Email Icon" />
-                                            <span>Email</span>
-                                        </Link>
-                                        <Link href="#" className="btn btn-outline-dark rounded-3">
-                                            <Image src="/assets/img/icons/call-dark.svg" width={20} height={20} alt="Phone Icon" />
-                                            <span>Phone</span>
-                                        </Link>
+                                        {project.user?.email && (
+                                            <Link href={`mailto:${project.user.email}`} className="btn btn-outline-dark rounded-3">
+                                                <Image src="/assets/img/icons/message-dark.svg" width={20} height={20} alt="Email Icon" />
+                                                <span>Email</span>
+                                            </Link>
+                                        )}
+
+                                        {project.user?.phone && (
+                                            <Link href={`tel:${project.user.phone}`} className="btn btn-outline-dark rounded-3">
+                                                <Image src="/assets/img/icons/call-dark.svg" width={20} height={20} alt="Phone Icon" />
+                                                <span>Phone</span>
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
 
