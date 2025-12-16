@@ -10,43 +10,54 @@ import '../../../styles/pricing.css';
 import '../../../styles/checkout.css';
 
 interface ProfileData {
-    address: string
-    city: string
-    companyName: string
-    email: string
-    licenseNumber: string
-    fullName: string
-    phone: string
-    profile_image: string
-    role: string
+    address: string;
+    city: string;
+    companyName: string;
+    email: string;
+    licenseNumber: string;
+    fullName: string;
+    phone: string;
+    profile_image: string;
+    role: string;
     categories: string[];
-    state: string
-    workRadius: string
-    zipCode: string
+    state: string;
+    workRadius: string;
+    zipCode: string;
 }
 
+interface Category {
+    id: string;
+    name: string;
+}
 
 export default function CheckoutPage() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState("Select category");
+    const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [selectedPlan, setSelectedPlan] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [profile, setProfile] = useState<ProfileData | null>(null);
-    const [error, setError] = useState<string | null>(null); // ✅ Add error state
+    const [error, setError] = useState<string | null>(null);
+
+    // Categories
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
 
     const handleConfirmPayment = () => {
         router.push('/subcontractor/thank-you');
     };
-    // ✅ Load selected plan from localStorage
+
+    // Load selected plan from localStorage
     useEffect(() => {
         const plan = localStorage.getItem('selectedPlan');
-        if (plan) setSelectedPlan(JSON.parse(plan));
-        else router.push('/pricing'); // optional: redirect if no plan
-        console.log(plan);
-    }, []);
+        if (plan) {
+            setSelectedPlan(JSON.parse(plan));
+        } else {
+            router.push('/subcontractor/subscription');
+        }
+    }, [router]);
 
-    // 🔁 Fetch profile after confirming token on client
+    // Fetch profile
     useEffect(() => {
         const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
@@ -68,15 +79,13 @@ export default function CheckoutPage() {
 
                 const data = await response.json();
 
-                console.log(data);
-
                 if (response.ok && data.data) {
                     setProfile({
                         address: data.data.address || null,
                         city: data.data.city || 'N/A',
                         companyName: data.data.company_name || 'N/A',
                         email: data.data.email || 'N/A',
-                        licenseNumber: data.data.license_number || null, // ✅ fixed typo: was "date"
+                        licenseNumber: data.data.license_number || null,
                         fullName: data.data.name || 'N/A',
                         phone: data.data.phone || 'N/A',
                         profile_image: data.data.profile_image || null,
@@ -84,7 +93,7 @@ export default function CheckoutPage() {
                         categories: data.data.categories || [],
                         state: data.data.state || 'N/A',
                         workRadius: data.data.workRadius || '0',
-                        zipCode: data.data.zipCode || 'N/A'
+                        zipCode: data.data.zipCode || 'N/A',
                     });
                 } else {
                     setError(data.message || 'Failed to load profile');
@@ -102,10 +111,83 @@ export default function CheckoutPage() {
         fetchProfile();
     }, [router]);
 
-    // ✅ Don't render anything until plan is loaded
+    // Fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`, {
+                    headers: { 'Accept': 'application/json' },
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                let fetchedCategories: Category[] = [];
+                if (Array.isArray(data)) {
+                    fetchedCategories = data.map(item => ({ id: String(item.id), name: item.name }));
+                } else if (data?.data?.specializations && Array.isArray(data.data.specializations)) {
+                    fetchedCategories = data.data.specializations.map((item: any) => ({
+                        id: String(item.id),
+                        name: item.name,
+                    }));
+                } else if (data?.data && Array.isArray(data.data)) {
+                    fetchedCategories = data.data.map((item: any) => ({
+                        id: String(item.id),
+                        name: item.name,
+                    }));
+                }
+                setCategories(fetchedCategories.length > 0 ? fetchedCategories : [
+                    { id: '1', name: 'Plumbing' },
+                    { id: '2', name: 'Electric Work' },
+                    { id: '3', name: 'Framing' },
+                    { id: '4', name: 'Roofing' },
+                ]);
+            } catch (err) {
+                console.error('Failed to load categories:', err);
+                setCategories([
+                    { id: '1', name: 'Plumbing' },
+                    { id: '2', name: 'Electric Work' },
+                    { id: '3', name: 'Framing' },
+                    { id: '4', name: 'Roofing' },
+                ]);
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // Initialize Select2
+    useEffect(() => {
+        if (typeof window === 'undefined' || categoriesLoading) return;
+
+        const $ = require('jquery');
+        require('select2');
+        require('select2/dist/css/select2.min.css');
+
+        $('#category-select2').select2({
+            placeholder: 'Select category',
+            allowClear: true, // ✅ Allow clearing
+            width: '100%',
+            minimumInputLength: 0,
+        })
+            .on('change', function () {
+                const val = $(this).val() as string;
+                setSelectedCategory(val || '');
+                // Clear error if needed (add your validation logic here)
+                // clearError('category');
+            })
+            .on('select2:unselect', function () {
+                setSelectedCategory('');
+            });
+
+        // Cleanup on unmount
+        return () => {
+            $('#category-select2').select2('destroy');
+        };
+    }, [categoriesLoading, categories]);
+
+    // ✅ Don't render until plan is loaded
     if (!selectedPlan) return null;
 
-    // ✅ Show loading spinner or message while fetching profile
     if (loading) {
         return (
             <div className="sections overflow-hidden">
@@ -125,17 +207,13 @@ export default function CheckoutPage() {
         );
     }
 
-    // ✅ If profile failed to load, it should have redirected already — but just in case:
-    if (!profile) {
-        return null; // or redirect again
-    }
+    if (!profile) return null;
 
-    // ✅ Price summary (unchanged)
+    // Price summary
     const basePrice = selectedPlan ? parseFloat(selectedPlan.price) || 0 : 0;
     const extraCategories = 2 * 125;
     const tax = Math.round((basePrice + extraCategories) * 0.08);
     const total = basePrice + extraCategories + tax;
-
 
     return (
         <div className="sections overflow-hidden">
@@ -167,8 +245,7 @@ export default function CheckoutPage() {
                                 </div>
 
                                 <div className="form">
-                                    {/* Use profile data to prefill or just confirm existence */}
-                                    {/* Full Name */}
+                                    {/* Full Name & Email */}
                                     <div className="input-wrapper-s2">
                                         <div className="input-wrapper d-flex flex-column">
                                             <label className="mb-1 fw-semibold">Full Name *</label>
@@ -193,30 +270,51 @@ export default function CheckoutPage() {
                                     {/* Category Select */}
                                     <div className="input-wrapper d-flex flex-column position-relative">
                                         <label className="mb-1 fw-semibold">Category *</label>
-                                        <div className={`custom-select ${isOpen ? 'open' : ''}`} onClick={() => setIsOpen(!isOpen)}>
-                                            <div className="select-selected">{selectedCategory}</div>
-                                            <i className="bi bi-chevron-down select-arrow"></i>
-                                            {/*{isOpen && (*/}
-                                            {/*    <ul className="select-options">*/}
-                                            {/*        {categories.map((cat) => (*/}
-                                            {/*            <li key={cat.id} onClick={() => handleSelect(cat.name)}>*/}
-                                            {/*                {cat.name}*/}
-                                            {/*            </li>*/}
-                                            {/*        ))}*/}
-                                            {/*    </ul>*/}
-                                            {/*)}*/}
-                                        </div>
+                                        <select
+                                            id="category-select2"
+                                            className="form-control"
+                                            value={selectedCategory}
+                                            // Controlled by Select2; value ignored but kept for SSR compatibility
+                                        >
+                                            <option value="">Select category</option>
+                                            {categories.map((cat) => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
 
-                                    {/* Extra Selected Categories (Buttons) */}
-                                    <div className="buttons d-flex align-items-center gap-2 flex-wrap">
-                                        {profile.categories.slice(0, 3).map((cat, idx) => (
-                                            <Link key={idx} href="#" className="btn bg-dark p-2 fs-12 rounded-3">
-                                                <span className="text-gray-light">{cat}</span>
-                                                <Image src="/assets/img/cancel_svgrepo.com.svg" width={16} height={16} alt="Cancel" />
-                                            </Link>
-                                        ))}
-                                    </div>
+                                    {/* 👇 Single Selected Category Chip */}
+                                    {selectedCategory && (
+                                        <div className="d-flex align-items-center gap-2 mb-3">
+                                            <div className="btn bg-dark p-2 fs-12 rounded-3 d-flex align-items-center gap-1">
+                                                <span className="text-gray-light">
+                                                    {categories.find(cat => cat.id === selectedCategory)?.name || 'Unknown'}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedCategory('');
+                                                        // Reset Select2
+                                                        if (typeof window !== 'undefined') {
+                                                            const $ = require('jquery');
+                                                            $('#category-select2').val(null).trigger('change');
+                                                        }
+                                                    }}
+                                                    className="bg-transparent border-0 p-0 m-0"
+                                                    aria-label="Remove category"
+                                                >
+                                                    <Image
+                                                        src="/assets/img/cancel_svgrepo.com.svg"
+                                                        width={16}
+                                                        height={16}
+                                                        alt="Remove"
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* Card Info */}
                                     <div className="input-wrapper-s2">
@@ -265,7 +363,9 @@ export default function CheckoutPage() {
 
                                                 <div className="d-flex align-items-center justify-content-between mt-2">
                                                     <span style={{ fontSize: '14px' }}>{selectedPlan.title} Plan</span>
-                                                    <span className="fw-semibold" style={{ fontSize: '14px' }}>{selectedPlan.price === 'Free' ? 'Free' : `$${selectedPlan.price}`}</span>
+                                                    <span className="fw-semibold" style={{ fontSize: '14px' }}>
+                                                        {selectedPlan.price === 'Free' ? 'Free' : `$${selectedPlan.price}`}
+                                                    </span>
                                                 </div>
 
                                                 <div className="d-flex align-items-center justify-content-between mt-2">
@@ -286,7 +386,7 @@ export default function CheckoutPage() {
                                                 </div>
 
                                                 <p className="mb-0 mt-2" style={{ fontSize: '14px' }}>
-                                                    Note: You’ve selected 3 categories
+                                                    Note: You’ve selected 1 category (others are pre-selected from profile)
                                                 </p>
                                             </div>
                                         </div>
@@ -317,17 +417,18 @@ export default function CheckoutPage() {
                                                 )}
                                             </div>
                                             <div className="d-flex align-items-center gap-2">
-                                                {selectedPlan.discount
-                                                    && <del className="fs-18">${selectedPlan.price}</del>
-                                                }
-                                                {selectedPlan.discount
-                                                    ? <span className="price">${selectedPlan.price-selectedPlan.price/100*selectedPlan.discount}</span>
-                                                    : <span className="price">${selectedPlan.price}</span>
-                                                }
+                                                {selectedPlan.discount && (
+                                                    <del className="fs-18">${selectedPlan.price}</del>
+                                                )}
+                                                {selectedPlan.discount ? (
+                                                    <span className="price">
+                                                        ${selectedPlan.price - selectedPlan.price / 100 * selectedPlan.discount}
+                                                    </span>
+                                                ) : (
+                                                    <span className="price">${selectedPlan.price}</span>
+                                                )}
                                                 {selectedPlan.saveText && (
-                                                    <div
-                                                        className="btn btn-primary rounded-pill p-2 m-0 bg-primary"
-                                                    >
+                                                    <div className="btn btn-primary rounded-pill p-2 m-0 bg-primary">
                                                         {parseFloat(selectedPlan.discount)}% OFF
                                                     </div>
                                                 )}
@@ -341,8 +442,6 @@ export default function CheckoutPage() {
                                                 ))}
                                             </ul>
                                         </div>
-
-                                        {selectedPlan.id === 2}
                                     </div>
                                 </div>
                             </div>

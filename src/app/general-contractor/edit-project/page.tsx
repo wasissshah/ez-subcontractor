@@ -119,6 +119,7 @@ export default function EditProjectPage() {
     useEffect(() => {
         setProjectId(localStorage.getItem('project-id'));
     }, []);
+
     // 🔹 Fetch categories
     useEffect(() => {
         const fetchCategories = async () => {

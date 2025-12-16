@@ -38,6 +38,7 @@ interface Project {
     attachments: Attachment[];
     created_at: string;
     email: string;
+    user: string;
 }
 
 

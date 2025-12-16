@@ -128,12 +128,11 @@ export default function DashboardSubContractor() {
             }
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/project/my-saved`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects/my-saved`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json',
                     },
                 }
             );
@@ -145,23 +144,26 @@ export default function DashboardSubContractor() {
 
             const data = await response.json();
 
+            console.log(data)
             if (!response.ok) {
                 throw new Error(data.message?.[0] || 'Failed to load saved project');
             }
 
-            // ✅ Parse saved project IDs.
-            // Adjust if your API returns { data: [1,2,3] } or { data: [{id:1},...] }
+            // ✅ Parse saved project IDs — MATCHING YOUR ACTUAL API RESPONSE
             let savedIds: number[] = [];
 
-            if (Array.isArray(data.data)) {
-                // Assume: { data: [ {id: 1}, {id: 2} ] } — common Laravel response
-                savedIds = data.data.map((item: any) => item.id);
-            } else if (typeof data.data === 'object' && Array.isArray(data.data.project)) {
-                // Fallback: { data: { project: [...] } }
-                savedIds = data.data.project.map((item: any) => item.id);
-            } else if (Array.isArray(data)) {
-                // Edge case: raw array [1,2,3]
-                savedIds = data;
+            // Your API: { data: { projects: [ {id: 34}, {id: 36}, ... ] } }
+            if (data?.data?.projects && Array.isArray(data.data.projects)) {
+                savedIds = data.data.projects.map((item: any) => Number(item.id));
+            }
+            // Optional fallbacks (keep for safety, but unlikely needed)
+            else if (Array.isArray(data?.data)) {
+                // e.g., { data: [ {id:1}, ... ] }
+                savedIds = data.data.map((item: any) => Number(item.id));
+            }
+            else if (Array.isArray(data)) {
+                // e.g., [1,2,3]
+                savedIds = data.map(id => Number(id));
             }
 
             setSavedproject(new Set(savedIds));
@@ -227,7 +229,7 @@ export default function DashboardSubContractor() {
             }
 
             const isCurrentlySaved = savedproject.has(projectId);
-            const endpoint = isCurrentlySaved ? 'common/project/unsave' : 'common/projects/save';
+            const endpoint = isCurrentlySaved ? 'common/projects/unsave' : 'common/projects/save';
 
             const formData = new FormData();
             formData.append('project_id', projectId.toString());
@@ -473,7 +475,7 @@ export default function DashboardSubContractor() {
                                                 <div className="d-flex align-items-center gap-2">
                                                     <div className="date">{formatTimeAgo(project.created_at)}</div>
                                                     <button
-                                                        className={`icon bg-white ${savedproject.has(project.id) ? 'saved' : ''}`}
+                                                        className={`icon bg-white ${savedproject.has(project.id) ? 'Saved' : 'Save'}`}
                                                         onClick={() => toggleSaveproject(project.id)}
                                                         aria-label={savedproject.has(project.id) ? 'Remove from saved' : 'Save project'}
                                                     >

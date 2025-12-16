@@ -36,7 +36,7 @@ export default function HowItWorksPage() {
                                             data-bs-toggle="tab"
                                             data-bs-target="#tab1"
                                         >
-                                            All (19)
+                                            Sub Contractor
                                         </button>
                                     </li>
                                     <li className="nav-item" role="presentation">
@@ -46,7 +46,7 @@ export default function HowItWorksPage() {
                                             data-bs-toggle="tab"
                                             data-bs-target="#tab2"
                                         >
-                                            Hired (1)
+                                            Affiliate
                                         </button>
                                     </li>
                                     <div className="slider"></div> {/* 👈 This is the animated green background */}
