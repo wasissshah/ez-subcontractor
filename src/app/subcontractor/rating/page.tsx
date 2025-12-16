@@ -60,7 +60,7 @@ export default function ReviewsPage() {
                 }
 
                 const data = await response.json();
-
+                console.log(data)
                 if (!response.ok) {
                     throw new Error(data.message?.[0] || 'Failed to load ratings');
                 }
@@ -277,8 +277,8 @@ export default function ReviewsPage() {
                                                         className="rounded-circle"
                                                     />
                                                     <div className="content">
+                                                        <div className="passion fs-14">General Contractor</div>
                                                         <div className="name fw-semibold text-black">{review.rated_given_by_user.name}</div>
-                                                        <div className="passion fs-14">{review.rated_given_by_user.role || 'Client'}</div>
                                                     </div>
                                                 </div>
                                                 <img
