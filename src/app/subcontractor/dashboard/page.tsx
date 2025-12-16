@@ -9,7 +9,6 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/free-trial.css';
 
-// Define the project type
 interface Project {
     id: number;
     city: string;
@@ -20,6 +19,11 @@ interface Project {
     category: {
         name: string;
     };
+}
+
+interface Category {
+    id: string;
+    name: string;
 }
 
 export default function DashboardSubContractor() {
@@ -35,20 +39,28 @@ export default function DashboardSubContractor() {
         arrows: false,
     };
 
+    // 🔹 State
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expanded, setExpanded] = useState<number[]>([]);
     const [savedproject, setSavedproject] = useState<Set<number>>(new Set());
 
-    // Toggle description expansion
-    const toggleExpand = (index: number) => {
-        setExpanded(prev =>
-            prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
-        );
-    };
+    // 🔹 Filter state
+    const [searchTerm, setSearchTerm] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [workRadius, setWorkRadius] = useState(2); // default 2 miles
+    const [categoryId, setCategoryId] = useState<string>(''); // empty = all categories
+    const [page, setPage] = useState(1);
+    const perPage = 10;
+    const [hasMore, setHasMore] = useState(true);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
 
-    // 🔹 Toast Notification — identical to LoginPage
+    // 🔹 Refs
+    const searchTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    // 🔹 Toast
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
         const toast = document.createElement('div');
         const bgColor = type === 'success' ? '#d4edda' : '#f8d7da';
@@ -91,7 +103,7 @@ export default function DashboardSubContractor() {
         });
     };
 
-    // Format date like "23 mins ago" or "2 days ago"
+    // 🔹 Format time ago
     const formatTimeAgo = (dateString: string): string => {
         const now = new Date();
         const past = new Date(dateString);
@@ -118,7 +130,40 @@ export default function DashboardSubContractor() {
         return 'Just now';
     };
 
-    // 🔹 Fetch saved project (e.g., on mount or after save/unsave)
+    // 🔁 Fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`, {
+                    headers: { 'Accept': 'application/json' },
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                let fetchedCategories: Category[] = [];
+                if (Array.isArray(data)) {
+                    fetchedCategories = data.map(item => ({ id: String(item.id), name: item.name }));
+                } else if (data?.data?.specializations && Array.isArray(data.data.specializations)) {
+                    fetchedCategories = data.data.specializations.map((item: any) => ({
+                        id: String(item.id),
+                        name: item.name,
+                    }));
+                } else if (data?.data && Array.isArray(data.data)) {
+                    fetchedCategories = data.data.map((item: any) => ({
+                        id: String(item.id),
+                        name: item.name,
+                    }));
+                }
+                setCategories(fetchedCategories);
+            } catch (err) {
+                console.error('Failed to load categories:', err);
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // 🔁 Fetch saved projects
     const fetchSavedproject = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -143,50 +188,50 @@ export default function DashboardSubContractor() {
             }
 
             const data = await response.json();
-
-            console.log(data)
             if (!response.ok) {
-                throw new Error(data.message?.[0] || 'Failed to load saved project');
+                throw new Error(data.message?.[0] || 'Failed to load saved projects');
             }
 
-            // ✅ Parse saved project IDs — MATCHING YOUR ACTUAL API RESPONSE
             let savedIds: number[] = [];
-
-            // Your API: { data: { projects: [ {id: 34}, {id: 36}, ... ] } }
             if (data?.data?.projects && Array.isArray(data.data.projects)) {
                 savedIds = data.data.projects.map((item: any) => Number(item.id));
-            }
-            // Optional fallbacks (keep for safety, but unlikely needed)
-            else if (Array.isArray(data?.data)) {
-                // e.g., { data: [ {id:1}, ... ] }
+            } else if (Array.isArray(data?.data)) {
                 savedIds = data.data.map((item: any) => Number(item.id));
-            }
-            else if (Array.isArray(data)) {
-                // e.g., [1,2,3]
+            } else if (Array.isArray(data)) {
                 savedIds = data.map(id => Number(id));
             }
 
             setSavedproject(new Set(savedIds));
         } catch (err: any) {
-            console.error('Fetch saved project error:', err);
-            // Do NOT block main UI — just log or soft-toast
-            // showToast(err.message || 'Failed to load saved project.', 'error');
+            console.error('Fetch saved projects error:', err);
         }
     };
 
-    // 🔹 Fetch projects
-    const fetchproject = async () => {
-        setLoading(true);
-        setError(null);
+    // 🔁 Fetch projects with filters
+    const fetchprojects = async (resetPage = false) => {
+        const currentPage = resetPage ? 1 : page;
+        if (resetPage) setPage(1);
+
+        const params = new URLSearchParams();
+        if (searchTerm) params.append('search', searchTerm);
+        if (zipCode) params.append('zip', zipCode);
+        params.append('radius', String(workRadius)); // ✅ Matches Postman
+        if (categoryId) params.append('category_id', categoryId);
+        params.append('page', String(currentPage));
+        params.append('perPage', String(perPage));
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            router.push('/auth/login');
+            return;
+        }
+
         try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                router.push('/auth/login');
-                return;
-            }
+            setLoading(true);
+            setError(null);
 
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects`,
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects?${params.toString()}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -194,6 +239,7 @@ export default function DashboardSubContractor() {
                     },
                 }
             );
+
             if (response.status === 401) {
                 localStorage.removeItem('token');
                 router.push('/auth/login');
@@ -202,17 +248,17 @@ export default function DashboardSubContractor() {
 
             const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.message?.[0] || 'Failed to load project');
+                throw new Error(data.message?.[0] || 'Failed to load projects');
             }
 
-            let fetchedProjects: Project[] = [];
-            if (data?.data?.data && Array.isArray(data.data.data)) {
-                fetchedProjects = [...data.data.data].reverse();
-            }
-            setProjects(fetchedProjects);
+            const fetchedProjects = data?.data?.data || [];
+            const total = data?.data?.total || 0;
+
+            setProjects(prev => resetPage ? fetchedProjects : [...prev, ...fetchedProjects]);
+            setHasMore(currentPage * perPage < total);
         } catch (err: any) {
             console.error('Fetch projects error:', err);
-            setError(err.message || 'Failed to load project.');
+            setError(err.message || 'Failed to load projects.');
         } finally {
             setLoading(false);
         }
@@ -220,7 +266,6 @@ export default function DashboardSubContractor() {
 
     // 🔹 Toggle save/unsave
     const toggleSaveproject = async (projectId: number) => {
-        console.log(projectId);
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -253,41 +298,72 @@ export default function DashboardSubContractor() {
             }
 
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.message?.[0] || `Failed to ${isCurrentlySaved ? 'unsave' : 'save'} project`);
             }
 
-            // Update local state
             setSavedproject(prev => {
                 const newSet = new Set(prev);
                 if (isCurrentlySaved) {
                     newSet.delete(projectId);
-                    showToast('project removed from saved list', 'success');
+                    showToast('Project removed from saved list', 'success');
                 } else {
                     newSet.add(projectId);
-                    showToast('project saved successfully!', 'success');
+                    showToast('Project saved successfully!', 'success');
                 }
                 return newSet;
             });
-
         } catch (err: any) {
             console.error(`${savedproject.has(projectId) ? 'Unsave' : 'Save'} project error:`, err);
             showToast(err.message || `Failed to ${savedproject.has(projectId) ? 'unsave' : 'save'} project.`, 'error');
         }
     };
 
-
-    // 🔹 On mount: fetch projects + saved project in parallel
+    // 🔹 Search debounce
     useEffect(() => {
-        const init = async () => {
-            await Promise.all([
-                fetchproject(),
-                fetchSavedproject()
-            ]);
+        if (searchTimeout.current) {
+            clearTimeout(searchTimeout.current);
+        }
+        searchTimeout.current = setTimeout(() => {
+            fetchprojects(true); // reset to page 1 on new search
+        }, 500);
+        return () => {
+            if (searchTimeout.current) clearTimeout(searchTimeout.current);
         };
-        init();
-    }, [router]);
+    }, [searchTerm, zipCode, workRadius, categoryId]);
+
+    // 🔹 Initial load: categories + saved + projects
+    useEffect(() => {
+        Promise.all([
+            fetchSavedproject(),
+            fetchprojects(true), // initial load with page=1
+        ]);
+    }, []);
+
+    // 🔹 Toggle description
+    const toggleExpand = (index: number) => {
+        setExpanded(prev =>
+            prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+        );
+    };
+
+    // 🔹 Load more
+    const handleLoadMore = () => {
+        if (!loading && hasMore) {
+            setPage(prev => prev + 1);
+            fetchprojects(); // appends next page
+        }
+    };
+
+    // 🔹 Reset filters
+    const handleResetFilters = () => {
+        setSearchTerm('');
+        setZipCode('');
+        setWorkRadius(2);
+        setCategoryId('');
+        setPage(1);
+        // Triggers fetch via useEffect (debounce)
+    };
 
     return (
         <>
@@ -385,15 +461,54 @@ export default function DashboardSubContractor() {
                     </div>
                 </section>
 
-                {/* Filter + projects Section */}
+                {/* Filter + Projects Section */}
                 <section className="filter-sec">
                     <div className="container">
                         <div className="row g-4">
                             {/* Filter Column */}
                             <div className="col-xl-3">
                                 <span className="d-block mb-3 fw-semibold fs-4">Filters</span>
+
+                                {/* Search */}
+                                <div className="input-wrapper mb-3">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search projects..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Zip Code */}
                                 <span className="d-block mb-2 fw-medium">Zip Code</span>
-                                <input type="text" placeholder="29391" className="form-control mb-3" />
+                                <input
+                                    type="text"
+                                    placeholder="29391"
+                                    className="form-control mb-3"
+                                    value={zipCode}
+                                    onChange={(e) => setZipCode(e.target.value)}
+                                />
+
+                                {/* Category */}
+                                <span className="d-block mb-2 fw-medium">Category</span>
+                                <div className="input-wrapper d-flex flex-column position-relative w-100 mb-3">
+                                    <select
+                                        className="form-control"
+                                        value={categoryId}
+                                        onChange={(e) => setCategoryId(e.target.value)}
+                                        disabled={categoriesLoading}
+                                    >
+                                        <option value="">All Categories</option>
+                                        {categories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Work Radius */}
                                 <span className="d-block mb-2 fw-medium">Work Radius</span>
                                 <div className="range-wrapper mb-5">
                                     <div className="range-container">
@@ -402,10 +517,11 @@ export default function DashboardSubContractor() {
                                                 type="range"
                                                 min="0"
                                                 max="100"
-                                                defaultValue="2"
+                                                value={workRadius}
+                                                onChange={(e) => setWorkRadius(Number(e.target.value))}
                                                 className="range-slider"
                                             />
-                                            <div className="range-value">2 miles</div>
+                                            <div className="range-value">{workRadius} miles</div>
                                         </div>
                                     </div>
                                     <div className="d-flex align-items-center justify-content-between">
@@ -413,6 +529,15 @@ export default function DashboardSubContractor() {
                                         <span className="max">100 miles</span>
                                     </div>
                                 </div>
+
+                                {/* Reset Button */}
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-primary w-100 mb-3"
+                                    onClick={handleResetFilters}
+                                >
+                                    Reset Filters
+                                </button>
 
                                 <Image
                                     src="/assets/img/filter-img.webp"
@@ -424,16 +549,21 @@ export default function DashboardSubContractor() {
                                 />
                             </div>
 
-                            {/* projects Column */}
+                            {/* Projects Column */}
                             <div className="col-xl-9">
-                                <span className="d-block mb-4 fw-semibold fs-4 text-dark">Projects</span>
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                    <span className="d-block fw-semibold fs-4 text-dark">Projects</span>
+                                    <small className="text-muted">
+                                        {projects.length} of {loading ? '...' : 'many'} projects
+                                    </small>
+                                </div>
 
-                                {loading ? (
+                                {loading && page === 1 ? (
                                     <div className="text-center py-5">
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading...</span>
                                         </div>
-                                        <p className="mt-2">Loading available project...</p>
+                                        <p className="mt-2">Loading projects...</p>
                                     </div>
                                 ) : error ? (
                                     <div className="alert alert-warning d-flex align-items-center" role="alert">
@@ -455,60 +585,81 @@ export default function DashboardSubContractor() {
                                             src="/assets/img/post.webp"
                                             width={120}
                                             height={120}
-                                            alt="No project"
+                                            alt="No projects"
                                             className="mb-3"
                                         />
-                                        <p className="text-muted">No project available right now.</p>
+                                        <p className="text-muted">No projects match your filters.</p>
+                                        <button
+                                            className="btn btn-outline-primary mt-2"
+                                            onClick={handleResetFilters}
+                                        >
+                                            Reset Filters
+                                        </button>
                                     </div>
                                 ) : (
-                                    projects.map((project, index) => (
-                                        <div key={project.id} className="posted-card posted-card-1 custom-card mb-3">
-                                            <div className="topbar mb-2 d-flex justify-content-between">
-                                                <button className="title p-0 border-0 bg-transparent"
-                                                    onClick={() => {
-                                                        localStorage.setItem('project-id', String(project.id));
-                                                        router.push('/subcontractor/project-details');
-                                                    }}
-                                                >
-                                                    {project.city}, {project.state}
-                                                </button>
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <div className="date">{formatTimeAgo(project.created_at)}</div>
+                                    <>
+                                        {projects.map((project, index) => (
+                                            <div key={project.id} className="posted-card posted-card-1 custom-card mb-3">
+                                                <div className="topbar mb-2 d-flex justify-content-between">
                                                     <button
-                                                        className={`icon bg-white ${savedproject.has(project.id) ? 'Saved' : 'Save'}`}
-                                                        onClick={() => toggleSaveproject(project.id)}
-                                                        aria-label={savedproject.has(project.id) ? 'Remove from saved' : 'Save project'}
+                                                        className="title p-0 border-0 bg-transparent text-start"
+                                                        onClick={() => {
+                                                            localStorage.setItem('project-id', String(project.id));
+                                                            router.push('/subcontractor/project-details');
+                                                        }}
                                                     >
-                                                        <Image
-                                                            src={
-                                                                savedproject.has(project.id)
-                                                                    ? '/assets/img/bookmark-filled.svg'
-                                                                    : '/assets/img/bookmark-outline.svg'
-                                                            }
-                                                            width={16}
-                                                            height={16}
-                                                            alt="save"
-                                                        />
+                                                        {project.city}, {project.state}
                                                     </button>
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        <div className="date">{formatTimeAgo(project.created_at)}</div>
+                                                        <button
+                                                            className={`icon bg-white ${savedproject.has(project.id) ? 'Saved' : 'Save'}`}
+                                                            onClick={() => toggleSaveproject(project.id)}
+                                                            aria-label={savedproject.has(project.id) ? 'Remove from saved' : 'Save project'}
+                                                        >
+                                                            <Image
+                                                                src={
+                                                                    savedproject.has(project.id)
+                                                                        ? '/assets/img/bookmark-filled.svg'
+                                                                        : '/assets/img/bookmark-outline.svg'
+                                                                }
+                                                                width={16}
+                                                                height={16}
+                                                                alt="save"
+                                                            />
+                                                        </button>
+                                                    </div>
                                                 </div>
+
+                                                <p
+                                                    className={`description mb-0 ${
+                                                        expanded.includes(index) ? 'expanded' : ''
+                                                    }`}
+                                                >
+                                                    {project.description.replace(/<[^>]*>/g, '').slice(0, 150) || 'No description provided.'}
+                                                    {!expanded.includes(index) && project.description.length > 150 && '...'}
+                                                </p>
+
+                                                <button
+                                                    className="see-more-btn d-block"
+                                                    onClick={() => toggleExpand(index)}
+                                                >
+                                                    {expanded.includes(index) ? 'See less' : 'See more'}
+                                                </button>
                                             </div>
+                                        ))}
 
-                                            <p
-                                                className={`description mb-0 ${
-                                                    expanded.includes(index) ? 'expanded' : ''
-                                                }`}
-                                            >
-                                                {project.description.replace(/<[^>]*>/g, '').slice(0, 150) || 'No description provided.'}
-                                            </p>
-
+                                        {hasMore && (
                                             <button
-                                                className="see-more-btn d-block"
-                                                onClick={() => toggleExpand(index)}
+                                                type="button"
+                                                className="btn btn-primary w-100 mt-4"
+                                                onClick={handleLoadMore}
+                                                disabled={loading}
                                             >
-                                                {expanded.includes(index) ? 'See less' : 'See more'}
+                                                {loading ? 'Loading...' : 'Load More'}
                                             </button>
-                                        </div>
-                                    ))
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>
