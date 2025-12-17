@@ -277,7 +277,7 @@ export default function PricingPage() {
                                         <p className="text-danger">{error}</p>
                                         <button
                                             className="btn btn-primary mt-3"
-                                            onclick={() => window.location.reload()}
+                                            onClick={() => window.location.reload()}
                                         >
                                             Retry
                                         </button>
