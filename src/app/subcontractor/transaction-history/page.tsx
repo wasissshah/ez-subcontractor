@@ -6,18 +6,125 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import '../../../styles/profile.css';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import SidebarSubcontractor from "../../components/SidebarSubcontractor";
+
+interface Transaction {
+    id: number;
+    subscription_id: string;
+    amount: string;
+    transaction_id: string;
+    promo_code: string | null;
+    card_brand: string;
+    card_last4: string;
+    card_holder: string;
+    created_at: string;
+    plan: {
+        id: number;
+        name: string;
+    };
+}
 
 export default function TransactionsPage() {
     const pathname = usePathname();
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+    const [logoutLoading, setLogoutLoading] = useState(false);
 
-    // Sidebar links
-    const links = [
-        { href: '/subcontractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
-        { href: '/subcontractor/edit-profile', label: 'Edit Profile', icon: '/assets/img/icons/lock.svg' },
-    ];
+    // ✅ Fetch transactions from API
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/transactions`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { Authorization: `Bearer ${token}` }),
+                    },
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    throw new Error(data.message?.[0] || 'Failed to fetch transactions');
+                }
+
+                setTransactions(data.data);
+            } catch (err: any) {
+                setError(err.message || 'Something went wrong');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTransactions();
+    }, []);
+
+    // 🔹 Filter transactions based on search term
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setFilteredTransactions(transactions);
+        } else {
+            const term = searchTerm.toLowerCase();
+            const filtered = transactions.filter(tx =>
+                tx.transaction_id.toLowerCase().includes(term) ||
+                tx.plan.name.toLowerCase().includes(term) ||
+                tx.card_holder.toLowerCase().includes(term) ||
+                tx.amount.toLowerCase().includes(term)
+            );
+            setFilteredTransactions(filtered);
+        }
+    }, [searchTerm, transactions]);
+
+    const handleLogout = async () => {
+        setLogoutLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                router.push('/auth/login');
+                return;
+            }
+
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const text = await response.text();
+            let data;
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch {
+                data = { message: text };
+            }
+
+            if (response.ok) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('token');
+                router.push('/auth/login');
+            } else {
+                alert(data?.message || 'Logout failed');
+            }
+        } catch (err) {
+            console.error('Logout Error:', err);
+            alert('Network error. Please try again.');
+        } finally {
+            setLogoutLoading(false);
+        }
+    };
 
     return (
         <div>
@@ -27,32 +134,8 @@ export default function TransactionsPage() {
                     <div className="container">
                         <div className="row g-4">
 
-                            {/* Sidebar */}
                             <div className="col-xl-3">
-                                <div className="sidebar d-flex flex-column" style={{height: '100%'}}>
-                                    <div className="buttons-wrapper">
-                                        {links.map((link) => (
-                                            <Link
-                                                key={link.href}
-                                                href={link.href}
-                                                className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
-                                            >
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <Image src={link.icon} width={20} height={20} alt="Icon" loading="lazy" />
-                                                    <span className="text-white">{link.label}</span>
-                                                </div>
-                                                <Image
-                                                    src="/assets/img/icons/angle-right.svg"
-                                                    width={15}
-                                                    height={9}
-                                                    alt="Arrow"
-                                                    style={{ objectFit: 'contain' }}
-                                                    loading="lazy"
-                                                />
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
+                                <SidebarSubcontractor onLogout={handleLogout} />
                             </div>
 
                             {/* Right Bar */}
@@ -60,52 +143,61 @@ export default function TransactionsPage() {
                                 <div className="right-bar">
                                     <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-4">
                                         <div className="change fw-semibold fs-4">Transaction History</div>
-                                        <div className="form-wrapper mb-0 flex-nowrap">
-                                            <Image
-                                                src="/assets/img/icons/search-gray.svg"
-                                                width={18}
-                                                height={18}
-                                                alt="Search Icon"
-                                                loading="lazy"
+                                        <div className="form-wrapper mb-0" style={{ flexGrow: 1, maxWidth: '300px' }}>
+                                            <input
+                                                type="text"
+                                                placeholder="Search here"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
                                             />
-                                            <input type="text" placeholder="Search here" />
                                         </div>
                                     </div>
 
                                     <div className="p-0 mb-4">
                                         <div className="table-responsive">
-                                            <table className="custom-table">
-                                                <thead>
-                                                <tr>
-                                                    <th>S. No</th>
-                                                    <th>Transaction ID</th>
-                                                    <th>Subscription</th>
-                                                    <th>Categories</th>
-                                                    <th>Date and Time</th>
-                                                    <th>Amount</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {[1, 2, 3].map((item, index) => (
-                                                    <tr key={index}>
-                                                        <td>{index + 1}</td>
-                                                        <td>55412821</td>
-                                                        <td>{index % 2 === 0 ? 'Yearly' : 'Monthly'}</td>
-                                                        <td>
-                                                            <span className="badge">Framing</span>
-                                                            <span className="badge">Electrical</span>
-                                                            <span className="badge more">+3 More</span>
-                                                        </td>
-                                                        <td>Jan 21, 2025 - 12:21</td>
-                                                        <td>${index === 0 ? '650' : index === 1 ? '400' : '50'}</td>
-                                                    </tr>
-                                                ))}
-                                                </tbody>
-                                            </table>
+                                            {loading ? (
+                                                <p className='p-4'>Loading transactions...</p>
+                                            ) : error ? (
+                                                <p className="text-danger">{error}</p>
+                                            ) : transactions.length === 0 ? (
+                                                <p>No transactions found.</p>
+                                            ) : (
+                                                <table className="custom-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S. No</th>
+                                                            <th>Transaction ID</th>
+                                                            <th>Subscription</th>
+                                                            <th>Card</th>
+                                                            <th>Date and Time</th>
+                                                            <th>Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {filteredTransactions.length === 0 ? (
+                                                            <tr>
+                                                                <td colSpan={6} className="text-center">No transactions found</td>
+                                                            </tr>
+                                                        ) : (
+                                                            filteredTransactions.map((tx, index) => (
+                                                                <tr key={tx.id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{tx.transaction_id}</td>
+                                                                    <td>{tx.plan.name}</td>
+                                                                    <td>{tx.card_brand} ****{tx.card_last4} ({tx.card_holder})</td>
+                                                                    <td>{new Date(tx.created_at).toLocaleString()}</td>
+                                                                    <td>${tx.amount}</td>
+                                                                </tr>
+                                                            ))
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <div className="data-table-pagination">
+                                    {/* Pagination - keep static for now */}
+                                    {/* <div className="data-table-pagination">
                                         <div className="rows-per-page">
                                             <div className="custom-select" tabIndex={0}>
                                                 <span className="custom-select__label">Rows per page:</span>
@@ -131,36 +223,11 @@ export default function TransactionsPage() {
                                                 </ul>
                                             </div>
                                         </div>
-
-                                        <div className="pagination-controls">
-                                            <button className="pagination-button pagination-button--nav" aria-label="First page" disabled>
-                                                &laquo;
-                                            </button>
-                                            <button className="pagination-button pagination-button--nav" aria-label="Previous page" disabled>
-                                                &lt;
-                                            </button>
-
-                                            <button className="pagination-button pagination-button--page pagination-button--active" aria-current="page">
-                                                1
-                                            </button>
-                                            <button className="pagination-button pagination-button--page">2</button>
-                                            <button className="pagination-button pagination-button--page">3</button>
-
-                                            <span className="pagination-separator">&ndash;</span>
-
-                                            <button className="pagination-button pagination-button--page">10</button>
-
-                                            <button className="pagination-button pagination-button--nav" aria-label="Next page">
-                                                &gt;
-                                            </button>
-                                            <button className="pagination-button pagination-button--nav" aria-label="Last page">
-                                                &raquo;
-                                            </button>
-                                        </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                             {/* Right Bar End */}
+
                         </div>
                     </div>
                 </section>

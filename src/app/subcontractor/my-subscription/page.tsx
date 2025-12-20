@@ -4,10 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SidebarSubcontractor from '../../components/SidebarSubcontractor';
 import '../../../styles/profile.css';
 import '../../../styles/pricing.css';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import CancelSubscriptionModal from './components/cancel-subscription-modal';
 
 interface Feature {
     feature: string;
@@ -20,8 +22,6 @@ interface Plan {
     duration_days: string;
     type: string;
     features: Feature[];
-    discount_price?: string;
-    label?: string;
 }
 
 interface Subscription {
@@ -30,208 +30,142 @@ interface Subscription {
     end_date: string;
     is_active: string;
     plan: Plan;
+    status: string;
 }
 
 export default function SubscriptionPage() {
     const router = useRouter();
     const pathname = usePathname();
     const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-    const [plans, setPlans] = useState<any[]>([]); // ✅ For pricing cards
     const [loading, setLoading] = useState(true);
-    const [loadingPlans, setLoadingPlans] = useState(true); // ✅ Separate loader
     const [error, setError] = useState<string | null>(null);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [selectedSubscription, setSelectedSubscription] = useState<Subscription>(null);
+    const [logoutLoading, setLogoutLoading] = useState(false);
 
-    // Sidebar links
-    const links = [
-        { href: '/subcontractor/saved-listing', label: 'Saved Listing', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
-        { href: '/subcontractor/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
-        { href: '/subcontractor/edit-profile', label: 'Edit Profile', icon: '/assets/img/icons/lock.svg' },
-    ];
 
-    // 🔁 Fetch subscriptions
     useEffect(() => {
+        fetchSubscriptions();
+    }, []);
+
+    const fetchSubscriptions = async () => {
         const token = localStorage.getItem('token');
+
         if (!token) {
             setError('Unauthorized');
             setLoading(false);
             return;
         }
 
-        const fetchSubscriptions = async () => {
-            try {
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/my-subscriptions`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                );
-                const data = await res.json();
-
-                if (!res.ok || !data.success) {
-                    throw new Error(data.message?.[0] || 'Failed to fetch subscriptions');
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/my-subscriptions`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
                 }
-                setSubscriptions(data.data.subscriptions || []);
-            } catch (err: any) {
-                setError(err.message || 'Something went wrong');
-            } finally {
-                setLoading(false);
+            );
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.message?.[0] || 'Failed to fetch subscriptions');
             }
-        };
 
-        fetchSubscriptions();
-    }, []);
-
-    // 🔁 Fetch pricing plans for subcontractor (even if no subs)
-    useEffect(() => {
-        const fetchPlans = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/plans?role=subcontractor`,
-                    {
-                        headers: token ? { Authorization: `Bearer ${token}` } : {},
-                    }
-                );
-                const data = await res.json();
-
-                if (res.ok && data.success && Array.isArray(data.data?.plans)) {
-                    const transformed = data.data.plans.map((plan: any) => ({
-                        id: plan.id,
-                        title: plan.plan_name,
-                        price: parseFloat(plan.price),
-                        discount: plan.discount_price ? parseFloat(plan.discount_price) : null,
-                        features: plan.features.map((f: any) => f.feature),
-                        hasNote: plan.type === 'trial',
-                        isPopular: plan.label === 'Popular',
-                        showStrike: !!plan.discount_price,
-                        saveText: plan.discount_price
-                            ? `${Math.round(100 - (parseFloat(plan.discount_price) / parseFloat(plan.price)) * 100)}% OFF`
-                            : '',
-                        saveColor: '#DC2626',
-                        type: plan.type,
-                    }));
-                    setPlans(transformed);
-                }
-            } catch (err) {
-                console.warn('Failed to load plans:', err);
-            } finally {
-                setLoadingPlans(false);
-            }
-        };
-        fetchPlans();
-    }, []);
-
-    // ✅ Handle plan selection
-    const handleSelectPlan = (plan: any) => {
-        localStorage.setItem('selectedPlan', JSON.stringify({ ...plan, type: 'sub-contractor' }));
-        router.push('/subcontractor/checkout');
+            setSubscriptions(data.data.subscriptions || []);
+        } catch (err: any) {
+            setError(err.message || 'Something went wrong');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // ✅ Render note card (same as PricingPage)
-    const renderNoteCard = () => (
-        <div className="note-card d-flex align-items-start gap-1">
-            <Image
-                src="/assets/img/icons/note.webp"
-                width={24}
-                height={24}
-                alt="Note"
-                loading="lazy"
-                className="d-block"
-            />
-            <div className="content">
-                <span style={{ fontSize: '14px' }} className="d-block fw-semibold mb-1">
-                    Note
-                </span>
-                <p style={{ fontSize: '12px' }} className="mb-0">
-                    After your trial ends, you’ll need to subscribe to keep bidding on projects, chatting with contractors, and accessing premium tools.
-                </p>
-            </div>
-        </div>
-    );
+    const cancelSubscription = async () => {
+        if (!selectedSubscription) return;
 
-    // ✅ Render plan card (same logic as PricingPage)
-    const renderPlanCard = (plan: any) => (
-        <div key={plan.id} className="col-lg-4 col-md-6 col-12">
-            <div className={`price-card ${plan.isPopular ? 'popular' : ''} free`}>
-                <div>
-                    <div className="pricing-header">
-                        {plan.isPopular ? (
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-                                <span className="title1 mb-0 text-truncate">{plan.title}</span>
-                                <div
-                                    style={{ fontSize: '14px' }}
-                                    className="custom-btn bg-white shadow p-2 rounded-pill"
-                                >
-                                    🔥 Popular
-                                </div>
-                            </div>
-                        ) : (
-                            <span className="title1 text-truncate">{plan.title}</span>
-                        )}
+        try {
+            const token = localStorage.getItem('token');
 
-                        {plan.showStrike ? (
-                            <div className="d-flex align-items-center gap-1 flex-wrap">
-                                <del className="fs-18 fw-medium text-black">$ {plan.price}</del>
-                                <div className="d-flex align-items-center gap-2">
-                                    <span className="price">
-                                        $<span className="fw-bold">{plan.discount}</span>
-                                    </span>
-                                    {plan.saveText && (
-                                        <div
-                                            style={{ backgroundColor: plan.saveColor }}
-                                            className="custom-btn text-white py-2 px-3 rounded-pill"
-                                        >
-                                            {plan.saveText}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="d-flex align-items-center gap-2">
-                                <span className="price">
-                                    $<span className="fw-bold">{plan.price}</span>
-                                </span>
-                                {plan.saveText && (
-                                    <button
-                                        type="button"
-                                        style={{ backgroundColor: plan.saveColor }}
-                                        className="custom-btn text-white p-2 rounded-pill"
-                                    >
-                                        {plan.saveText}
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </div>
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/cancel`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subscription_id: selectedSubscription.id,
+                    }),
+                }
+            );
 
-                    <div className="pricing-body mb-3">
-                        <ul className="m-0 p-0 list-with-icon">
-                            {plan.features.map((feature: string, i: number) => (
-                                <li key={i}>{feature}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+            const data = await res.json();
 
-                <div className="d-flex align-items-center flex-column">
-                    {plan.hasNote && renderNoteCard()}
-                    <div className="pricing-button w-100 pt-0">
-                        <button className="btn" onClick={() => handleSelectPlan(plan)}>
-                            Buy Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+            if (!res.ok || !data.success) {
+                throw new Error(data.message?.[0] || 'Failed to cancel subscription');
+            }
 
-    // 🌀 Combined loading
-    const isLoading = loading || loadingPlans;
+            // ✅ Modal close
+            setShowCancelModal(false);
+            setSelectedSubscription(null);
+
+            // ✅ Subscriptions dubara load
+            fetchSubscriptions();
+
+        } catch (err: any) {
+            alert(err.message || 'Cancel failed');
+        }
+    };
+
+    const handleLogout = async () => {
+        setLogoutLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                router.push('/auth/login');
+                return;
+            }
+
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/logout`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const text = await response.text();
+            let data;
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch {
+                data = { message: text };
+            }
+
+            if (response.ok) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('token');
+                router.push('/auth/login');
+            } else {
+                alert(data?.message || 'Logout failed');
+            }
+        } catch (err) {
+            console.error('Logout Error:', err);
+            alert('Network error. Please try again.');
+        } finally {
+            setLogoutLoading(false);
+        }
+    };
+
 
     return (
         <>
@@ -240,78 +174,29 @@ export default function SubscriptionPage() {
                 <section className="banner-sec profile pricing">
                     <div className="container">
                         <div className="row g-4">
-                            {/* Sidebar */}
                             <div className="col-xl-3">
-                                <div className="sidebar d-flex flex-column">
-                                    <div className="main-wrapper bg-dark m-0">
-                                        <div className="buttons-wrapper">
-                                            {links.map((link) => (
-                                                <Link
-                                                    key={link.href}
-                                                    href={link.href}
-                                                    className={`custom-btn ${pathname === link.href ? 'active' : ''}`}
-                                                >
-                                                    <div className="d-flex align-items-center gap-2">
-                                                        <Image src={link.icon} width={20} height={20} alt="Icon" loading="lazy" />
-                                                        <span className="text-white">{link.label}</span>
-                                                    </div>
-                                                    <Image
-                                                        src="/assets/img/icons/angle-right.svg"
-                                                        width={15}
-                                                        height={9}
-                                                        alt="Arrow"
-                                                        style={{ objectFit: 'contain' }}
-                                                        loading="lazy"
-                                                    />
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="bottom-bar mt-auto">
-                                        <div className="buttons-wrapper">
-                                            <Link
-                                                href="#"
-                                                className="custom-btn s1 bg-danger"
-                                                style={{ borderColor: '#DC2626' }}
-                                            >
-                                                <div className="d-flex align-items-center gap-2">
-                                                    <Image
-                                                        src="/assets/img/icons/logout.svg"
-                                                        width={20}
-                                                        height={20}
-                                                        alt="Logout Icon"
-                                                        loading="lazy"
-                                                    />
-                                                    <span className="text-white">Logout</span>
-                                                </div>
-                                                <Image
-                                                    src="/assets/img/icons/angle-right.svg"
-                                                    style={{ objectFit: 'contain' }}
-                                                    width={15}
-                                                    height={9}
-                                                    alt="Arrow"
-                                                    loading="lazy"
-                                                />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
+                                <SidebarSubcontractor onLogout={handleLogout} />
                             </div>
 
                             {/* Right Content */}
                             <div className="col-xl-9">
                                 <div className="right-bar">
-                                    {isLoading ? (
-                                        <div className="d-flex justify-content-center align-items-center py-5" style={{ height: '80vh' }}>
+
+                                    {/* Loader */}
+                                    {loading ? (
+                                        <div className="d-flex justify-content-center align-items-center py-5"
+                                            style={{ height: '80vh' }}>
                                             <div className="spinner-border text-primary" role="status" />
                                         </div>
                                     ) : error ? (
-                                        <div className="alert alert-danger" style={{ height: '80vh' }}>
+                                        /* Error */
+                                        <div className="alert alert-danger"
+                                            style={{ height: '80vh' }}>
                                             {error}
                                         </div>
                                     ) : (
                                         <>
+                                            {/* Header */}
                                             <div className="d-flex align-items-center gap-2 justify-content-between flex-wrap mb-5">
                                                 <div className="icon-wrapper d-flex align-items-center gap-3">
                                                     <button
@@ -328,81 +213,117 @@ export default function SubscriptionPage() {
                                                     </button>
                                                     <span className="fs-4 fw-semibold">Subscription</span>
                                                 </div>
-                                                {subscriptions.length !== 0 && (
+                                                {
+                                                    subscriptions.length !== 0 ? (
+                                                        <button
+                                                            onClick={() => router.push('/subcontractor/subscription')}
+                                                            className="btn btn-primary"
+                                                        >
+                                                            View Plans
+                                                        </button>
+                                                    ) : (
+                                                        <div></div>
+                                                    )
+                                                }
+                                            </div>
+
+                                            {/* No Subscription Found */}
+                                            {subscriptions.length === 0 ? (
+                                                <div
+                                                    className="d-flex flex-column justify-content-center align-items-center text-center"
+                                                    style={{ height: '70vh' }}
+                                                >
+                                                    <h5 className="fw-semibold">No Subscription Found</h5>
+                                                    <p className="text-muted mb-4">
+                                                        You don’t have any active or expired subscriptions yet.
+                                                    </p>
                                                     <button
                                                         onClick={() => router.push('/subcontractor/subscription')}
                                                         className="btn btn-primary"
                                                     >
                                                         View Plans
                                                     </button>
-                                                )}
-                                            </div>
-
-                                            {subscriptions.length === 0 ? (
-                                                <>
-                                                    <div className="text-center mb-5">
-                                                        <h5 className="fw-semibold">No Active Subscription</h5>
-                                                        <p className="text-muted">
-                                                            Choose a plan to get started and unlock full access.
-                                                        </p>
-                                                    </div>
-
-                                                    {/* ✅ Pricing Cards for Subcontractor */}
-                                                    <div className="pricing-sec p-0">
-                                                        <div className="row g-3 justify-content-center">
-                                                            {loadingPlans ? (
-                                                                <div className="col-12 text-center py-3">
-                                                                    <div className="spinner-border spinner-border-sm text-primary" />
-                                                                </div>
-                                                            ) : plans.length > 0 ? (
-                                                                plans.map(renderPlanCard)
-                                                            ) : (
-                                                                <div className="col-12 text-center py-3 text-muted">
-                                                                    No plans available at this time.
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </>
+                                                </div>
                                             ) : (
+                                                /* Subscription Cards */
                                                 <div className="pricing-sec p-0">
                                                     <div className="row g-3">
                                                         {subscriptions.map((sub) => (
-                                                            <div key={sub.id} className="col-lg-4 col-md-6 col-12">
-                                                                <div className="price-card">
+                                                            <div
+                                                                key={sub.id}
+                                                                className="col-lg-4 col-md-6 col-12"
+                                                            >
+                                                                <div
+                                                                    className="price-card"
+                                                                >
+                                                                    {/* Header */}
                                                                     <div className="pricing-header mb-3">
                                                                         <div className="d-flex align-items-center justify-content-between mb-2">
-                                                                            <span className="title1">{sub.plan.plan_name}</span>
+                                                                            <span className="title1">
+                                                                                {sub.plan.plan_name}
+                                                                            </span>
+
                                                                             {sub.is_active === '1' && (
                                                                                 <div className="custom-btn bg-white shadow p-2 rounded-pill fs-14">
                                                                                     ✅ Active
                                                                                 </div>
                                                                             )}
                                                                         </div>
+
                                                                         <div className="d-flex align-items-center gap-2">
-                                                                            <span className="price">${sub.plan.price}</span>
-                                                                            <span className="fs-14 text-muted">/ {sub.plan.type}</span>
+                                                                            <span className="price">
+                                                                                ${sub.plan.price}
+                                                                            </span>
+                                                                            <span className="fs-14 text-muted">
+                                                                                / {sub.plan.type}
+                                                                            </span>
                                                                         </div>
                                                                     </div>
+
+                                                                    {/* Body */}
                                                                     <div className="pricing-body">
                                                                         <ul className="m-0 p-0 list-with-icon">
                                                                             {sub.plan.features.map((f, i) => (
-                                                                                <li key={i}>{f.feature}</li>
+                                                                                <li key={i}>
+                                                                                    {f.feature}
+                                                                                </li>
                                                                             ))}
                                                                         </ul>
                                                                     </div>
+
+                                                                    {/* Button */}
                                                                     <div className="pricing-button mt-3">
                                                                         <button
-                                                                            className={`btn ${sub.is_active === '1' ? 'btn-outline-danger' : 'btn-secondary'}`}
-                                                                            disabled={sub.is_active !== '1'}
+                                                                            className={`btn ${sub.status === 'active'
+                                                                                ? 'btn-outline-danger'
+                                                                                : 'btn-secondary'
+                                                                                }`}
+                                                                            disabled={sub.status !== 'active'}
+                                                                            onClick={() => {
+                                                                                if (sub.status === 'active') {
+                                                                                    setSelectedSubscription(sub);
+                                                                                    setShowCancelModal(true)
+                                                                                }
+                                                                            }}
                                                                         >
-                                                                            {sub.is_active === '1' ? 'Cancel Plan' : 'Expired'}
+                                                                            {sub.status === 'active' ? 'Cancel Plan' : sub.status === 'cancelled' ? 'Cancelled' : 'Expired'}
                                                                         </button>
                                                                     </div>
+
+                                                                    {/* Dates */}
                                                                     <div className="text-center fs-14 mt-3 mb-3 text-muted">
                                                                         {sub.start_date} → {sub.end_date}
                                                                     </div>
                                                                 </div>
+                                                                <CancelSubscriptionModal
+                                                                    show={showCancelModal}
+                                                                    planName={selectedSubscription?.plan?.plan_name}
+                                                                    onClose={() => {
+                                                                        setShowCancelModal(false);
+                                                                        setSelectedSubscription(null);
+                                                                    }}
+                                                                    onConfirm={cancelSubscription}
+                                                                />
                                                             </div>
                                                         ))}
                                                     </div>
@@ -412,6 +333,7 @@ export default function SubscriptionPage() {
                                     )}
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </section>
