@@ -133,8 +133,7 @@ export default function ProfilePage() {
                         zipCode: data.data.zip || '',
                         workRadius: data.data.work_radius || 0,
                         category: data.data.specialization ? Number(data.data.specialization) : null,
-                        // ✅ Add rating fields
-                        average_rating: parseFloat(data.data.average_rating) || '0',
+                        average_rating: (parseFloat(data.data.average_rating) || 0).toString(),
                         total_ratings: data.data.total_ratings || 0,
                     });
                 } else {
