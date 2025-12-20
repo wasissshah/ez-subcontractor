@@ -659,7 +659,7 @@ export default function EditProfile() {
                                                     id="category-select"
                                                     className="form-control"
                                                     value={formData.category}
-                                                    onchange={(e) => setFormData(prev => ({
+                                                    onChange={(e) => setFormData(prev => ({
                                                         ...prev,
                                                         category: e.target.value
                                                     }))}
