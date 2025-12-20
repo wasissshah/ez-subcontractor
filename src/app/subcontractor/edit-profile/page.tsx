@@ -685,7 +685,7 @@ export default function EditProfile() {
                                                     className="form-control"
                                                     placeholder="223546"
                                                     value={formData.license_number}
-                                                    onchange={handleChange}
+                                                    onChange={handleChange}
                                                 />
                                             </div>
                                         </div>
