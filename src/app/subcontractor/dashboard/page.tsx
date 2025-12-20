@@ -641,7 +641,7 @@ export default function DashboardSubContractor() {
                                         <select
                                             className="form-control"
                                             value={categoryId}
-                                            onchange={(e) => setCategoryId(e.target.value)}
+                                            onChange={(e) => setCategoryId(e.target.value)}
                                             disabled={categoriesLoading}
                                         >
                                             <option value="">All Categories</option>
