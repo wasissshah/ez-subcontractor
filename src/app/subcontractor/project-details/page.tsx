@@ -48,6 +48,13 @@ interface Project {
     };
 }
 
+interface BannerImage {
+    id: number;
+    src: string;
+    alt: string;
+    // caption?: string; // optional: add later if needed
+}
+
 
 export default function ProjectSubcontractorDetailsPage() {
     const router = useRouter();
