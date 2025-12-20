@@ -175,13 +175,13 @@ export default function Header() {
                                         <Image src="/assets/img/icons/notification-dark.svg" width={24} height={24}
                                                alt="Notifications"/>
                                     </Link>
-                                    <ul class="dropdown-menu dropdown-menu-end" style={{minWidth: '300px'}}>
+                                    <ul className="dropdown-menu dropdown-menu-end" style={{minWidth: '300px'}}>
                                         <li>
                                             <span
                                                 className={"fw-bold px-3 border-bottom d-block py-2"}>Notifications</span>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item py-2" href="#">
+                                            <a className="dropdown-item py-2" href="#">
                                                      <span
                                                          className={'d-flex align-items-center justify-content-between w-100'}>
                                                          <span className={'d-block fw-medium'}>Success</span>
@@ -191,7 +191,7 @@ export default function Header() {
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item py-2" href="#">
+                                            <a className="dropdown-item py-2" href="#">
                                                      <span
                                                          className={'d-flex align-items-center justify-content-between w-100'}>
                                                          <span className={'d-block fw-medium'}>Success</span>
