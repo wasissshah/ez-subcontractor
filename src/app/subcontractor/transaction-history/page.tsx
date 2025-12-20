@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import '../../../styles/profile.css';
-import { usePathname } from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SidebarSubcontractor from "../../components/SidebarSubcontractor";
 
@@ -26,6 +26,7 @@ interface Transaction {
 }
 
 export default function TransactionsPage() {
+    const router = useRouter();
     const pathname = usePathname();
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(false);
