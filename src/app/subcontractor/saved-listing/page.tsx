@@ -422,7 +422,6 @@ export default function SavedListingPage() {
 
                                                     <div className="description-wrapper mb-2 position-relative">
                                                         <p
-                                                            ref={el => descriptionRefs.current[index] = el}
                                                             className={`description mb-0 ${
                                                                 expanded.includes(index) ? 'expanded' : 'collapsed'
                                                             }`}
