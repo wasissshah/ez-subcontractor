@@ -154,11 +154,12 @@ export default function Header() {
                                             <button
                                                 className="dropdown-item"
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'general_contractor';
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
+                                                    console.log(userRole);
                                                 }}
                                             >
                                                 General Contractor
@@ -168,11 +169,12 @@ export default function Header() {
                                             <button
                                                 className="dropdown-item"
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'subcontractor';
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
+                                                    console.log(userRole);
                                                 }}
                                             >
                                                 Subcontractor
@@ -182,11 +184,12 @@ export default function Header() {
                                             <button
                                                 className="dropdown-item"
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'affiliate'; // ✅ singular, assuming backend expects this
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
+                                                    console.log(userRole);
                                                 }}
                                             >
                                                 Affiliates
