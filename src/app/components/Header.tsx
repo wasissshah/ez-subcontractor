@@ -152,46 +152,58 @@ export default function Header() {
                                     <ul className="dropdown-menu">
                                         <li>
                                             <button
-                                                className="dropdown-item"
+                                                className={`dropdown-item d-flex align-items-center ${
+                                                    userRole === 'general_contractor' ? 'fw-bold' : ''
+                                                }`}
                                                 type="button"
-                                                onClick={(e) => {
+                                                onclick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'general_contractor';
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
-                                                    console.log(userRole);
                                                 }}
                                             >
+                                                {userRole === 'general_contractor' && (
+                                                    <span className="me-2">✓</span>
+                                                )}
                                                 General Contractor
                                             </button>
                                         </li>
                                         <li>
                                             <button
-                                                className="dropdown-item"
+                                                className={`dropdown-item d-flex align-items-center ${
+                                                    userRole === 'subcontractor' ? 'fw-bold' : ''
+                                                }`}
                                                 type="button"
-                                                onClick={(e) => {
+                                                onclick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'subcontractor';
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
-                                                    console.log(userRole);
                                                 }}
                                             >
+                                                {userRole === 'subcontractor' && (
+                                                    <span className="me-2">✓</span>
+                                                )}
                                                 Subcontractor
                                             </button>
                                         </li>
                                         <li>
                                             <button
-                                                className="dropdown-item"
+                                                className={`dropdown-item d-flex align-items-center ${
+                                                    userRole === 'affiliate' ? 'fw-bold' : ''
+                                                }`}
                                                 type="button"
-                                                onClick={(e) => {
+                                                onclick={(e) => {
                                                     e.preventDefault();
-                                                    const role = 'affiliate'; // ✅ singular, assuming backend expects this
+                                                    const role = 'affiliate';
                                                     localStorage.setItem('role', role);
                                                     setUserRole(role);
-                                                    console.log(userRole);
                                                 }}
                                             >
+                                                {userRole === 'affiliate' && (
+                                                    <span className="me-2">✓</span>
+                                                )}
                                                 Affiliates
                                             </button>
                                         </li>
