@@ -212,7 +212,7 @@ export default function HomePage() {
                                     className="banner-wrapper"
                                 >
                                     <video
-                                        autoplay
+                                        autoPlay
                                         muted
                                         loop
                                         playsinline
