@@ -16,13 +16,21 @@ export default function PricingPage() {
     const [plans, setPlans] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const isLoggedIn = !!localStorage.getItem('token'); // ✅ Check auth
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // ✅ Delayed check
+
+    // 🔁 Check auth on mount (client-side only)
+    useEffect(() => {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        setIsLoggedIn(!!token);
+    }, []);
 
     // Fetch plans from API
     useEffect(() => {
+        if (isLoggedIn === null) return; // Wait for auth check
+
         const fetchPlans = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/plans?role=subcontractor`, {
                     headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
@@ -69,7 +77,7 @@ export default function PricingPage() {
         };
 
         fetchPlans();
-    }, []);
+    }, [isLoggedIn]); // ✅ Run after auth check
 
     const handleSelectPlan = (plan: any) => {
         localStorage.setItem('selectedPlan', JSON.stringify({ ...plan, type: 'sub-contractor' }));
@@ -192,8 +200,8 @@ export default function PricingPage() {
         </div>
     );
 
-    // 🌀 Loading State
-    if (loading) {
+    // 🌀 Loading State — Only show spinner while waiting for auth + plans
+    if (loading || isLoggedIn === null) {
         return (
             <>
                 <Header />
