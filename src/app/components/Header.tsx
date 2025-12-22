@@ -15,12 +15,24 @@ export default function Header() {
 
 
     useEffect(() => {
+        // 🚀 Phase 1: Optimistic UI — read from localStorage immediately
+        const token = localStorage.getItem('token');
         const role = localStorage.getItem('role');
-        setUserRole(role);
 
+        if (token && role) {
+            setUserRole(role);
+            setLogin(role);
+        } else {
+            setUserRole(null);
+            setLogin(null);
+        }
 
-        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-        const fetchProfile = async () => {
+        // 🛡️ Phase 2: Background verification (optional but safe)
+        if (!token) return;
+
+        let isMounted = true;
+
+        const verifyAuth = async () => {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
                     method: 'GET',
@@ -29,20 +41,38 @@ export default function Header() {
                         'Content-Type': 'application/json',
                     },
                 });
-                const data = await response.json();
-                console.log(data)
-                if (response.ok) {
 
-                    const isLoggedIn = !!localStorage.getItem('token');
-                    setLogin(isLoggedIn ? localStorage.getItem('role') : null);
+                if (!response.ok) throw new Error('Invalid session');
+
+                const data = await response.json();
+                const backendRole = data?.user?.role;
+
+                // Update only if backend says different role (e.g., role changed)
+                if (isMounted && backendRole && backendRole !== role) {
+                    localStorage.setItem('role', backendRole);
+                    setUserRole(backendRole);
+                    setLogin(backendRole);
                 }
+                // If roles match — no change needed
             } catch (err) {
-                localStorage.setItem('token', null);
-                setLogin(null);
+                if (isMounted) {
+                    // Session invalid → clear and force re-auth
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    setUserRole(null);
+                    setLogin(null);
+                    // Optional: auto-redirect to login
+                    // if (typeof window !== 'undefined') window.location.href = '/auth/login';
+                }
             }
         };
-        fetchProfile();
-    });
+
+        verifyAuth();
+
+        return () => {
+            isMounted = false; // prevent state update if component unmounted
+        };
+    }, []); // ✅ Run once on mount
 
     return (
         <div>

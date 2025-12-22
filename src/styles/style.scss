@@ -448,14 +448,35 @@ body {
 }
 .slick-slider {
   .slick-arrow {
+    width: auto !important;
+    height: auto !important;
+    background-color: transparent !important;
     top: auto;
     bottom: 0;
-    transform: translate(0, 0)
+    transform: translate(0, 0);
+    &:hover,
+    &:focus {
+      background-color: transparent !important;
+    }
+    &:before {
+      background-color: transparent !important;
+    }
   }
   .slick-arrow.slick-prev {
-    left: 20px
+    left: 20px;
+    &:before {
+      background: url("/assets/img/icons/arrow-left.svg") no-repeat center/contain;
+      width: 16px;
+      height: 16px;
+    }
   }
   .slick-arrow.slick-next {
-    left: 50px
+    left: 50px;
+    right: auto;
+    &:before {
+      background: url("/assets/img/icons/arrow-right.svg") no-repeat center/contain;
+      width: 16px;
+      height: 16px;
+    }
   }
 }
