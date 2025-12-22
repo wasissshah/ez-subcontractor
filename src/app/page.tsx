@@ -218,7 +218,7 @@ export default function HomePage() {
                                         playsInline
                                         preload="none"
                                         poster="/assets/img/poster.webp"
-                                        class="hero-video"
+                                        className="hero-video"
                                         style={{
                                             position: 'absolute',
                                             top: 0,
