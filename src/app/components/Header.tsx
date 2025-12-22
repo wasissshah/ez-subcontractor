@@ -186,7 +186,7 @@ export default function Header() {
                                                     userRole === 'general_contractor' ? 'fw-bold' : ''
                                                 }`}
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'general_contractor';
                                                     localStorage.setItem('role', role);
@@ -205,7 +205,7 @@ export default function Header() {
                                                     userRole === 'subcontractor' ? 'fw-bold' : ''
                                                 }`}
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'subcontractor';
                                                     localStorage.setItem('role', role);
@@ -224,7 +224,7 @@ export default function Header() {
                                                     userRole === 'affiliate' ? 'fw-bold' : ''
                                                 }`}
                                                 type="button"
-                                                onclick={(e) => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const role = 'affiliate';
                                                     localStorage.setItem('role', role);
