@@ -121,7 +121,7 @@ export default function Header() {
                                 pathname === '/how-it-works'
                             ) &&
                             <ul className="navbar-nav ms-auto mb-2 mb-lg-0 rounded-3 px-lg-2 py-lg-2">
-                                {!userRole && (
+                                {userRole && (
                                     <>
                                         <li className="nav-item">
                                             <Link className="nav-link" aria-current="page" href={'/'}>Home</Link>
