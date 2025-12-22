@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import '../../../styles/pricing.css';
 import { useState, useEffect } from 'react';
+import Link from 'next/link'; // ✅ Add this
 
 export default function PricingPage() {
     const router = useRouter();
@@ -15,26 +16,32 @@ export default function PricingPage() {
     const [plans, setPlans] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const isLoggedIn = !!localStorage.getItem('token'); // ✅ Check auth
 
     // Fetch plans from API
     useEffect(() => {
         const fetchPlans = async () => {
             try {
-                const token = localStorage.getItem('token'); // Optional: auth not required for public plans
+                const token = localStorage.getItem('token');
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/subscription/plans?role=subcontractor`, {
                     headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
-                const data = await res.json();
 
-                console.log(data)
+                const text = await res.text(); // Read as text first
+
+                // If response is HTML (not JSON), assume unauthorized
+                if (!text.startsWith('{') && !text.startsWith('[')) {
+                    throw new Error('Unauthorized or server returned HTML. Please log in.');
+                }
+
+                const data = JSON.parse(text);
 
                 if (res.ok && data.success && Array.isArray(data.data?.plans)) {
-                    // Transform API response into your UI structure
                     const transformedPlans = data.data.plans.map((plan: any) => ({
                         id: plan.id,
                         title: plan.plan_name,
-                        price: parseFloat(plan.price), // Use discount if available
-                        discount: plan.discount_price, // Use discount if available
+                        price: parseFloat(plan.price),
+                        discount: plan.discount_price,
                         features: plan.features.map((f: any) => f.feature),
                         hasNote: plan.type === 'trial',
                         isPopular: plan.label === 'Popular',
@@ -97,7 +104,6 @@ export default function PricingPage() {
             p.is_cancelled !== true
     );
 
-
     const renderPlanCard = (plan: any) => (
         <div key={plan.id} className="col-lg-3 col-md-6">
             <div className={`price-card ${plan.isPopular ? 'popular' : ''} free`}>
@@ -119,7 +125,7 @@ export default function PricingPage() {
 
                         {plan.showStrike ? (
                             <div className="d-flex align-items-center gap-1 flex-wrap">
-                                <del className="fs-18 fw-medium text-black">$ {plan.price}</del>
+                                <del className="fs-18 fw-medium text-black">$ {plan.price.toFixed(2)}</del>
                                 <div className="d-flex align-items-center gap-2 justify-content-between">
                                     <span className="price">
                                         $
@@ -132,7 +138,7 @@ export default function PricingPage() {
                                             style={{ backgroundColor: plan.saveColor }}
                                             className="custom-btn text-white py-2 px-3 rounded-pill"
                                         >
-                                            {parseFloat(plan.discount)} % OFF
+                                            {plan.saveText}
                                         </div>
                                     )}
                                 </div>
@@ -140,7 +146,7 @@ export default function PricingPage() {
                         ) : (
                             <div className="d-flex align-items-center gap-2">
                                 <span className="price">
-                                    $<span className="fw-bold">{plan.price}</span>
+                                    $<span className="fw-bold">{plan.price.toFixed(2)}</span>
                                 </span>
                                 {plan.saveText && (
                                     <button
@@ -167,28 +173,26 @@ export default function PricingPage() {
                 <div className="d-flex align-items-center flex-column">
                     {plan.hasNote && renderNoteCard()}
                     <div className="pricing-button w-100 pt-0">
-                        <div className="pricing-button w-100 pt-0">
-                            <button
-                                className={plan.is_subscribed ? 'active-btn btn btn-primary' : 'btn'}
-                                disabled={hasAnyActiveSubscription && !plan.is_subscribed}
-                                onClick={() => {
-                                    if (!hasAnyActiveSubscription && !plan.is_subscribed) {
-                                        handleSelectPlan(plan);
-                                    }
-                                }}
-                            >
-                                {plan.is_subscribed && plan.status !== 'cancelled'
-                                    ? 'Current Plan'
-                                    : 'Buy Now'}
-                            </button>
-                        </div>
+                        <button
+                            className={plan.is_subscribed ? 'current-plan btn' : 'btn'}
+                            disabled={hasAnyActiveSubscription && !plan.is_subscribed}
+                            onClick={() => {
+                                if (!hasAnyActiveSubscription && !plan.is_subscribed) {
+                                    handleSelectPlan(plan);
+                                }
+                            }}
+                        >
+                            {plan.is_subscribed && plan.status !== 'cancelled'
+                                ? 'Current Plan'
+                                : 'Buy Now'}
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     );
 
-    // 🌀 Loading State — same as Profile Page
+    // 🌀 Loading State
     if (loading) {
         return (
             <>
@@ -211,6 +215,7 @@ export default function PricingPage() {
         );
     }
 
+    // 🚫 Error Handling — Show Login if Unauthorized
     if (error) {
         return (
             <>
@@ -220,13 +225,29 @@ export default function PricingPage() {
                         <div className="container">
                             <div className="row">
                                 <div className="col-12 text-center py-5">
-                                    <p className="text-danger">{error}</p>
-                                    <button
-                                        className="btn btn-primary mt-3"
-                                        onClick={() => window.location.reload()}
-                                    >
-                                        Retry
-                                    </button>
+                                    {error.includes('Unauthorized') ? (
+                                        <>
+                                            <p className="text-danger mb-3">Please log in to view subscription plans.</p>
+                                            <div className="d-flex gap-2 justify-content-center">
+                                                <Link href="/auth/login" className="btn btn-outline-dark">
+                                                    Login
+                                                </Link>
+                                                <Link href="/auth/register" className="btn btn-primary">
+                                                    Signup
+                                                </Link>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="text-danger">{error}</p>
+                                            <button
+                                                className="btn btn-primary mt-3"
+                                                onClick={() => window.location.reload()}
+                                            >
+                                                Retry
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>

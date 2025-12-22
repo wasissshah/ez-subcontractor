@@ -212,12 +212,13 @@ export default function HomePage() {
                                     className="banner-wrapper"
                                 >
                                     <video
-                                        autoPlay
+                                        autoplay
                                         muted
                                         loop
-                                        playsInline
-                                        poster={banner.video_poster}
-                                        className="hero-video"
+                                        playsinline
+                                        preload="none"
+                                        poster="/assets/img/poster.webp"
+                                        class="hero-video"
                                         style={{
                                             position: 'absolute',
                                             top: 0,
