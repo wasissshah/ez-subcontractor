@@ -278,8 +278,8 @@ export default function HomePage() {
                             </div>
                             <div className="col-lg-6 order-lg-1">
                                 <div className="content-wrapper d-flex flex-column h-100 justify-content-center">
-                                    <Link href="#" style={{ textTransform: 'uppercase !important' }} className="btn btn-outline-dark mb-4">
-                                        How It Works
+                                    <Link href="#" className="btn btn-outline-dark mb-4">
+                                        HOW IT WORKS
                                     </Link>
                                     <h1 className="mb-4">Connect with General contractors and get more Jobs</h1>
                                     <p className="mb-3 fw-medium fs-5">
