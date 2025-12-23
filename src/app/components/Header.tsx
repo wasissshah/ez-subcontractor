@@ -156,9 +156,68 @@ export default function Header() {
                                         <li className="nav-item">
                                             <Link className="nav-link" aria-current="page" href={'/'}>Home</Link>
                                         </li>
-                                        <li className="nav-item">
+                                        <li className="nav-item dropdown">
                                             <Link className="nav-link" aria-current="page" href={'/subscription'}>Free
                                                 Trial</Link>
+                                            <ul className="dropdown-menu">
+                                                <li>
+                                                    <button
+                                                        className={`dropdown-item d-flex align-items-center ${
+                                                            userRole === 'general_contractor' ? 'fw-bold' : ''
+                                                        }`}
+                                                        type="button"
+                                                        onclick={(e) => {
+                                                            e.preventDefault();
+                                                            const role = 'general_contractor';
+                                                            localStorage.setItem('role', role);
+                                                            setUserRole(role);
+                                                        }}
+                                                    >
+                                                        {userRole === 'general_contractor' && (
+                                                            <span className="me-2">✓</span>
+                                                        )}
+                                                        General Contractor
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        className={`dropdown-item d-flex align-items-center ${
+                                                            userRole === 'subcontractor' ? 'fw-bold' : ''
+                                                        }`}
+                                                        type="button"
+                                                        onclick={(e) => {
+                                                            e.preventDefault();
+                                                            const role = 'subcontractor';
+                                                            localStorage.setItem('role', role);
+                                                            setUserRole(role);
+                                                        }}
+                                                    >
+                                                        {userRole === 'subcontractor' && (
+                                                            <span className="me-2">✓</span>
+                                                        )}
+                                                        Subcontractor
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button
+                                                        className={`dropdown-item d-flex align-items-center ${
+                                                            userRole === 'affiliate' ? 'fw-bold' : ''
+                                                        }`}
+                                                        type="button"
+                                                        onclick={(e) => {
+                                                            e.preventDefault();
+                                                            const role = 'affiliate';
+                                                            localStorage.setItem('role', role);
+                                                            setUserRole(role);
+                                                        }}
+                                                    >
+                                                        {userRole === 'affiliate' && (
+                                                            <span className="me-2">✓</span>
+                                                        )}
+                                                        Affiliates
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li className="nav-item">
                                             <Link className="nav-link" href={'/how-it-works'}>How It Works</Link>

@@ -301,7 +301,7 @@ export default function HomePage() {
                                     {accountTypes.map((acc) => (
                                         <div className="col-lg-4">
                                             <div
-                                                className={`account-card mb-3 px-4 shadow-sm ${selectedType === acc.id ? 'active' : ''}`}
+                                                className={`account-card mb-3 px-lg-4 shadow-sm ${selectedType === acc.id ? 'active' : ''}`}
                                                 key={acc.id}
                                                 onClick={() => handleSelection(acc.id)}
                                                 style={{cursor: 'pointer', minWidth: '430px'}}
