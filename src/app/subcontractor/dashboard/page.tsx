@@ -41,12 +41,23 @@ export default function DashboardSubContractor() {
 
     // 🔹 Slider settings
     const sliderSettings = {
-        dots: false,
+        dots: true,
         infinite: true,
         speed: 600,
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        pauseOnHover: true,
+    };
+    const sliderSettingsRight = {
+        dots: false,
+        infinite: true,
+        speed: 600,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
         autoplay: true,
         autoplaySpeed: 4000,
         pauseOnHover: true,
@@ -65,9 +76,12 @@ export default function DashboardSubContractor() {
 
     // 🔹 NEW: Banner images state (API-ready)
     const [bannerImages, setBannerImages] = useState<BannerImage[]>([]);
+    const [bannerImageRight, setBannerImageRight] = useState<BannerImage[]>([]);
     const [bannerImagesSidebar, setBannerImagesSidebar] = useState<BannerImage[]>([]);
     const [bannerImagesLoading, setBannerImagesLoading] = useState(true);
+    const [bannerImagesRightLoading, setBannerImagesRightLoading] = useState(true);
     const [bannerImagesError, setBannerImagesError] = useState<string | null>(null);
+    const [bannerImagesRightError, setBannerRightImagesError] = useState<string | null>(null);
 
     // 🔹 Rest of your existing state
     const [projects, setProjects] = useState<Project[]>([]);
@@ -173,9 +187,9 @@ export default function DashboardSubContractor() {
 
             // 🔹 For now: static fallback (you can remove this when API ready)
             const staticImages: BannerImage[] = [
-                { id: 1, src: '/assets/img/ad-posting1.webp', alt: 'Construction Project 1' },
-                { id: 2, src: '/assets/img/ad-posting1.webp', alt: 'Construction Project 2' },
-                { id: 3, src: '/assets/img/ad-posting1.webp', alt: 'Construction Project 3' },
+                { id: 1, src: '/assets/img/add1.jpg', alt: 'Construction Project 1' },
+                { id: 2, src: '/assets/img/add1.jpg', alt: 'Construction Project 2' },
+                { id: 3, src: '/assets/img/add1.jpg', alt: 'Construction Project 3' },
             ];
 
             // Simulate API delay (remove in production)
@@ -187,10 +201,42 @@ export default function DashboardSubContractor() {
             setBannerImagesError('Failed to load banner images');
             // Fallback to default images
             setBannerImages([
-                { id: 1, src: '/assets/img/ad-posting1.webp', alt: 'Default Banner' },
+                { id: 1, src: '/assets/img/add1.jpg', alt: 'Default Banner' },
             ]);
         } finally {
             setBannerImagesLoading(false);
+        }
+    };
+    const fetchBannerImages_right = async () => {
+        setBannerImagesRightLoading(true);
+        setBannerRightImagesError(null);
+
+        try {
+            // ✅ Replace this block with real API call later
+            // Example:
+            // const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}banner-images`);
+            // const data = await res.json();
+
+            // 🔹 For now: static fallback (you can remove this when API ready)
+            const staticImages: BannerImage[] = [
+                { id: 1, src: '/assets/img/add1.jpg', alt: 'Construction Project 1' },
+                { id: 2, src: '/assets/img/add1.jpg', alt: 'Construction Project 2' },
+                { id: 3, src: '/assets/img/add1.jpg', alt: 'Construction Project 3' },
+            ];
+
+            // Simulate API delay (remove in production)
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            setBannerImageRight(staticImages);
+        } catch (err) {
+            console.error('Failed to load banner images:', err);
+            setBannerRightImagesError('Failed to load banner images');
+            // Fallback to default images
+            setBannerImageRight([
+                { id: 1, src: '/assets/img/add2.webp', alt: 'Default Banner' },
+            ]);
+        } finally {
+            setBannerImagesRightLoading(false);
         }
     };
     const fetchBannerImagesSidebar = async () => {
@@ -431,7 +477,8 @@ export default function DashboardSubContractor() {
 
     // 🔹 Initial load: Banner images + saved + projects
     useEffect(() => {
-        fetchBannerImages(); // ✅ NEW: Load banner first
+        fetchBannerImages();
+        fetchBannerImages_right();
         fetchBannerImagesSidebar();
         Promise.all([
             fetchSavedproject(),
@@ -503,7 +550,6 @@ export default function DashboardSubContractor() {
                 <section className="banner-sec trial position-static">
                     <div className="container">
                         <div className="row g-4">
-                            {/* 🔹 Left: Dynamic Image Slider */}
                             <div className="col-lg-6 position-relative">
                                 {bannerImagesLoading ? (
                                     <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '272px' }}>
@@ -519,14 +565,13 @@ export default function DashboardSubContractor() {
                                     <div className="slider rounded overflow-hidden">
                                         <Slider ref={leftSliderRef} {...sliderSettings}>
                                             {bannerImages.map((img) => (
-                                                <div key={img.id} className="px-1">
+                                                <div key={img.id}>
                                                     <Image
                                                         src={img.src}
                                                         width={800}
                                                         height={230}
                                                         alt={img.alt}
                                                         className="img-fluid w-100 h-100 rounded-4 object-fit-cover "
-                                                        // Optional: add loading="lazy" later
                                                     />
                                                 </div>
                                             ))}
@@ -534,76 +579,40 @@ export default function DashboardSubContractor() {
                                     </div>
                                 )}
                             </div>
-
-                            {/* 🔹 Right: Text Slider (unchanged) */}
                             <div className="col-lg-6">
-                                <div
-                                    className="banner-wrapper position-relative"
-                                    style={{ backgroundImage: "url('/assets/img/free-trial-img2.webp')" }}
-                                >
-                                    <div className="main-slider">
-                                        <Slider ref={sliderRef} {...sliderSettings}>
-                                            {[1, 2].map((_, i) => (
-                                                <div key={i} className="slider-item p-4">
-                                                    <div className="d-flex align-items-center gap-2 mb-3">
-                                                        <div className="icon bg-primary">
-                                                            <Image
-                                                                src="/assets/img/icons/camera.svg"
-                                                                width={14}
-                                                                height={10}
-                                                                alt="icon"
-                                                            />
-                                                        </div>
-                                                        <div style={{ fontSize: '14px' }} className="content text-white fw-medium">
-                                                            Online Webinar
-                                                        </div>
-                                                    </div>
-                                                    <h2 className="main-title text-primary">50% Increase Sales</h2>
-                                                    <div className="desc fw-medium text-white mb-3">
-                                                        Present a professional estimate with your logo and company name and
-                                                        colors.
-                                                    </div>
-                                                </div>
+                                {bannerImagesRightLoading ? (
+                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '272px' }}>
+                                        <div className="spinner-border text-primary" role="status">
+                                            <span className="visually-hidden">Loading banner...</span>
+                                        </div>
+                                    </div>
+                                ) : bannerImagesRightError ? (
+                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '272px' }}>
+                                        {bannerImagesRightError}
+                                    </div>
+                                ) : (
+                                    <div className="slider slider-bottom-fade slider-arrow-right-bottom rounded overflow-hidden position-relative">
+                                        <Slider ref={leftSliderRef} {...sliderSettingsRight}>
+                                            {bannerImageRight.map((img) => (
+                                                <Image
+                                                    key={img.id}
+                                                    src={img.src}
+                                                    width={800}
+                                                    height={300}
+                                                    alt={img.alt}
+                                                    className="img-fluid w-100 h-100 rounded-4 object-fit-cover "
+                                                />
                                             ))}
                                         </Slider>
-                                    </div>
-                                    <div className="slider-controls d-flex align-items-center justify-content-between px-4">
-                                        <div className="custom-arrows d-flex align-items-center gap-2">
-                                            <button
-                                                className="custom-prev btn btn-sm btn-light rounded-circle px-2 py-1"
-                                                onClick={() => sliderRef.current?.slickPrev()}
-                                                aria-label="Previous content"
-                                            >
-                                                <Image
-                                                    src="/assets/img/dashboard-arrow.svg"
-                                                    alt="Prev"
-                                                    width={8}
-                                                    height={16}
-                                                />
-                                            </button>
-                                            <button
-                                                className="custom-next btn btn-sm btn-light rounded-circle"
-                                                onClick={() => sliderRef.current?.slickNext()}
-                                                aria-label="Next content"
-                                            >
-                                                <Image
-                                                    src="/assets/img/dashboard-arrow1.svg"
-                                                    alt="Next"
-                                                    width={8}
-                                                    height={16}
-                                                />
-                                            </button>
-                                        </div>
-                                        <div className="icon">
-                                            <Image
-                                                src="/assets/img/icons/search-icon1.svg"
-                                                alt="Search"
-                                                width={14}
-                                                height={14}
-                                            />
+                                        <div className="d-flex align-items-center gap-3 position-absolute z-3" style={{bottom: 20, left: 20}}>
+                                            <Image classNam="img-fluide" src={'/assets/img/profile-placeholder.webp'} width={50} height={50}/>
+                                            <div>
+                                                <h6 className="fw-bold mb-0 text-white">ABC Corporation</h6>
+                                                <p className="mb-0 text-white">John A</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>
