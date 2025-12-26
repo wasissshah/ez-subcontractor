@@ -374,10 +374,10 @@ export default function ProfilePage() {
                                                     className="icon delete border-0"
                                                     onClick={() => {
                                                         const modalEl = document.getElementById('deleteAccountModal');
-                                                        if (modalEl) {
-                                                            const modal = new window.bootstrap.Modal(modalEl);
-                                                            modal.show();
-                                                        }
+                                                        // if (modalEl) {
+                                                        //     const modal = new window.bootstrap.Modal(modalEl);
+                                                        //     modal.show();
+                                                        // }
                                                     }}
                                                 >
                                                     <Image
