@@ -380,40 +380,40 @@ export default function HomePage() {
                 </div>
             </section>
 
-            <section class="pricing-sec">
-                <div class="container">
+            <section className="pricing-sec">
+                <div className="container">
                     <h2 className="main-title text-center fw-bold mb-3">Our Plans</h2>
                     <p className="text-center mb-5">Choose Your Plan and Start Getting Project Leads Today</p>
-                    <div class="tab-content pricing-wrapper">
-                        <div class="tab-pane fade show active pricing-content">
-                            <div class="row g-3 justify-content-center">
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="price-card popular free">
+                    <div className="tab-content pricing-wrapper">
+                        <div className="tab-pane fade show active pricing-content">
+                            <div className="row g-3 justify-content-center">
+                                <div className="col-lg-4 col-md-6">
+                                    <div className="price-card popular free">
                                         <div>
-                                            <div class="pricing-header">
-                                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                                    <span class="title1 mb-0 text-truncate">Yearly Plan</span>
-                                                    <div class="custom-btn bg-white shadow p-2 rounded-pill"
+                                            <div className="pricing-header">
+                                                <div className="d-flex align-items-center justify-content-between mb-3">
+                                                    <span className="title1 mb-0 text-truncate">Yearly Plan</span>
+                                                    <div className="custom-btn bg-white shadow p-2 rounded-pill"
                                                          style={{fontSize: '14px'}}>🔥 Popular
                                                     </div>
                                                 </div>
                                                 <div
-                                                    class="d-flex align-items-center justify-content-between gap-1 flex-wrap">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <del class="fs-18 fw-medium text-black">$ 600</del>
+                                                    className="d-flex align-items-center justify-content-between gap-1 flex-wrap">
+                                                    <div className="d-flex align-items-center gap-2">
+                                                        <del className="fs-18 fw-medium text-black">$ 600</del>
                                                         <div
-                                                            class="d-flex align-items-center gap-2 justify-content-between">
-                                                            <span class="price">$<span class="fw-bold">400</span></span>
+                                                            className="d-flex align-items-center gap-2 justify-content-between">
+                                                            <span className="price">$<span className="fw-bold">400</span></span>
                                                         </div>
                                                     </div>
-                                                    <div class="custom-btn text-white py-2 px-3 rounded-pill"
+                                                    <div className="custom-btn text-white py-2 px-3 rounded-pill"
                                                          style={{backgroundColor: 'rgb(220, 38, 38)', maxWidth: '130px'}}>33
                                                         % OFF
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="pricing-body mb-3">
-                                                <ul class="m-0 p-0 list-with-icon">
+                                            <div className="pricing-body mb-3">
+                                                <ul className="m-0 p-0 list-with-icon">
                                                     <li>Full access to all job postings</li>
                                                     <li>Live chat + file exchange</li>
                                                     <li>View contractor contact info</li>
@@ -422,10 +422,10 @@ export default function HomePage() {
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center flex-column">
-                                            <div class="pricing-button w-100 p-0">
-                                                <div class="pricing-button w-100 pt-0">
-                                                    <Link href={'/auth/register/subcontractor'} class="btn">Buy Now</Link>
+                                        <div className="d-flex align-items-center flex-column">
+                                            <div className="pricing-button w-100 p-0">
+                                                <div className="pricing-button w-100 pt-0">
+                                                    <Link href={'/auth/register/subcontractor'} className="btn">Buy Now</Link>
                                                 </div>
                                             </div>
                                         </div>
