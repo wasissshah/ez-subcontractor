@@ -228,10 +228,6 @@ export default function ProfilePage() {
             setDeleteLoading(false);
             // Close modal
             const modalEl = document.getElementById('deleteAccountModal');
-            if (modalEl) {
-                const modal = window.bootstrap.Modal.getInstance(modalEl);
-                modal?.hide();
-            }
         }
     };
 
