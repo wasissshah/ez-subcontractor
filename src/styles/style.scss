@@ -65,9 +65,6 @@ h2 {
   transition: all 0.3s ease;
   text-decoration: none;
   color: $dark;
-  display: flex;
-  align-items: center;
-  gap: 8px;
   // Primary Button
   &.btn-primary {
     background-color: $primary;
@@ -474,14 +471,21 @@ body {
       top: auto;
       bottom: 20px;
       transform: translate(0, 0);
+      background-color: transparent !important;
+      box-shadow: none !important;
+      &:before {
+        display: none;
+      }
     }
     .slick-arrow.slick-prev {
-      right: 50px;
+      right: 60px;
       left: auto;
+      background-image: url("/assets/img/icons/slider-arrow1.webp") !important;
     }
     .slick-arrow.slick-next {
       right: 20px;
       left: auto;
+      background-image: url("/assets/img/icons/slider-arrow2.webp") !important;
     }
   }
 }

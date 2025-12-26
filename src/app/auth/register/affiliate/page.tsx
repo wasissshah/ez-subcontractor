@@ -10,7 +10,8 @@ import {useRouter, useParams} from 'next/navigation';
 
 export default function RegisterPage() {
     const router = useRouter();
-    const params = useParams();
+    const params = useParams()
+    const accountType = (params.type as string) || 'affiliate';
 
     // 🔹 Show non-blocking toast notification
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -215,21 +216,30 @@ export default function RegisterPage() {
                 localStorage.setItem('token', token);
                 if (token) {
                     showToast('Registration successful! Welcome aboard!');
-                    // Delay navigation to show toast
+
                     setTimeout(() => {
-                        if (role == 'general_contractor') {
-                            console.log(1);
-                            router.push('/general-contractor/dashboard');
-                        }
-                        if (role == 'subcontractor') {
-                            console.log(2);
-                            router.push('/subcontractor/subscription');
-                        }
-                        if (role == 'affiliate') {
-                            console.log(3);
-                            router.push('/affiliate/subscription');
-                        }
+                        const paths: Record<string, string> = {
+                            'general-contractor': '/subscription-list',
+                            'sub-contractor': '/subscription-list',
+                            'affiliate': '/subscription-list',
+                        };
+                        router.push(paths[accountType] || '/');
                     }, 1500);
+                    // Delay navigation to show toast
+                    // setTimeout(() => {
+                    //     if (role == 'general_contractor') {
+                    //         console.log(1);
+                    //         router.push('/general-contractor/dashboard');
+                    //     }
+                    //     if (role == 'subcontractor') {
+                    //         console.log(2);
+                    //         router.push('/subcontractor/subscription');
+                    //     }
+                    //     if (role == 'affiliate') {
+                    //         console.log(3);
+                    //         router.push('/affiliate/subscription');
+                    //     }
+                    // }, 1500);
                 } else {
                     showToast('Registration succeeded, but no token received.', 'error');
                 }

@@ -184,7 +184,7 @@ export default function PricingPage() {
                 <div className="d-flex align-items-center flex-column">
                     {plan.hasNote && renderNoteCard()}
                     <div className="pricing-button w-100 pt-0">
-                        <div className="pricing-button w-100 pt-0">
+                        <div className="pricing-button w-100 p-0 pt-4">
                             <button
                                 className={plan.is_subscribed ? 'btn btn-primary bg-primary' : 'btn'}
                                 disabled={hasAnyActiveSubscription && !plan.is_subscribed}

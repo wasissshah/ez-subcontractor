@@ -27,6 +27,15 @@ interface Project {
     category: {
         name: string;
     };
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        phone: string;
+        company_name: string;
+        profile_image_url: string;
+        zip: string;
+    };
 }
 
 interface Category {
@@ -81,7 +90,9 @@ export default function DashboardSubContractor() {
     const [bannerImagesLoading, setBannerImagesLoading] = useState(true);
     const [bannerImagesRightLoading, setBannerImagesRightLoading] = useState(true);
     const [bannerImagesError, setBannerImagesError] = useState<string | null>(null);
-    const [bannerImagesRightError, setBannerRightImagesError] = useState<string | null>(null);
+    const [bannerImagesRightError, setBannerRightImagesError] = useState<string | null>(null)
+
+    const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
 
     // 🔹 Rest of your existing state
     const [projects, setProjects] = useState<Project[]>([]);
@@ -219,9 +230,9 @@ export default function DashboardSubContractor() {
 
             // 🔹 For now: static fallback (you can remove this when API ready)
             const staticImages: BannerImage[] = [
-                { id: 1, src: '/assets/img/add1.jpg', alt: 'Construction Project 1' },
-                { id: 2, src: '/assets/img/add1.jpg', alt: 'Construction Project 2' },
-                { id: 3, src: '/assets/img/add1.jpg', alt: 'Construction Project 3' },
+                { id: 1, src: '/assets/img/add2.jpg', alt: 'Construction Project 1' },
+                { id: 2, src: '/assets/img/add2.jpg', alt: 'Construction Project 2' },
+                { id: 3, src: '/assets/img/add2.jpg', alt: 'Construction Project 3' },
             ];
 
             // Simulate API delay (remove in production)
@@ -271,6 +282,45 @@ export default function DashboardSubContractor() {
             setBannerImagesLoading(false);
         }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        // 🚫 Don't await directly in useEffect — define inner async function
+        const fetchProfile = async () => {
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}common/get-profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile');
+                }
+
+                const data = await response.json();
+                const subscriptionId = data?.data?.subscription_id;
+
+                if (subscriptionId) {
+                    localStorage.setItem('subscription', subscriptionId);
+                    // ✅ Now update state or do whatever you need
+                    setSubscriptionId(subscriptionId); // assuming you have useState
+                }
+
+            } catch (error) {
+                console.error('Profile fetch error:', error);
+                // handle error (e.g., redirect to login, clear storage)
+            }
+        };
+
+        if (token) {
+            fetchProfile(); // ✅ Call the async function
+        }
+    }, []); // empty dep array = runs once on mount
+
 
     // 🔹 Fetch categories (unchanged)
     useEffect(() => {
@@ -389,6 +439,7 @@ export default function DashboardSubContractor() {
             }
 
             const data = await response.json();
+            console.log(data);
             if (!response.ok) {
                 throw new Error(data.message?.[0] || 'Failed to load projects');
             }
@@ -544,21 +595,19 @@ export default function DashboardSubContractor() {
     return (
         <>
             <Header />
-
             <div className="sections overflow-hidden">
-                {/* Banner Section */}
                 <section className="banner-sec trial position-static">
                     <div className="container">
                         <div className="row g-4">
                             <div className="col-lg-6 position-relative">
                                 {bannerImagesLoading ? (
-                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '272px' }}>
+                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '352px' }}>
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading banner...</span>
                                         </div>
                                     </div>
                                 ) : bannerImagesError ? (
-                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '272px' }}>
+                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '352px' }}>
                                         {bannerImagesError}
                                     </div>
                                 ) : (
@@ -581,13 +630,13 @@ export default function DashboardSubContractor() {
                             </div>
                             <div className="col-lg-6">
                                 {bannerImagesRightLoading ? (
-                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '272px' }}>
+                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '352px' }}>
                                         <div className="spinner-border text-primary" role="status">
                                             <span className="visually-hidden">Loading banner...</span>
                                         </div>
                                     </div>
                                 ) : bannerImagesRightError ? (
-                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '272px' }}>
+                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '352px' }}>
                                         {bannerImagesRightError}
                                     </div>
                                 ) : (
@@ -605,7 +654,9 @@ export default function DashboardSubContractor() {
                                             ))}
                                         </Slider>
                                         <div className="d-flex align-items-center gap-3 position-absolute z-3" style={{bottom: 20, left: 20}}>
-                                            <Image classNam="img-fluide" src={'/assets/img/profile-placeholder.webp'} width={50} height={50}/>
+                                            <div className="bg-white rounded-circle p-2 shadow">
+                                                <Image classNam="img-fluide" src={'/assets/img/icons/fav.png'} width={50} height={50}/>
+                                            </div>
                                             <div>
                                                 <h6 className="fw-bold mb-0 text-white">ABC Corporation</h6>
                                                 <p className="mb-0 text-white">John A</p>
@@ -618,7 +669,6 @@ export default function DashboardSubContractor() {
                     </div>
                 </section>
 
-                {/* Filter + Projects Section (unchanged except Filter Image spacing) */}
                 <section className="filter-sec">
                     <div className="container">
                         <div className="row g-4">
@@ -675,7 +725,14 @@ export default function DashboardSubContractor() {
                                                 onChange={(e) => setWorkRadius(Number(e.target.value))}
                                                 className="range-slider"
                                             />
-                                            <div className="range-value">{workRadius} miles</div>
+                                            <div
+                                                className="range-value"
+                                                style={{
+                                                    left: `${((workRadius - 0) / (100 - 0)) * 100}%`,
+                                                }}
+                                            >
+                                                {workRadius} miles
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="d-flex align-items-center justify-content-between">
@@ -762,15 +819,19 @@ export default function DashboardSubContractor() {
                                         {projects.map((project, index) => (
                                             <div key={project.id} className="posted-card posted-card-1 custom-card mb-3">
                                                 <div className="topbar mb-2 d-flex justify-content-between">
-                                                    <button
-                                                        className="title p-0 border-0 bg-transparent text-start"
-                                                        onClick={() => {
-                                                            localStorage.setItem('project-id', String(project.id));
-                                                            router.push('/subcontractor/project-details');
-                                                        }}
-                                                    >
-                                                        {project.city}, {project.state}
-                                                    </button>
+                                                    {subscriptionId ? (
+                                                        <button
+                                                            className="title p-0 border-0 bg-transparent text-start text-capitalize"
+                                                            onClick={() => {
+                                                                localStorage.setItem('project-id', String(project.id));
+                                                                router.push('/subcontractor/project-details');
+                                                            }}
+                                                        >
+                                                            {project.city}, {project.state}
+                                                        </button>
+                                                    ) : (
+                                                        <div className="title text-capitalize">{project.city}, {project.state}</div>
+                                                    ) }
                                                     <div className="d-flex align-items-center gap-2">
                                                         <div className="date">{formatTimeAgo(project.created_at)}</div>
                                                         <button
@@ -820,6 +881,90 @@ export default function DashboardSubContractor() {
                                                         {expanded.includes(index) ? 'See less' : 'See more'}
                                                     </button>
                                                 )}
+                                                {subscriptionId &&
+                                                (
+                                                    <div className="bottom-bar">
+                                                        <div className="left">
+                                                            {project.user?.profile_image_url ? (
+                                                                <Image
+                                                                    src={project.user?.profile_image_url}
+                                                                    width={40}
+                                                                    height={40}
+                                                                    alt="P Icon"
+                                                                    loading="lazy"
+                                                                    className="rounded-circle"
+                                                                />
+                                                            ) : (
+                                                                <Image
+                                                                    src="/assets/img/placeholder-round.png"
+                                                                    width={40}
+                                                                    height={40}
+                                                                    alt="P Icon"
+                                                                    loading="lazy"
+                                                                    className="rounded-circle"
+                                                                />
+                                                            )}
+                                                            <p className="mb-0 fw-semibold">{project.user?.company_name || ''}</p>
+                                                        </div>
+                                                        <div class="d-flex gap-2">
+                                                            <button onclick={() => {
+                                                                localStorage.setItem('project-id', String(project.id));
+                                                                router.push('/subcontractor/project-details');
+                                                            }} className="btn btn-primary me-2 btn-sm py-1 px-4">
+                                                                View More
+                                                            </button>
+                                                            {
+                                                                project.user && (
+                                                                    <div className="social-icons">
+                                                                        {project.user?.email && (
+                                                                            <Link href={'mailto:'+ project.user?.email} className="icon">
+                                                                                <Image
+                                                                                    src={`/assets/img/icons/message-white.svg`}
+                                                                                    width={20}
+                                                                                    height={20}
+                                                                                    alt="Social Icon"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            </Link>
+                                                                        )}
+
+                                                                        <Link href={{
+                                                                            pathname: '/messages',
+                                                                            query: {
+                                                                                userId: project.user.id,
+                                                                                name: project.user.name,
+                                                                                email: project.user.email,
+                                                                                phone: project.user.phone,
+                                                                                companyName: project.user.company_name,
+                                                                            },
+                                                                        }} className="icon">
+                                                                            <Image
+                                                                                src={`/assets/img/icons/chat.svg`}
+                                                                                width={20}
+                                                                                height={20}
+                                                                                alt="Social Icon"
+                                                                                loading="lazy"
+                                                                            />
+                                                                        </Link>
+
+                                                                        {project.user?.phone && (
+                                                                            <Link href={'mailto:'+ project.user?.phone} className="icon">
+                                                                                <Image
+                                                                                    src={`/assets/img/icons/call-white.svg`}
+                                                                                    width={20}
+                                                                                    height={20}
+                                                                                    alt="Social Icon"
+                                                                                    loading="lazy"
+                                                                                />
+                                                                            </Link>
+                                                                        )}
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                )
+                                                }
                                             </div>
                                         ))}
 
@@ -840,7 +985,6 @@ export default function DashboardSubContractor() {
                     </div>
                 </section>
             </div>
-
             <Footer />
         </>
     );

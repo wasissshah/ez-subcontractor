@@ -68,9 +68,6 @@ h2 {
   transition: all 0.3s ease;
   text-decoration: none;
   color: #272727;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 .btn.btn-primary {
   background-color: #C9DA2B;
@@ -417,14 +414,21 @@ body .quill .ql-container {
   top: auto;
   bottom: 20px;
   transform: translate(0, 0);
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.slider-arrow-right-bottom .slick-slider .slick-arrow:before {
+  display: none;
 }
 .slider-arrow-right-bottom .slick-slider .slick-arrow.slick-prev {
-  right: 50px;
+  right: 60px;
   left: auto;
+  background-image: url("/assets/img/icons/slider-arrow1.webp") !important;
 }
 .slider-arrow-right-bottom .slick-slider .slick-arrow.slick-next {
   right: 20px;
   left: auto;
+  background-image: url("/assets/img/icons/slider-arrow2.webp") !important;
 }
 
 .slider-bottom-fade {
