@@ -331,7 +331,7 @@ export default function HomePage() {
                                                 : `${project.description.substring(0, 150)}...`}
                                         </div>
                                         <button
-                                            onclick={() => toggleExpand(index)}
+                                            onClick={() => toggleExpand(index)}
                                             className="see-more-btn d-block btn btn-link p-0 text-primary d-none"
                                         >
                                             {expandedCards.has(index) ? "See less" : "See more"}
@@ -367,7 +367,7 @@ export default function HomePage() {
                                                 : `${project.description.substring(0, 150)}...`}
                                         </div>
                                         <button
-                                            onclick={() => toggleExpand(index)}
+                                            onClick={() => toggleExpand(index)}
                                             className="see-more-btn d-block btn btn-link p-0 text-primary"
                                         >
                                             {expandedCards.has(index) ? "See less" : "See more"}
