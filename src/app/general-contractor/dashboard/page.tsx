@@ -604,7 +604,7 @@ export default function DashboardPage() {
                                     </Slider>
                                     <div className="d-flex align-items-center gap-3 position-absolute z-3" style={{bottom: 20, left: 20}}>
                                         <div className="bg-white rounded-circle p-2 shadow">
-                                            <Image className="img-fluide" src={'/assets/img/icons/fav.png'} width={50} height={50}/>
+                                            <Image className="img-fluide" src={'/assets/img/icons/fav.png'} width={50} height={50} alt={"icon"}/>
                                         </div>
                                         <div>
                                             <h6 className="fw-bold mb-0 text-white">ABC Corporation</h6>
