@@ -55,7 +55,7 @@ export default function SavedListingPage() {
         const icon = type === 'success' ? '✅' : '❌';
 
         toast.innerHTML = `
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="
+            <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="
                 position: fixed;
                 top: 20px;
                 right: 20px;
@@ -73,7 +73,7 @@ export default function SavedListingPage() {
                 font-weight: 500;
             ">
                 <span>${icon} ${message}</span>
-                <button type="button" class="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
+                <button type="button" className="btn-close" style="font-size: 14px; margin-left: auto;" data-bs-dismiss="toast"></button>
             </div>
         `;
         document.body.appendChild(toast);
@@ -536,7 +536,7 @@ export default function SavedListingPage() {
                                                                 )}
                                                                 <p className="mb-0 fw-semibold">{project.user?.company_name || ''}</p>
                                                             </div>
-                                                            <div class="d-flex gap-2">
+                                                            <div className="d-flex gap-2">
                                                                 <button onClick={() => {
                                                                     localStorage.setItem('project-id', String(project.id));
                                                                     router.push('/subcontractor/project-details');
