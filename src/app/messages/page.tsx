@@ -13,7 +13,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 export default function ChatPage() {
   const router = useRouter();
   const chatNowHandledRef = useRef(false);
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   // const chatUserId = searchParams.get('userId');
   // const chatUserName = searchParams.get('name');
