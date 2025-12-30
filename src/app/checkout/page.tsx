@@ -148,6 +148,7 @@ export default function CheckoutPage() {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}data/specializations`);
                 const data = await res.json();
+                console.log(data);
                 if (data.success && Array.isArray(data.data.specializations)) {
                     setCategories(data.data.specializations);
                 } else {

@@ -410,7 +410,7 @@ export default function HomePage() {
 
                         <div className="buttons d-flex align-items-center justify-content-between gap-2 flex-wrap mt-5">
                             <div className="custom-pagination d-flex align-items-center justify-content-center gap-2" />
-                            <Link href="/" className="btn bg-dark rounded-3">
+                            <Link href="/" className="btn bg-dark rounded-3 d-flex align-items-center gap-2">
                                 <span className="text-white">See All</span>
                                 <Image
                                     src="/assets/img/icons/arrow-white.svg"

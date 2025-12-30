@@ -128,6 +128,8 @@ export default function ProfilePage() {
                 console.error('Profile fetch error:', err);
                 const msg = 'Network error. Please try again.';
                 setError(msg);
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
                 showToast(msg, 'error');
             } finally {
                 setLoading(false);

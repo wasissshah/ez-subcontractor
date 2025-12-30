@@ -262,7 +262,6 @@ export default function RegisterPage() {
 
     // ✅ Go to Step 2 (with validation)
     const goToNextStep = () => {
-        if (accountType === 'affiliate') return;
 
         const step1Errors: Record<string, string> = {};
 
@@ -365,7 +364,7 @@ export default function RegisterPage() {
                 setTimeout(() => {
                     const paths: Record<string, string> = {
                         'general-contractor': '/subscription-list',
-                        'sub-contractor': '/subscription-list',
+                        'subcontractor': '/subscription-list',
                         'affiliate': '/affiliate/dashboard',
                     };
                     router.push(paths[accountType] || '/');
@@ -395,8 +394,8 @@ export default function RegisterPage() {
     };
 
     const displayInfo = accountTypeInfo[accountType as keyof typeof accountTypeInfo] || {
-        title: 'User',
-        icon: '/assets/img/icons/user.svg',
+        title: 'Subcontractor',
+        icon: '/assets/img/icons/settings.svg',
     };
 
     return (
@@ -439,7 +438,7 @@ export default function RegisterPage() {
                                         <div className="step-one animate__animated animate__fadeIn">
                                             <div className="fw-semibold fs-2 mb-4 text-center">Register</div>
 
-                                            <div className="register-topbar px-4 gap-3">
+                                            <div className="register-topbar px-4 gap-3 mb-3">
                                                 <Image
                                                     src={displayInfo.icon}
                                                     width={50}
@@ -591,7 +590,7 @@ export default function RegisterPage() {
                                     )}
 
                                     {/* STEP 2: Business Details (GC/Sub only) */}
-                                    {currentStep === 2 && ['general-contractor', 'sub-contractor'].includes(accountType) && (
+                                    {currentStep === 2 && ['general-contractor', 'subcontractor'].includes(accountType) && (
                                         <div className="step-two animate__animated animate__fadeIn">
                                             <div className="fw-semibold fs-2 mb-4 text-center">Business Details</div>
 

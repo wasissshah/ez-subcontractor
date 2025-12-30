@@ -13,8 +13,8 @@ export default function ProfilePage() {
     const links = [
         { href: '/affiliate/change-password', label: 'Change Password', icon: '/assets/img/icons/lock.svg' },
         { href: '/affiliate/saved-contractors', label: 'Saved Contractors', icon: '/assets/img/icons/saved.svg' },
-        { href: '/affiliate/my-subscription', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
-        { href: '/affiliate/transaction-history', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
+        { href: '/affiliate/my-subscription-old', label: 'My Subscription', icon: '/assets/img/icons/saved.svg' },
+        { href: '/affiliate/transaction-history-old', label: 'Transaction History', icon: '/assets/img/icons/saved.svg' },
         { href: '/affiliate/saved-cards', label: 'Saved Cards', icon: '/assets/img/icons/saved.svg' },
     ];
 
