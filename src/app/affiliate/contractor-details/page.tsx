@@ -113,7 +113,6 @@ export default function ContractorDetails() {
             try {
                 const parsed = JSON.parse(saved) as Contractor;
                 setContractor(parsed);
-                setIsSaved(parsed.is_saved || false);
                 setLoading(false);
 
             } catch (e) {
