@@ -362,7 +362,7 @@ export default function CheckoutPage() {
                                         <div className="input-wrapper d-flex flex-column position-relative">
                                             <label className="mb-1 fw-semibold">Select Specializations *</label>
                                             <div className={`custom-select ${isOpen ? 'open' : ''}`}
-                                                 onclick={() => setIsOpen(!isOpen)}>
+                                                 onClick={() => setIsOpen(!isOpen)}>
                                                 <div className="select-selected">
                                                     {selectedCategories.length > 0 ?
                                                         selectedCategories.map(c => c.name).join(', ') :
