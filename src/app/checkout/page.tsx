@@ -372,7 +372,7 @@ export default function CheckoutPage() {
                                                 {isOpen && (
                                                     <ul className="select-options">
                                                         {categories.map(cat => (
-                                                            <li key={cat.id} onclick={() => toggleCategory(cat)}>
+                                                            <li key={cat.id} onClick={() => toggleCategory(cat)}>
                                                                 <input
                                                                     type="checkbox"
                                                                     checked={selectedCategories.some(c => c.id === cat.id)}
