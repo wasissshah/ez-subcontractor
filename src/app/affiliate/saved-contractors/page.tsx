@@ -361,20 +361,27 @@ export default function SavedContractors() {
                                                             />
                                                         </button>
 
-                                                        <Image
-                                                            src={contractor.profile_image_url || '/assets/img/profile-placeholder.webp'}
-                                                            width={104}
-                                                            height={104}
-                                                            className="d-block mx-auto mb-3 rounded-circle"
-                                                            alt={`${contractor.name}'s Profile`}
-                                                            style={{ objectFit: 'cover' }}
-                                                        />
-                                                        <div
-                                                            style={{ color: '#333342' }}
-                                                            className="title text-black fw-semibold text-center fs-5 mb-2 text-capitalize"
-                                                        >
-                                                            {contractor.company_name || contractor.name}
-                                                        </div>
+                                                        <button className="btn border-0 mx-auto d-block"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    localStorage.setItem('selectedContractor', JSON.stringify(contractor));
+                                                                    router.push('/affiliate/contractor-details');
+                                                                }}>
+                                                            <Image
+                                                                src={contractor.profile_image_url || '/assets/img/profile-placeholder.webp'}
+                                                                width={104}
+                                                                height={104}
+                                                                className="d-block mx-auto mb-3 rounded-circle"
+                                                                alt={`${contractor.name}'s Profile`}
+                                                                style={{objectFit: 'cover'}}
+                                                            />
+                                                            <div
+                                                                style={{color: '#333342'}}
+                                                                className="title text-black fw-semibold text-center fs-5 mb-2 text-capitalize"
+                                                            >
+                                                                {contractor.company_name || contractor.name}
+                                                            </div>
+                                                        </button>
 
                                                         <div className="text-center">
                                                             <button

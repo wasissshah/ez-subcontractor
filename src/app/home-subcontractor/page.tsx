@@ -24,12 +24,54 @@ import {onMessage} from "firebase/messaging";
 import {showNotificationToast} from "../notification/toast";
 import {useRouter} from "next/navigation";
 
+interface Project {
+    id: number;
+    city: string;
+    state: string;
+    description: string;
+    status: string;
+    created_at: string;
+    category: {
+        name: string;
+    };
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        phone: string;
+        company_name: string;
+        profile_image_url: string;
+        zip: string;
+    };
+}
+
+const stripHtml = (html: string): string => {
+    if (typeof window === 'undefined') {
+        // Fallback for SSR: simple regex (less robust but safe)
+        return html
+            .replace(/<[^>]*>?/gm, '') // remove tags
+            .replace(/&nbsp;/gi, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    // Client-side: use DOM parser (more accurate)
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    return (temp.textContent || temp.innerText || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+};
+
 export default function HomePage() {
     const router = useRouter();
     const sliderRef = useRef(null);
     const [selectedType, setSelectedType] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [faqs, setFaqs] = useState<any[]>([]);
+
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const sliderSettings = {
         slidesToShow: 3,
@@ -85,6 +127,30 @@ export default function HomePage() {
         },
     ];
 
+    const [location, setLocation] = useState<{ lat: number; lng: number; error?: string } | null>(null);
+    useEffect(() => {
+        if (typeof window !== 'undefined' && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    setLocation({ lat: 0, lng: 0, error: error.message });
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0,
+                }
+            );
+        } else {
+            setLocation({ lat: 0, lng: 0, error: 'Geolocation not supported' });
+        }
+    }, []);
+
 
     useEffect(() => {
         document.title = "Construction Projects & Sub-Contractors Network";
@@ -127,6 +193,78 @@ export default function HomePage() {
             }
         })
     }, []);
+
+    // 🔹 Fetch Projects
+    const fetchProjects = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}common/projects?limit=6`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                    // Optional: prevent caching
+                    // next: { revalidate: 300 },
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error('API Error:', data);
+                throw new Error(data.message || 'Failed to load projects');
+            }
+
+            let fetchedProjects: Project[] = data?.data?.data || [];
+
+            // ✅ 1. Limit to 6 (client-side safety)
+            fetchedProjects = fetchedProjects.reverse().slice(0, 6);
+
+            // ✅ 2. Sort by newest first (created_at DESC)
+            const sortedProjects = fetchedProjects.sort((a, b) =>
+                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            );
+
+            setProjects(sortedProjects);
+        } catch (err: any) {
+            console.error('Fetch projects error:', err);
+            // Optionally set error state
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // 🔹 Call fetch on mount
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    // 🔹 Format time ago
+    const formatTimeAgo = (dateString: string): string => {
+        const now = new Date();
+        const past = new Date(dateString);
+        const seconds = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+        let interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) return `${interval} year${interval > 1 ? 's' : ''} ago`;
+
+        interval = Math.floor(seconds / 2592000);
+        if (interval >= 1) return `${interval} month${interval > 1 ? 's' : ''} ago`;
+
+        interval = Math.floor(seconds / 86400);
+        if (interval >= 1) return `${interval} day${interval > 1 ? 's' : ''} ago`;
+
+        interval = Math.floor(seconds / 3600);
+        if (interval >= 1) return `${interval} hour${interval > 1 ? 's' : ''} ago`;
+
+        interval = Math.floor(seconds / 60);
+        if (interval >= 1) return `${interval} min${interval > 1 ? 's' : ''} ago`;
+
+        return 'Just now';
+    };
+
 
     useEffect(() => {
         const loadFaqs = async () => {
@@ -171,12 +309,12 @@ export default function HomePage() {
         beforeChange: (_, next) => setCurrentSlide(next),
     };
 
-    const projects = Array(6).fill({
-        category: "Framing",
-        location: "Whittier, CA",
-        description: `Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish.`,
-        timeAgo: "23 mins ago",
-    });
+    // const projects = Array(6).fill({
+    //     category: "Framing",
+    //     location: "Whittier, CA",
+    //     description: `Looking for a licensed painter to complete full interior repainting of a 2,000 sq ft office. Includes two coats of primer and final flat finish.`,
+    //     timeAgo: "23 mins ago",
+    // });
 
     const [expandedCards, setExpandedCards] = useState(new Set());
     const toggleExpand = (id) => {
@@ -202,7 +340,7 @@ export default function HomePage() {
         slidesToShow: 3,
         slidesToScroll: 1,
         arrows: false,
-        dots: false,
+        dots: true,
         infinite: true,
         autoplay: true,
         speed: 600,
@@ -212,7 +350,7 @@ export default function HomePage() {
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
-        dots: false,
+        dots: true,
         infinite: true,
         speed: 600,
     };
@@ -298,7 +436,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            <section className="project-sec pb-0">
+            <section className="project-sec py-5">
                 <div className="container">
                     <div className="content-wrapper mb-4 text-center">
                         <h2 className="main-title text-capitalize">
@@ -306,77 +444,79 @@ export default function HomePage() {
                         </h2>
                     </div>
 
-                    {/* Desktop Slider */}
-                    <div className="main-card-slide d-none d-lg-block">
-                        <Slider {...sliderSettingsDesktop}>
-                            {projects.map((project, index) => (
-                                <div key={index} className="px-2">
-                                    <div className="custom-card">
-                                        <div
-                                            className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                            <Link
-                                                href={`/projects?category=${project.category.toLowerCase()}`}
-                                                className="btn btn-primary"
-                                            >
-                                                {project.category}
-                                            </Link>
-                                            <div className="date text-primary-gray-light">{project.timeAgo}</div>
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Loading projects...</span>
+                            </div>
+                            <p className="mt-3 text-muted">Fetching latest projects</p>
+                        </div>
+                    ) : projects.length === 0 ? (
+                        <div className="text-center py-5">
+                            <p className="text-muted">No active projects at the moment.</p>
+                            <Link href="/auth/login" className="btn btn-primary mt-2">
+                                Post Your First Project
+                            </Link>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Desktop Slider */}
+                            <div className="main-card-slide d-none d-lg-block">
+                                <Slider {...sliderSettingsDesktop}>
+                                    {projects.map((project) => (
+                                        <div key={project.id} className="px-2">
+                                            <div className="custom-card p-4 h-100" style={{minHeight: '244px'}}>
+                                                <div className="topbar d-flex align-items-center justify-content-between gap-1 mb-3">
+                                                    <div
+                                                        className="btn btn-primary btn-sm text-truncate fs-14"
+                                                    >
+                                                        {project.category.name}
+                                                    </div>
+                                                    <div className="date text-primary-gray-light fs-12 text-end" style={{minWidth: '100px'}}>
+                                                        {formatTimeAgo(project.created_at)}
+                                                    </div>
+                                                </div>
+                                                <div className="title text-black fs-5 fw-semibold mb-3">
+                                                    {project.city}, {project.state}
+                                                </div>
+                                                <div className="description mb-3 text-truncate3 fw-normal">
+                                                    {stripHtml(project.description)}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="title text-black fs-5 fw-semibold mb-3">
-                                            {project.location}
-                                        </div>
-                                        <div className="description">
-                                            {expandedCards.has(index)
-                                                ? project.description.repeat(2)
-                                                : `${project.description.substring(0, 150)}...`}
-                                        </div>
-                                        <button
-                                            onClick={() => toggleExpand(index)}
-                                            className="see-more-btn d-block btn btn-link p-0 text-primary d-none"
-                                        >
-                                            {expandedCards.has(index) ? "See less" : "See more"}
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
+                                    ))}
+                                </Slider>
+                            </div>
 
-                    {/* Mobile Slider */}
-                    <div className="main-card-slide d-block d-lg-none">
-                        <Slider {...sliderSettingsMobile}>
-                            {projects.map((project, index) => (
-                                <div key={index} className="px-2">
-                                    <div className="custom-card">
-                                        <div
-                                            className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                            <Link
-                                                href={`/projects?category=${project.category.toLowerCase()}`}
-                                                className="btn btn-primary"
-                                            >
-                                                {project.category}
-                                            </Link>
-                                            <div className="date text-primary-gray-light">{project.timeAgo}</div>
+                            {/* Mobile Slider */}
+                            <div className="main-card-slide d-block d-lg-none">
+                                <Slider {...sliderSettingsMobile}>
+                                    {projects.map((project) => (
+                                        <div key={project.id} className="px-2">
+                                            <div className="custom-card p-4">
+                                                <div className="topbar mb-3">
+                                                    <div className="date text-primary-gray-light fs-12 mb-3">
+                                                        {formatTimeAgo(project.created_at)}
+                                                    </div>
+                                                    <div
+                                                        className="btn btn-primary btn-sm px-3 py-1 text-start"
+                                                    >
+                                                        {project.category.name}
+                                                    </div>
+                                                </div>
+                                                <div className="title text-black fs-5 fw-semibold mb-3">
+                                                    {project.city}, {project.state}
+                                                </div>
+                                                <div className="description mb-3 text-truncate fw-normal">
+                                                    {stripHtml(project.description)}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="title text-black fs-5 fw-semibold mb-3">
-                                            {project.location}
-                                        </div>
-                                        <div className="description">
-                                            {expandedCards.has(index)
-                                                ? project.description.repeat(2)
-                                                : `${project.description.substring(0, 150)}...`}
-                                        </div>
-                                        <button
-                                            onClick={() => toggleExpand(index)}
-                                            className="see-more-btn d-block btn btn-link p-0 text-primary"
-                                        >
-                                            {expandedCards.has(index) ? "See less" : "See more"}
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
+                                    ))}
+                                </Slider>
+                            </div>
+                        </>
+                    )}
                 </div>
             </section>
 

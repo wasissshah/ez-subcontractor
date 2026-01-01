@@ -47,60 +47,6 @@ export default function AffiliateDashboard() {
     // 🔹 Saved state
     const [savedContractors, setSavedContractors] = useState<Set<number>>(new Set());
 
-    // 🔹 Banner images state
-    const [bannerImages, setBannerImages] = useState<BannerImage[]>([]);
-    const [bannerImageRight, setBannerImageRight] = useState<BannerImage[]>([]);
-    const [bannerImagesSidebar, setBannerImagesSidebar] = useState<BannerImage[]>([]);
-    const [bannerImagesLoading, setBannerImagesLoading] = useState(true);
-    const [bannerImagesRightLoading, setBannerImagesRightLoading] = useState(true);
-    const [bannerImagesError, setBannerImagesError] = useState<string | null>(null);
-    const [bannerImagesRightError, setBannerRightImagesError] = useState<string | null>(null);
-
-    const leftSliderRef = useRef<Slider | null>(null);
-
-    // 🔹 Slider settings
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 600,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        pauseOnHover: true,
-    };
-    const sliderSettingsRight = {
-        dots: false,
-        infinite: true,
-        speed: 600,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: true,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        pauseOnHover: true,
-    };
-    const sliderSettingsSidebar = {
-        dots: false,
-        infinite: true,
-        speed: 600,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-        autoplaySpeed: 4000,
-        pauseOnHover: true,
-    };
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 600,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false,
-    };
 
     // 🔹 Toast notification — identical to LoginPage
     const showToast = (message: string, type: 'success' | 'error' = 'success') => {
@@ -296,79 +242,6 @@ export default function AffiliateDashboard() {
         }
     };
 
-    // 🔹 NEW: Fetch banner images (replace with your API)
-    const fetchBannerImages = async () => {
-        setBannerImagesLoading(true);
-        setBannerImagesError(null);
-        try {
-            const staticImages: BannerImage[] = [
-                { id: 1, src: '/assets/img/add1.jpg', alt: 'Construction Project 1' },
-                { id: 2, src: '/assets/img/add1.jpg', alt: 'Construction Project 2' },
-                { id: 3, src: '/assets/img/add1.jpg', alt: 'Construction Project 3' },
-            ];
-            await new Promise(resolve => setTimeout(resolve, 300));
-            setBannerImages(staticImages);
-        } catch (err) {
-            console.error('Failed to load banner images:', err);
-            setBannerImagesError('Failed to load banner images');
-            setBannerImages([
-                { id: 1, src: '/assets/img/add1.jpg', alt: 'Default Banner' },
-            ]);
-        } finally {
-            setBannerImagesLoading(false);
-        }
-    };
-
-    const fetchBannerImages_right = async () => {
-        setBannerImagesRightLoading(true);
-        setBannerRightImagesError(null);
-        try {
-            const staticImages: BannerImage[] = [
-                { id: 1, src: '/assets/img/add2.jpg', alt: 'Construction Project 1' },
-                { id: 2, src: '/assets/img/add2.jpg', alt: 'Construction Project 2' },
-                { id: 3, src: '/assets/img/add2.jpg', alt: 'Construction Project 3' },
-            ];
-            await new Promise(resolve => setTimeout(resolve, 300));
-            setBannerImageRight(staticImages);
-        } catch (err) {
-            console.error('Failed to load banner images:', err);
-            setBannerRightImagesError('Failed to load banner images');
-            setBannerImageRight([
-                { id: 1, src: '/assets/img/add2.webp', alt: 'Default Banner' },
-            ]);
-        } finally {
-            setBannerImagesRightLoading(false);
-        }
-    };
-
-    const fetchBannerImagesSidebar = async () => {
-        setBannerImagesLoading(true);
-        setBannerImagesError(null);
-        try {
-            const staticImagesSidebar: BannerImage[] = [
-                { id: 1, src: '/assets/img/filter-img.webp', alt: 'Construction Project 1' },
-                { id: 2, src: '/assets/img/filter-img.webp', alt: 'Construction Project 2' },
-                { id: 3, src: '/assets/img/filter-img.webp', alt: 'Construction Project 3' },
-            ];
-            await new Promise(resolve => setTimeout(resolve, 300));
-            setBannerImagesSidebar(staticImagesSidebar);
-        } catch (err) {
-            console.error('Failed to load banner images:', err);
-            setBannerImagesError('Failed to load banner images');
-            setBannerImagesSidebar([
-                { id: 1, src: '/assets/img/filter-img.webp', alt: 'Default Banner' },
-            ]);
-        } finally {
-            setBannerImagesLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchBannerImages();
-        fetchBannerImages_right();
-        fetchBannerImagesSidebar();
-    }, []);
-
     // 🔹 Render stars based on average_rating
     const renderStars = (rating: string) => {
         const avg = parseFloat(rating) || 0;
@@ -410,81 +283,9 @@ export default function AffiliateDashboard() {
             <Header />
 
             <div className="sections overflow-hidden">
-                <section className="banner-sec trial position-static">
-                    <div className="container">
-                        <div className="row g-4">
-                            <div className="col-lg-6 position-relative">
-                                {bannerImagesLoading ? (
-                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '352px' }}>
-                                        <div className="spinner-border text-primary" role="status">
-                                            <span className="visually-hidden">Loading banner...</span>
-                                        </div>
-                                    </div>
-                                ) : bannerImagesError ? (
-                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '352px' }}>
-                                        {bannerImagesError}
-                                    </div>
-                                ) : (
-                                    <div className="slider rounded overflow-hidden">
-                                        <Slider ref={leftSliderRef} {...sliderSettings}>
-                                            {bannerImages.map((img) => (
-                                                <div key={img.id}>
-                                                    <Image
-                                                        src={img.src}
-                                                        width={800}
-                                                        height={230}
-                                                        alt={img.alt}
-                                                        className="img-fluid w-100 h-100 rounded-4 object-fit-cover "
-                                                    />
-                                                </div>
-                                            ))}
-                                        </Slider>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="col-lg-6">
-                                {bannerImagesRightLoading ? (
-                                    <div className="d-flex align-items-center justify-content-center bg-light rounded-4" style={{ height: '352px' }}>
-                                        <div className="spinner-border text-primary" role="status">
-                                            <span className="visually-hidden">Loading banner...</span>
-                                        </div>
-                                    </div>
-                                ) : bannerImagesRightError ? (
-                                    <div className="alert alert-warning d-flex align-items-center" style={{ height: '352px' }}>
-                                        {bannerImagesRightError}
-                                    </div>
-                                ) : (
-                                    <div className="slider slider-bottom-fade slider-arrow-right-bottom rounded overflow-hidden position-relative">
-                                        <Slider ref={leftSliderRef} {...sliderSettingsRight}>
-                                            {bannerImageRight.map((img) => (
-                                                <Image
-                                                    key={img.id}
-                                                    src={img.src}
-                                                    width={800}
-                                                    height={300}
-                                                    alt={img.alt}
-                                                    className="img-fluid w-100 h-100 rounded-4 object-fit-cover "
-                                                />
-                                            ))}
-                                        </Slider>
-                                        <div className="d-flex align-items-center gap-3 position-absolute z-3" style={{ bottom: 20, left: 20 }}>
-                                            <div className="bg-white rounded-circle p-2 shadow">
-                                                <Image className="img-fluid" src={'/assets/img/icons/fav.png'} width={50} height={50} alt={'icon'} />
-                                            </div>
-                                            <div>
-                                                <h6 className="fw-bold mb-0 text-white">ABC Corporation</h6>
-                                                <p className="mb-0 text-white">John A</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 {/* ===================== Filter Section ===================== */}
-                <section className="filter-sec">
+                <section className="filter-sec pt-5">
                     <div className="container">
                         <div className="row g-4">
                             {/* Left Filter SidebarSubcontractor */}
@@ -548,22 +349,6 @@ export default function AffiliateDashboard() {
                                         <span className="min">0 miles</span>
                                         <span className="max">100 miles</span>
                                     </div>
-                                </div>
-
-                                <div className="slider rounded overflow-hidden">
-                                    <Slider ref={leftSliderRef} {...sliderSettings}>
-                                        {bannerImagesSidebar.map((img) => (
-                                            <div key={img.id} className="px-1">
-                                                <Image
-                                                    src={img.src}
-                                                    width={800}
-                                                    height={230}
-                                                    alt={img.alt}
-                                                    className="img-fluid w-100 h-100 rounded-4 object-fit-cover "
-                                                />
-                                            </div>
-                                        ))}
-                                    </Slider>
                                 </div>
                             </div>
 
@@ -629,26 +414,32 @@ export default function AffiliateDashboard() {
                                                             />
                                                         </button>
 
-                                                        <Image
-                                                            src={contractor.profile_image_url || '/assets/img/profile-placeholder.webp'}
-                                                            width={104}
-                                                            height={104}
-                                                            className="d-block mx-auto mb-3 rounded-circle"
-                                                            alt={`${contractor.name}'s Profile`}
-                                                            style={{ objectFit: 'cover' }}
-                                                        />
-                                                        <div
-                                                            style={{ color: '#333342' }}
-                                                            className="title text-black fw-semibold text-center fs-5 mb-2 text-capitalize"
-                                                        >
-                                                            {contractor.company_name || contractor.name}
-                                                        </div>
+                                                        <button className="btn border-0 mx-auto d-block" onClick={(e) => {
+                                                            e.preventDefault();
+                                                            localStorage.setItem('selectedContractor', JSON.stringify(contractor));
+                                                            router.push('/affiliate/contractor-details');
+                                                        }}>
+                                                            <Image
+                                                                src={contractor.profile_image_url || '/assets/img/profile-placeholder.webp'}
+                                                                width={104}
+                                                                height={104}
+                                                                className="d-block mx-auto mb-3 rounded-circle"
+                                                                alt={`${contractor.name}'s Profile`}
+                                                                style={{ objectFit: 'cover' }}
+                                                            />
+                                                            <div
+                                                                style={{ color: '#333342' }}
+                                                                className="title text-black fw-semibold text-center fs-5 mb-2 text-capitalize"
+                                                            >
+                                                                {contractor.company_name || contractor.name}
+                                                            </div>
+                                                        </button>
+
 
                                                         <div className="text-center">
                                                             <button
                                                                 onClick={(e) => {
                                                                     e.preventDefault();
-                                                                    // ✅ Save contractor to localStorage
                                                                     localStorage.setItem('selectedContractor', JSON.stringify(contractor));
                                                                     router.push('/affiliate/contractor-details');
                                                                 }}
