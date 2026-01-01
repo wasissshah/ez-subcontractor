@@ -376,7 +376,7 @@ export default function CheckoutPage() {
                                                                 <input
                                                                     type="checkbox"
                                                                     checked={selectedCategories.some(c => c.id === cat.id)}
-                                                                    readonly
+                                                                    readonly={true}
                                                                 /> {cat.name}
                                                             </li>
                                                         ))}
