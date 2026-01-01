@@ -358,7 +358,7 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
 
-                                    {!role == 'affiliate' && (
+                                    {role === 'subcontractor' && (
                                         <div className="input-wrapper d-flex flex-column position-relative">
                                             <label className="mb-1 fw-semibold">Select Specializations *</label>
                                             <div className={`custom-select ${isOpen ? 'open' : ''}`}
