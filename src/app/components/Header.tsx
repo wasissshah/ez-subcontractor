@@ -26,6 +26,7 @@ export default function Header() {
         const token = localStorage.getItem('token');
         const role = localStorage.getItem('role');
 
+        console.log(role);
         // Update state *once*
         setAuthState({
             role: token && role ? role : null,
@@ -46,6 +47,7 @@ export default function Header() {
                     },
                 });
                 const data = await response.json();
+                console.log(data);
                 localStorage.setItem('userName', data.data.name);
                 localStorage.setItem('userEmail', data.data.email);
             } catch (err) {
@@ -112,7 +114,6 @@ export default function Header() {
                             <Image src="/assets/img/user.svg" width={20} height={20} alt="Login" />
                         </Link>
                     )}
-
                     <button
                         className="navbar-toggler border-0"
                         type="button"
@@ -192,7 +193,7 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" href="/affiliate/my-ads">
+                                <Link className="nav-link" href="/affiliate/ad-posted">
                                     My Ads
                                 </Link>
                             </li>
@@ -380,7 +381,7 @@ export default function Header() {
                             </ul>
                         </div>
                         <Link
-                            href={`/${role}/profile`}
+                            href={`/${role === 'general_contractor' ? 'general-contractor' : role}/profile`}
                             className="nav-link icon"
                             aria-label="Profile"
                         >

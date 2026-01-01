@@ -337,7 +337,7 @@ export default function RegisterPage() {
             zip: formData.zip,
             work_radius: parseInt(formData.work_radius) || 0,
             category: parseInt(formData.category) || 1,
-            role: role,
+            role: 'subcontractor',
         };
 
         try {
@@ -356,6 +356,7 @@ export default function RegisterPage() {
                 const token = data.data?.token;
                 if (token) {
                     localStorage.setItem('token', token);
+                    localStorage.setItem('role', 'subcontractor');
                 }
 
                 showToast('Registration successful! Redirecting...', 'success');

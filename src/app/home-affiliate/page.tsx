@@ -69,7 +69,7 @@ export default function HomePage() {
 
     const accountTypes = [
         {
-            id: 'general_contractor',
+            id: 'general-contractor',
             title: 'General Contractor',
             icon: '/assets/img/icons/construction-worker.webp',
         },
@@ -84,6 +84,7 @@ export default function HomePage() {
             icon: '/assets/img/icons/portfolio.webp',
         },
     ];
+
 
 
     useEffect(() => {
@@ -144,6 +145,7 @@ export default function HomePage() {
     }, []);
 
 
+
     const banners = [
         {
             id: 1,
@@ -188,8 +190,8 @@ export default function HomePage() {
     const handleSelection = (typeId) => {
         setSelectedType(typeId);
         localStorage.setItem('role', typeId);
-        if (typeId == 'general_contractor') {
-            router.push('/auth/register/general_contractor');
+        if (typeId == 'general-contractor') {
+            router.push('/auth/register/general-contractor');
         } else if (typeId == 'subcontractor') {
             router.push('/auth/register/subcontractor');
         } else if (typeId == 'affiliate') {
@@ -298,87 +300,6 @@ export default function HomePage() {
                 </div>
             </section>
 
-            <section className="project-sec pb-0">
-                <div className="container">
-                    <div className="content-wrapper mb-4 text-center">
-                        <h2 className="main-title text-capitalize">
-                            Explore real projects <br/>posted by top general contractors
-                        </h2>
-                    </div>
-
-                    {/* Desktop Slider */}
-                    <div className="main-card-slide d-none d-lg-block">
-                        <Slider {...sliderSettingsDesktop}>
-                            {projects.map((project, index) => (
-                                <div key={index} className="px-2">
-                                    <div className="custom-card">
-                                        <div
-                                            className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                            <Link
-                                                href={`/projects?category=${project.category.toLowerCase()}`}
-                                                className="btn btn-primary"
-                                            >
-                                                {project.category}
-                                            </Link>
-                                            <div className="date text-primary-gray-light">{project.timeAgo}</div>
-                                        </div>
-                                        <div className="title text-black fs-5 fw-semibold mb-3">
-                                            {project.location}
-                                        </div>
-                                        <div className="description">
-                                            {expandedCards.has(index)
-                                                ? project.description.repeat(2)
-                                                : `${project.description.substring(0, 150)}...`}
-                                        </div>
-                                        <button
-                                            onClick={() => toggleExpand(index)}
-                                            className="see-more-btn d-block btn btn-link p-0 text-primary d-none"
-                                        >
-                                            {expandedCards.has(index) ? "See less" : "See more"}
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
-
-                    {/* Mobile Slider */}
-                    <div className="main-card-slide d-block d-lg-none">
-                        <Slider {...sliderSettingsMobile}>
-                            {projects.map((project, index) => (
-                                <div key={index} className="px-2">
-                                    <div className="custom-card">
-                                        <div
-                                            className="topbar d-flex align-items-center justify-content-between gap-1 flex-wrap mb-3">
-                                            <Link
-                                                href={`/projects?category=${project.category.toLowerCase()}`}
-                                                className="btn btn-primary"
-                                            >
-                                                {project.category}
-                                            </Link>
-                                            <div className="date text-primary-gray-light">{project.timeAgo}</div>
-                                        </div>
-                                        <div className="title text-black fs-5 fw-semibold mb-3">
-                                            {project.location}
-                                        </div>
-                                        <div className="description">
-                                            {expandedCards.has(index)
-                                                ? project.description.repeat(2)
-                                                : `${project.description.substring(0, 150)}...`}
-                                        </div>
-                                        <button
-                                            onClick={() => toggleExpand(index)}
-                                            className="see-more-btn d-block btn btn-link p-0 text-primary"
-                                        >
-                                            {expandedCards.has(index) ? "See less" : "See more"}
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
-                </div>
-            </section>
 
             <section className="pricing-sec">
                 <div className="container">

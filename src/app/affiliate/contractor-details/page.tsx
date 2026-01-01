@@ -388,14 +388,6 @@ export default function ContractorDetails() {
                                 </div>
 
                                 <div className="content-wrapper d-flex align-items-center flex-wrap" style={{ gap: 'clamp(20px,7vw,80px)' }}>
-                                    <div className="content">
-                                        <div className="fs-14 text-gray-light fw-medium mb-1">
-                                            Liability Insurance
-                                        </div>
-                                        <div className="fw-semibold">
-                                            {contractor.has_liability_insurance ? 'Yes' : 'No'}
-                                        </div>
-                                    </div>
                                     {contractor.work_radius && (
                                         <div className="content">
                                             <div className="fs-14 text-gray-light fw-medium mb-1">

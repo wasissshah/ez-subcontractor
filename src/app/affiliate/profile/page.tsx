@@ -332,7 +332,7 @@ export default function ProfilePage() {
                                                 <span className="fs-4 fw-semibold">Profile Details</span>
                                             </div>
                                             <div className="icon-wrapper d-flex align-items-center gap-3">
-                                                <Link href="/subcontractor/edit-profile" className="icon">
+                                                <Link href="/affiliate/edit-profile" className="icon">
                                                     <Image
                                                         src="/assets/img/icons/edit.svg"
                                                         width={24}
@@ -345,10 +345,10 @@ export default function ProfilePage() {
                                                     className="icon delete border-0"
                                                     onClick={() => {
                                                         const modalEl = document.getElementById('deleteAccountModal');
-                                                        // if (modalEl) {
-                                                        //     const modal = new window.bootstrap.Modal(modalEl);
-                                                        //     modal.show();
-                                                        // }
+                                                        if (modalEl) {
+                                                            const modal = new window.bootstrap.Modal(modalEl);
+                                                            modal.show();
+                                                        }
                                                     }}
                                                 >
                                                     <Image

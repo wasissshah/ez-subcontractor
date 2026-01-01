@@ -25,7 +25,7 @@ export default function HomePage() {
 
     const accountTypes = [
         {
-            id: 'general_contractor',
+            id: 'general-contractor',
             title: 'General Contractor',
             icon: '/assets/img/icons/construction-worker.webp',
         },
@@ -169,12 +169,12 @@ export default function HomePage() {
     const handleSelection = (typeId) => {
         setSelectedType(typeId);
         localStorage.setItem('role', typeId);
-        if (typeId == 'general_contractor') {
-            router.push('/auth/register/general_contractor');
+        if (typeId == 'general-contractor') {
+            router.push('/home-general-contractor');
         } else if (typeId == 'subcontractor') {
-            router.push('/auth/register/subcontractor');
+            router.push('/home-subcontractor');
         } else if (typeId == 'affiliate') {
-            router.push('/auth/register/affiliate');
+            router.push('/home-affiliate');
         }
         console.log(typeId);
     };
